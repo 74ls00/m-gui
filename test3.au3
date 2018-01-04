@@ -13,6 +13,7 @@ Global $hGUI, $iBtnStart, $iBtnStop, $iBtnClean, $iBtnPause, $iBtnUnPause, $iEdt
 
 $iPID = Run(@ComSpec, Null, @SW_HIDE, $STDIN_CHILD + $STDERR_MERGED)
 OnAutoItExitRegister("_OnExit")
+
 $hGUI = GUICreate("Пример", 430)
 $iBtnStart = GUICtrlCreateButton("Старт", 5, 5, 80, 25, $BS_DEFPUSHBUTTON)
 $iBtnStop = GUICtrlCreateButton("Стоп", 90, 5, 80, 25)
@@ -21,6 +22,7 @@ $iBtnClean = GUICtrlCreateButton("Очистить", 175, 5, 80, 25)
 $iBtnPause = GUICtrlCreateButton("Пауза", 260, 5, 80, 25)
 $iBtnUnPause = GUICtrlCreateButton("Продолжить", 345, 5, 80, 25)
 GUICtrlSetState(-1, $GUI_DISABLE)
+
 $iEdt = GUICtrlCreateEdit(Null, 5, 35, 420, 360, BitOR($ES_READONLY, $ES_AUTOVSCROLL, $WS_VSCROLL))
 GUICtrlSendMsg(-1, $EM_LIMITTEXT, -1, 0)
 GUIRegisterMsg($WM_ACTIVATE, "WM_ACTIVATE")

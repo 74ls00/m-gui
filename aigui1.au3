@@ -1,3 +1,13 @@
+;AiGUI GUI v0.1a
+;
+;    G:\home\Documents\Projects\autoit\aigui-miner\nheqminer_suprnovav0.4a\cpu.bat
+;
+;
+
+#include <GuiButton.au3>
+#include <GuiImageList.au3>
+
+
 #include <GuiConstantsEx.au3>
 #include <ScrollBarConstants.au3>
 #include <WindowsConstants.au3>
@@ -6,22 +16,27 @@
 #include <WinAPIMisc.au3>
 #include <WinAPIProc.au3>
 #include <WinAPI.au3>
-#include <GuiButton.au3>
-#include <GuiImageList.au3>
 
-#include <aig-ini.au3>
 #include <version.au3>
+#include <aig-ini.au3>
+#include <aig-bin.au3>
 
+AutoItSetOption("TrayAutoPause", 0)
+;системные переменные
 Global Const $WA_ACTIVE = 1
 Global Const $WA_CLICKACTIVE = 2
 Global Const $WA_INACTIVE = 0
 Global $hGUI, $iBtnStart, $iBtnStop, $iBtnClean, $iBtnPause, $iBtnUnPause, $iEdt, $iPID, $aPIDs, $sOut, $iUnSel = 1
-;$sLine = "ping -t 8.8.8.8" & @CRLF
-$sLine = @WorkingDir & "\nheqminer_suprnovav0.4a\nheqminer.exe -l zec.suprnova.cc:2142 -u satok.cpu0 -p cpu0p" & @CRLF
+;$sLine = @WorkingDir & "\nheqminer_suprnovav0.4a\nheqminer.exe -l zec.suprnova.cc:2142 -u satok.cpu0 -p cpu0p" & @CRLF
+$sLine = "ping -t 8.8.8.8" & @CRLF
+
+$iPID = Run(@ComSpec, Null, @SW_HIDE, $STDIN_CHILD + $STDERR_MERGED)
+OnAutoItExitRegister("_OnExit")
 
 Dim $hImage
+
 ; размеры gui
-Dim $NameGUI = "AiGUI"
+Dim $NameGUI = "AiGUI" & $version
 Dim $WWidth = 670 , $WHeight = 450 ; ширина и высота окна
 Dim $StrTool = 35 ; сверху первая строка под вкладкой.
 Dim $THeight = $WHeight-75 ; высота консоли
@@ -30,21 +45,41 @@ Dim $tabs=2
 Dim $nTabs[$tabs]
 Dim $mpath0 , $name0 , $server0 , $port0 , $user0 , $rig0 , $pass0 , $info0
 Dim $mpath1 , $name1 , $server1 , $port1 , $user1 , $rig1 , $pass1 , $info1
-
 _iniLoad() ; загрузить настройки из ini aig-ini.au3
 
-$iPID = Run(@ComSpec, Null, @SW_HIDE, $STDIN_CHILD + $STDERR_MERGED)
-OnAutoItExitRegister("_OnExit")
+$input1=@WorkingDir & "\" & $mpath0 & $name0 & " " & $server0 & " " & $user0 & " " & $pass0
+;$input0=@WorkingDir & "\" & $mpath1 & $name1 & " " & $server1 & " " & $port1 & " " & $user1 & " " & $pass1
+$input0=@WorkingDir & " ping -t ya.ru"
+
+
+
+
+
+
+
+
 
 Select ; определение прав запуска
    Case IsAdmin()
-	  $nGUI = " - Администратор"
+	  $hGUI = GUICreate($NameGUI & " - Администратор",$WWidth,$WHeight , "" , "" ,-1)
    Case Else
-	  $nGUI = " - без прав администратора"
-   EndSelect
-$hGUI = GUICreate($NameGUI & " " & $version & $nGUI,$WWidth,$WHeight)
+	  $hGUI = GUICreate($NameGUI & " - без прав администратора",$WWidth,$WHeight , "" , "" ,-1)
+EndSelect
+
+
+;$GUI = GUICreate("AiGUI",$WWidth,$WHeight , "" , "" ,-1)
+
+;GUICtrlCreateGroup("", 5, 0 , 34 , 300)
+;GUICtrlCreateLabel("GPU 05", 10, 10 , 40 , 20 ,1)
+
+;GUICtrlCreateLabel("GPU" & @CRLF & "0", 10, 10 , 32 , 20 ,1)
+;GUICtrlSetFont(-1, 8, 400, 0 , "Arial" , 5)
+;GUICtrlSetBkColor(-1, 0x00FF00)
+
 
 GUICtrlCreateTab(5, 5, $WWidth-10, $WHeight-10) ;создать вкладки с отступом 5 по краям окна, и 5 внутри
+
+
 
 GUICtrlCreateTabItem(" Панель "); Первая вкладка для инструментов
 GUICtrlCreateGroup("", 15 , $StrTool-5 , $WWidth-30 , $THeight+5)
@@ -55,7 +90,9 @@ GUICtrlSetBkColor(-1, 0x00FF00)
 GUICtrlCreateLabel($info0, 20, $StrTool+80)
 GUICtrlSetBkColor(-1, 0x00FF09)
 GUICtrlCreateLabel("guyguygjiljiojijijjiijyuguy", 160, $StrTool+80)
+
 GUICtrlSetBkColor(-1, 0x00FF09)
+
 
 $hImage = _GUIImageList_Create(32, 32, 5, 3, 6)
 _GUIImageList_AddIcon($hImage, "devmgr.dll", 4, True)
@@ -69,28 +106,38 @@ _GUICtrlButton_SetImageList($btnTM, $hImage)
 
 $hImage = _GUIImageList_Create(32, 32, 5, 3, 6)
 _GUIImageList_AddIcon($hImage, "cmd.exe", 0, True)
-$btnCM = GUICtrlCreateButton("Командная строка", 339, $WHeight-95, 150, 40)
-_GUICtrlButton_SetImageList($btnCM, $hImage)
+$btnDM = GUICtrlCreateButton("Командная строка", 339, $WHeight-95, 150, 40)
+_GUICtrlButton_SetImageList($btnDM, $hImage)
 
 $hImage = _GUIImageList_Create(32, 32, 5, 3, 6)
 _GUIImageList_AddIcon($hImage, "shell32.dll", 21, True)
-$btnST = GUICtrlCreateButton("Настройки", 494, $WHeight-95, 150, 40)
-_GUICtrlButton_SetImageList($btnST, $hImage)
+$btnDM = GUICtrlCreateButton("Настройки", 494, $WHeight-95, 150, 40)
+_GUICtrlButton_SetImageList($btnDM, $hImage)
+
+;$Inp4 = GUICtrlCreateInput($input0, 15, $THeight+40, 340, 20)
+
+
+;GUICtrlCreateTab(0, 0, $WWidth+200, $WHeight+200) ;создать вкладки с отступом 5 по краям окна, и 5 внутри
 
 ;Вкладка 0
 GUICtrlCreateTabItem($info0) ; Вкладка первой программы
-
-$iBtnStart = GUICtrlCreateButton("Старт", 14, $THeight+40 , 80, 25, $BS_DEFPUSHBUTTON)
-$iBtnStop = GUICtrlCreateButton("Стоп", 100, $THeight+40, 80, 25, 0x01) ; $BS_DEFPUSHBUTTON
-GUICtrlSetState(-1, $GUI_DISABLE)
-$iBtnClean = GUICtrlCreateButton("Очистить", 180, $THeight+40, 80, 25)
-$iBtnPause = GUICtrlCreateButton("Пауза", 270, $THeight+40, 80, 25)
-$iBtnUnPause = GUICtrlCreateButton("Продолжить", 355, $THeight+40, 80, 25)
-GUICtrlSetState(-1, $GUI_DISABLE)
-
+;окно консоли 1
 $iEdt = GUICtrlCreateEdit(Null, 14, $StrTool, $WWidth-30, $THeight, BitOR($ES_READONLY, $ES_AUTOVSCROLL, $WS_VSCROLL))
 GUICtrlSendMsg(-1, $EM_LIMITTEXT, -1, 0)
 GUIRegisterMsg($WM_ACTIVATE, "WM_ACTIVATE")
+
+;GUICtrlSetFont(-1, 10, 400, 0 , "Lucida Console" , 5) ; Шрифт в окне
+;GUICtrlSendMsg(-1, 0xC5, -1, 0) ; $EM_LIMITTEXT
+
+$Inp = GUICtrlCreateInput($input0, 15, $THeight+40, 340, 20)
+
+;$Btn = GUICtrlCreateButton("Enter", 360+0, $THeight+40, 45, 20, 0x01) ; $BS_DEFPUSHBUTTON
+$iBtnStart = GUICtrlCreateButton("Старт", 360, $THeight+40 , 80, 25, $BS_DEFPUSHBUTTON)
+$iBtnStop = GUICtrlCreateButton("Stop", 450, $THeight+40, 80, 25, 0x01) ; $BS_DEFPUSHBUTTON
+GUICtrlSetState(-1, $GUI_DISABLE)
+
+;$BtnRead0 = GUICtrlCreateButton("Read", 540, $THeight+40, 80, 25, 0x01) ; $BS_DEFPUSHBUTTON
+
 
 GUICtrlCreateTabItem("вкладка2")
 GUICtrlCreateTabItem("вкладка3")
@@ -99,9 +146,23 @@ GUICtrlCreateTabItem("вкладка5  ")
 GUICtrlCreateTabItem("вкладка6  ")
 GUICtrlCreateTabItem("вкладка7")
 GUICtrlCreateTabItem("вкладка8")
+;GUICtrlCreateTabItem("вкладка9")
+;GUICtrlCreateTabItem("вкладка10")
+;GUICtrlCreateTabItem("вкладка11")
 
 
+;Вкладка 2
+;GUICtrlCreateTabItem($info1)
 
+;$Inp1 = GUICtrlCreateInput($input1, 15, $StrTool+10, 340, 20)
+;$Btn1 = GUICtrlCreateButton("Enter", 360, $StrTool+10, 45, 20, 0x01) ; $BS_DEFPUSHBUTTON
+;$BtnStop1 = GUICtrlCreateButton("Stop", 410, $StrTool+10, 45, 20, 0x01) ; $BS_DEFPUSHBUTTON
+;$Edt1 = GUICtrlCreateEdit("", 15, $StrTool+35, $WWidth-33, $WHeight-75, 0x200840) ; $ES_READONLY + $ES_AUTOVSCROLL + $WS_VSCROLL
+;GUICtrlSetFont(-1, 10, 400, 0 , "Lucida Console" , 5) ; Шрифт в окне
+;GUICtrlSendMsg(-1, 0xC5, -1, 0) ; $EM_LIMITTEXT
+
+;GUICtrlCreateMenu("Menu&One")
+;GUISetState(@SW_SHOW)
 GUISetState()
 
 While 1
@@ -134,13 +195,6 @@ While 1
             GUICtrlSetState($iBtnPause, $GUI_ENABLE)
             AdlibRegister("_Update")
             GUIRegisterMsg($WM_ACTIVATE, "WM_ACTIVATE")
-		 Case $btnDM
-			;MsgBox(4096, 'Результат', @SystemDir & "mmc.exe" & " " & "devmgmt.msc")
-			Run (@SystemDir & "\mmc.exe " & @SystemDir & "\devmgmt.msc" , @SystemDir ,@SW_SHOW)
-		 Case $btnTM
-			Run (@SystemDir & "\taskmgr.exe", @SystemDir ,@SW_SHOW)
-		 Case $btnCM
-			Run (@SystemDir & "\cmd.exe", @WorkingDir ,@SW_SHOW)
     EndSwitch
 WEnd
 
@@ -148,32 +202,29 @@ Func WM_ACTIVATE($hWnd, $iMsg, $wParam, $lParam)
     Switch _WinAPI_LoWord($wParam)
         Case $WA_ACTIVE, $WA_CLICKACTIVE
             AdlibRegister("_Update")
-    ;    Case $WA_INACTIVE
-    ;        AdlibUnRegister("_Update")
+   ;     Case $WA_INACTIVE
+  ;          AdlibUnRegister("_Update")
     EndSwitch
 EndFunc   ;==>WM_ACTIVATE
 
 Func _Update()
     Local $vTemp = $sOut & _WinAPI_OemToChar(StdoutRead($iPID)), $aSel = GUICtrlRecvMsg($iEdt, $EM_GETSEL)
-Select
-    Case $vTemp <> $sOut
-		 $sOut = $vTemp
-		 $vTemp = 1
-    Case Else
-		 $vTemp = 0
-EndSelect
+    If $vTemp <> $sOut Then
+        $sOut = $vTemp
+        $vTemp = 1
+    Else
+        $vTemp = 0
+    EndIf
     If @error Or (Not @error And $aSel[0] = $aSel[1]) Then
-Select
-    Case $vTemp
-		 GUICtrlSetData($iEdt, $sOut)
-		 GUICtrlSendMsg($iEdt, $EM_SCROLL, $SB_BOTTOM, 0)
-EndSelect
-	  Else
-Select
-    Case $iUnSel
-		 $iUnSel = 0
-		 AdlibRegister("_UnSel", 5000)
-EndSelect
+        If $vTemp Then
+            GUICtrlSetData($iEdt, $sOut)
+            GUICtrlSendMsg($iEdt, $EM_SCROLL, $SB_BOTTOM, 0)
+        EndIf
+    Else
+        If $iUnSel Then
+            $iUnSel = 0
+            AdlibRegister("_UnSel", 5000)
+        EndIf
     EndIf
 EndFunc   ;==>_Update
 
@@ -186,12 +237,11 @@ EndFunc   ;==>_UnSel
 
 Func _OnExit()
     Local $aPIDs = _WinAPI_EnumChildProcess($iPID)
-   Select
-	  Case Not @error
-		 For $i = 1 To $aPIDs[0][0]
+    If Not @error Then
+        For $i = 1 To $aPIDs[0][0]
             ProcessClose($aPIDs[$i][0])
-		 Next
-   EndSelect
+        Next
+    EndIf
     ProcessClose($iPID)
 EndFunc   ;==>_OnExit
 

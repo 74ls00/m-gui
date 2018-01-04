@@ -16,8 +16,8 @@ Global Const $WA_ACTIVE = 1
 Global Const $WA_CLICKACTIVE = 2
 Global Const $WA_INACTIVE = 0
 Global $hGUI, $iBtnStart, $iBtnStop, $iBtnClean, $iBtnPause, $iBtnUnPause, $iEdt, $iPID, $aPIDs, $sOut, $iUnSel = 1
-;$sLine = "ping -t 8.8.8.8" & @CRLF
-$sLine = @WorkingDir & "\nheqminer_suprnovav0.4a\nheqminer.exe -l zec.suprnova.cc:2142 -u satok.cpu0 -p cpu0p" & @CRLF
+$sLine = "ping -t 8.8.8.8" & @CRLF
+;$sLine = @WorkingDir & "\nheqminer_suprnovav0.4a\nheqminer.exe -l zec.suprnova.cc:2142 -u satok.cpu0 -p cpu0p" & @CRLF
 
 Dim $hImage
 ; размеры gui
@@ -134,13 +134,8 @@ While 1
             GUICtrlSetState($iBtnPause, $GUI_ENABLE)
             AdlibRegister("_Update")
             GUIRegisterMsg($WM_ACTIVATE, "WM_ACTIVATE")
-		 Case $btnDM
-			;MsgBox(4096, 'Результат', @SystemDir & "mmc.exe" & " " & "devmgmt.msc")
-			Run (@SystemDir & "\mmc.exe " & @SystemDir & "\devmgmt.msc" , @SystemDir ,@SW_SHOW)
-		 Case $btnTM
-			Run (@SystemDir & "\taskmgr.exe", @SystemDir ,@SW_SHOW)
-		 Case $btnCM
-			Run (@SystemDir & "\cmd.exe", @WorkingDir ,@SW_SHOW)
+	    Case $btnDM
+
     EndSwitch
 WEnd
 

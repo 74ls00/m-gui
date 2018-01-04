@@ -19,6 +19,7 @@ backup/
 com/
 local/
 
+*.dll
 *.exe
 
 *.bak
