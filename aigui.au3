@@ -4,6 +4,10 @@
 ;
 ;
 
+#include <GuiButton.au3>
+#include <GuiImageList.au3>
+
+
 #include <GuiConstantsEx.au3>
 #include <ScrollBarConstants.au3>
 #include <WindowsConstants.au3>
@@ -25,6 +29,8 @@ Global Const $WA_INACTIVE = 0
 Global $hGUI, $iBtnStart, $iBtnStop, $iBtnClean, $iBtnPause, $iBtnUnPause, $iEdt, $iPID, $aPIDs, $sOut, $iUnSel = 1
 $sLine = @WorkingDir & "\nheqminer_suprnovav0.4a\nheqminer.exe -l zec.suprnova.cc:2142 -u satok.cpu0 -p cpu0p" & @CRLF
 
+Dim $hImage
+
 ; размеры gui
 Dim $NameGUI = "AiGUI" & $version
 Dim $WWidth = 670 , $WHeight = 450 ; ширина и высота окна
@@ -38,6 +44,8 @@ _iniLoad() ; загрузить настройки из ini aig-ini.au3
 
 $input1=@WorkingDir & "\" & $mpath0 & $name0 & " " & $server0 & " " & $user0 & " " & $pass0
 $input0=@WorkingDir & "\" & $mpath1 & $name1 & " " & $server1 & " " & $port1 & " " & $user1 & " " & $pass1
+
+
 
 
 Select ; определение прав запуска
@@ -65,6 +73,23 @@ GUICtrlCreateGroup("", 15 , $StrTool-5 , $WWidth-30 , $THeight+5)
 GUICtrlCreateLabel($NameGUI & " - интерфейс контроля консольных приложений длительного действия", 20, $StrTool+5, $WWidth-40, 60)
 GUICtrlSetFont(-1, 10.5, 400, 0 , "Arial" , 5)
 GUICtrlSetBkColor(-1, 0x00FF00)
+
+
+
+$hImage = _GUIImageList_Create(32, 32, 5, 3, 6)
+_GUIImageList_AddIcon($hImage, "taskmgr.exe", 0, True)
+$btnTM = GUICtrlCreateButton("Диспетчер задач", 25, $WHeight-95, 150, 40)
+_GUICtrlButton_SetImageList($btnTM, $hImage)
+
+$hImage = _GUIImageList_Create(32, 32, 5, 3, 6)
+_GUIImageList_AddIcon($hImage, "devmgr.dll", 4, True)
+$btnDM = GUICtrlCreateButton("Диспетчер устройств", 25+155, $WHeight-95, 160, 40)
+_GUICtrlButton_SetImageList($btnDM, $hImage)
+
+
+
+
+
 
 
 $Inp4 = GUICtrlCreateInput($input0, 15, $THeight+40, 340, 20)
