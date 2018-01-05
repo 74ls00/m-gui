@@ -8,6 +8,26 @@ Dim $firstrun
 
 ;@WorkingDir & "nheqminer_suprnovav0.4a\nheqminer.exe -l zec.suprnova.cc:2142 -u satok.cpu0 -p cpu0p"
 
+;$info   ; заголовок  окна
+;$dev    ; значение. имя устройства
+;$server ; параметр сервера
+;$port   ; параметр порта
+;$user   ; параметр пользователя
+;$pass	 ; параметр пароль
+
+;$expath ; путь к исполняемому файлу
+;$exname ; программа
+;$log    ; параметр указание лог файла
+;$params ; дополнительные параметры
+
+;$debug  ; вывод. полученная команда
+; ! параметр означает что перед ним будет пробел
+
+; parp="programs\" = "C:\эта папка\programs\"
+; parx=prog.exe    = "prog.exe"
+; pars="-p pass"   = " -p pass"
+; parn="-p pass"   = "-p pass"
+
 
 Func _iniSave()
 

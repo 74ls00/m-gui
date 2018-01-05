@@ -23,7 +23,7 @@ rem set now=%%a%%b.%%c
 set "now=%now:~-11%"
 >"%~d0%~p0version.au3" echo Dim $version = "  0.%now%"
 
-start /d "%autoitdir%\Aut2Exe" Aut2exe_x64.exe /in %prodir%%app%.au3 /out %outdir%%app64%.exe /x64 /comp 4 /icon %prodir%src\icon2.ico /gui
+start /d "%autoitdir%\Aut2Exe" Aut2exe_x64.exe /in %prodir%%app%.au3 /out %outdir%%app64%.exe /x64 /comp 4 /icon %prodir%res\icon2.ico /gui
 
 rem "%autoitdir%\Aut2Exe\upx.exe" -9  -o %outdir%%app64%u.exe %outdir%%app64%.exe
 rem "%upxx%" -5 -o %outdir%%app64%u.exe %outdir%%app64%.exe
