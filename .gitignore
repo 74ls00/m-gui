@@ -14,6 +14,8 @@ adm.au3
 
 dev-ini.au3
 myconf.ini
+debug.ini
+system.ini
 
 
 pict/
@@ -23,6 +25,7 @@ local/
 
 *.dll
 *.exe
+*.xml
 
 *.bak
 *.lnk

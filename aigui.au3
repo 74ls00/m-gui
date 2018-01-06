@@ -31,7 +31,7 @@ Global $sLine = @WorkingDir & "\nheqminer_suprnovav0.4a\nheqminer.exe -l zec.sup
 ;$sLine = @WorkingDir & "\inp.bat" & @CRLF
 ;Global $sLine = @WorkingDir & "\debug\dcon2.exe" & @CRLF
 
-
+;Global $sLine =
 
 Global $strl4
 
@@ -43,33 +43,34 @@ Dim $WWidth = 670 , $WHeight = 450 ; ширина и высота окна
 Dim $StrTool = 35 ; сверху первая строка под вкладкой.
 Dim $THeight = $WHeight-75 ; высота консоли
 ;пользовательские настройки
-Dim $windowTabs=1
+;Dim $windowTabs=1
 
 
-Dim $mpath0 , $name0 , $server0 , $port0 , $user0 , $rig0 , $pass0 , $info0
-Dim $mpath1 , $name1 , $server1 , $port1 , $user1 , $rig1 , $pass1 , $info1
+;Dim $mpath0 , $name0 , $server0 , $port0 , $user0 , $rig0 , $pass0 , $info0
+;Dim $mpath1 , $name1 , $server1 , $port1 , $user1 , $rig1 , $pass1 , $info1
 
 
 
-Dim $info[$windowTabs+1],$mpath[$windowTabs+1],$name[$windowTabs+1],$server[$windowTabs+1],$port[$windowTabs+1],$user[$windowTabs+1],$rig[$windowTabs+1],$pass[$windowTabs+1]
+;Dim $info[$windowTabs+1],$mpath[$windowTabs+1],$name[$windowTabs+1],$server[$windowTabs+1],$port[$windowTabs+1],$user[$windowTabs+1],$rig[$windowTabs+1],$pass[$windowTabs+1]
+
 Dim $iBtnStart[$windowTabs+1],$iBtnStop[$windowTabs+1],$iBtnClean[$windowTabs+1],$iBtnUnPause[$windowTabs+1],$iEdt[$windowTabs+1],$iBtnPause[$windowTabs+1]
 Dim $iPIDx[$windowTabs+1],$sLineX[$windowTabs+1]
 ;Dim $sOut[$windowTabs+1]
-For $i = 0 To $windowTabs
-   $info[$i] = "tabs " & $i
-   $mpath[$i] = $i
-   $name[$i] = $i
-   $server[$i] = $i
-   $port[$i] = $i
-   $user[$i] = $i
-   $rig[$i] = $i
-   $pass[$i] = $i
+;For $i = 0 To $windowTabs
+  ; $info[$i] = "tabs " & $i
+  ; $mpath[$i] = $i
+  ; $name[$i] = $i
+  ; $server[$i] = $i
+  ; $port[$i] = $i
+  ; $user[$i] = $i
+  ; $rig[$i] = $i
+ ;  $pass[$i] = $i
 
-   $sLineX[$i] = $sLine
-   $iPIDx[$i] = Run(@ComSpec, Null, @SW_HIDE, $STDIN_CHILD + $STDERR_MERGED)
+ ; $sLineX[$i] = $sLine
+ ;  $iPIDx[$i] = Run(@ComSpec, Null, @SW_HIDE, $STDIN_CHILD + $STDERR_MERGED)
  ; OnAutoItExitRegister("_OnExit")
 
-Next
+;Next
 
 
 _iniLoad() ; загрузить настройки из ini aig-ini.au3
