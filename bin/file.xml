@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<gpuz_dump>
+  <version>2.5.0</version>
+  <card>
+    <location>1:0:0</location>
+    <cardname>NVIDIA GeForce GTX 1050 Ti</cardname>
+    <vendor>NVIDIA</vendor>
+    <vendorid>10DE</vendorid>
+    <gpuname>GP107</gpuname>
+    <diesize>132</diesize>
+    <processsize>14</processsize>
+    <deviceid>1C82</deviceid>
+    <subsysid>3351</subsysid>
+    <subvendor>MSI</subvendor>
+    <subvendorid>1462</subvendorid>
+    <gpurevision>A1</gpurevision>
+    <biosversion>86.07.42.00.5A</biosversion>
+    <businterface>PCIe x16 3.0 @ x16 3.0</businterface>
+    <directxsupport>12 (12_1)</directxsupport>
+    <memtype>GDDR5</memtype>
+    <membuswidth>128</membuswidth>
+    <memsize>4096</memsize>
+    <numrops>32</numrops>
+    <numtmus>48</numtmus>
+    <numshadersvertex></numshadersvertex>
+    <numshaderspixel></numshaderspixel>
+    <numshadersunified>768</numshadersunified>
+    <driverversion>23.21.13.8843 (NVIDIA 388.43) / Win7 64</driverversion>
+    <fillratepixel>48.4</fillratepixel>
+    <fillratetexel>72.7</fillratetexel>
+    <membandwidth>121.4</membandwidth>
+    <clockgpu>1514</clockgpu>
+    <clockmem>1897</clockmem>
+    <clockshader></clockshader>
+    <clockgpudefault>1354</clockgpudefault>
+    <clockmemdefault>1752</clockmemdefault>
+    <clockshaderdefault></clockshaderdefault>
+    <clockgpuboost>1628</clockgpuboost>
+    <clockgpuboostdefault>1468</clockgpuboostdefault>
+    <multigpuname>NVIDIA SLI</multigpuname>
+    <multigpu0>Not supported by GPU</multigpu0>
+    <cuda>1</cuda>
+    <opencl>1</opencl>
+    <dxcompute>1</dxcompute>
+    <physx>1</physx>
+  </card>
+</gpuz_dump>

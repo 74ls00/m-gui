@@ -1,7 +1,9 @@
-
 git.txt
 
 0
+1
+tmp
+log
 
 nheqminer_suprnovav0.4a
 zm_0.5.7_win
@@ -10,8 +12,8 @@ aigui.ini
 _RegRead.au3
 adm.au3
 
-
-
+dev-ini.au3
+myconf.ini
 
 
 pict/
