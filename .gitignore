@@ -22,6 +22,7 @@ pict/
 backup/
 com/
 local/
+bak/
 
 *.dll
 *.exe

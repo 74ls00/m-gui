@@ -14,6 +14,7 @@
 #include <debug-log.au3>
 
 _debug_start()
+;IniWrite($myini, "system", "run", 1)
 
 
 AutoItSetOption("TrayAutoPause", 0)
@@ -72,8 +73,12 @@ Dim $iPIDx[$windowTabs+1],$sLineX[$windowTabs+1]
 
 ;Next
 
-
+;IniWrite($myini, "system", "run", "exit")
 _iniLoad() ; загрузить настройки из ini aig-ini.au3
+;IniWrite($myini, "system", "run", "running")
+
+ ;  Local $running = IniRead ($myini,"system","run", Null)
+ ;  MsgBox(4096,"$running",$running)
 
 
 $iPID = Run(@ComSpec, Null, @SW_HIDE, $STDIN_CHILD + $STDERR_MERGED)
@@ -90,8 +95,8 @@ Select ; определение прав запуска
    EndSelect
 $hGUI = GUICreate($NameGUI & " " & $version & $nGUI,$WWidth,$WHeight)
 
-GUICtrlCreateTab(5, 5, $WWidth-10, $WHeight-10) ;создать вкладки с отступом 5 по краям окна, и 5 внутри
-$y = GUICtrlCreateTabItem(" Панель "); Первая вкладка для инструментов
+$iTab = GUICtrlCreateTab(5, 5, $WWidth-10, $WHeight-10) ;создать вкладки с отступом 5 по краям окна, и 5 внутри
+GUICtrlCreateTabItem("  Панель  "); Первая вкладка для инструментов
 
 GUICtrlCreateGroup("", 15 , $StrTool-5 , $WWidth-30 , $THeight+5)
 GUICtrlCreateLabel($NameGUI & " - интерфейс", 20, $StrTool+5, $WWidth-40, 60)
@@ -154,6 +159,7 @@ While 1
     Switch GUIGetMsg()
 	Case $GUI_EVENT_CLOSE
 	   _debug_stop()
+	   ;IniWrite($myini, "system", "run", "exit")
             Exit
 		 Case $btnDM
 			Run (@SystemDir & "\mmc.exe " & @SystemDir & "\devmgmt.msc" , @SystemDir ,@SW_SHOW)

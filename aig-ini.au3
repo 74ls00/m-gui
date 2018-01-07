@@ -4,20 +4,13 @@
 $myini = @WorkingDir & "\myconf.ini"
 $sysini = @WorkingDir & "\system.ini"
 $windowTabs=1
-Global $initabs
 
 ;Dim $firstrun ;видимо для записи инструкции в настройки
 Dim $info[$windowTabs+1],$server[$windowTabs+1],$port[$windowTabs+1],$user[$windowTabs+1],$pass[$windowTabs+1]
 Dim $devr[$windowTabs+1],$expath[$windowTabs+1],$exname[$windowTabs+1],$exlog[$windowTabs+1],$params[$windowTabs+1]
 Dim $debug[$windowTabs+1],$exlpid[$windowTabs+1],$useregflg[$windowTabs+1],$urlprofile[$windowTabs+1]
-
-
-
 ;--------------------------------------------------------------------------------------------------
-Func _iniSave()
-
-Select
-   Case Not FileExists($myini)
+Func _iniDefLoad()
 For $i=0 To $windowTabs
 $info[$i] = $i		; строка .название вкладки
 $devr[$i] = Null	; имя. устройство
@@ -34,9 +27,15 @@ $exlpid[$i] = Null	; pid запущеного процесса
 $useregflg[$i] = 0	; 1 = пользователь зарегестрирован на пуле , 0 = предупредить
 $urlprofile[$i] = "http:/www#"
 Next
- ;  $firstrun = 1
+ ;MsgBox(4096,"_iniDefLoad",$info[0])
+EndFunc
+;--------------------------------------------------------------------------------------------------
+Func _iniSave()
+
+Select
+   Case Not FileExists($myini)
+   _iniDefLoad()   ; загрузить  дефолтные настройки
    _load_dev_ini() ; загрузить личные настройки
-   $initabs = $windowTabs ; метка размерности
 EndSelect
 
 For $i=0 To $windowTabs
@@ -56,23 +55,20 @@ IniWrite($myini, $process & $i, "exlpid", $exlpid[$i])
 IniWrite($myini, $process & $i, "useregflg", $useregflg[$i])
 IniWrite($myini, $process & $i, "urlprofile", $urlprofile[$i])
 Next
-IniWrite($myini, "system", "initabs", $windowTabs)
 
-IniWrite($sysini, "system", "myconf", $myini)
-IniWrite($sysini, "system", "tabs", $initabs)
+IniWrite($myini, "system", "tabs", $windowTabs)
 
 
 EndFunc
 ;--------------------------------------------------------------------------------------------------
 Func _iniLoad()
-   ;MsgBox(4096, $ini)
 
 Select
-Case FileExists($sysini)
-$myini = IniRead ($sysini,"system","myconf", Null)
-$windowTabs = IniRead ($sysini,"system","tabs", Null)
+   Case FileExists($myini)
 
-If $windowTabs > $initabs Then
+$windowTabs = IniRead ($myini,"system","tabs", Null)
+If $windowTabs > 15 Then $windowTabs = 15
+
 ReDim $info[$windowTabs+1]
 ReDim $devr[$windowTabs+1]
 ReDim $server[$windowTabs+1]
@@ -87,18 +83,11 @@ ReDim $debug[$windowTabs+1]
 ReDim $exlpid[$windowTabs+1]
 ReDim $useregflg[$windowTabs+1]
 ReDim $urlprofile[$windowTabs+1]
-EndIf
 
-   Case Else
-   _iniSave()
-EndSelect
-
-
-If FileExists($myini) Then
 
 For $i = 0 To $windowTabs
 Local $process = "miner"
-$info[$i] = IniRead ($myini,$process & $i,"info", Null)
+$info[$i] = IniRead ($myini,$process & $i,"info", $i)
 $devr[$i] = IniRead ($myini,$process & $i,"dev", Null)
 $server[$i] = IniRead ($myini,$process & $i,"server", Null)
 $port[$i] = IniRead ($myini,$process & $i,"port", Null)
@@ -114,13 +103,20 @@ $useregflg[$i] = IniRead ($myini,$process & $i,"useregflg", Null)
 $urlprofile[$i] = IniRead ($myini,$process & $i,"urlprofile", Null)
 Next
 
-Else
+; MsgBox(4096,"после ини",$info[0])
+
+
+Case Else
+
+;Else
 _iniSave()
-EndIf
-;_dataLoad()
-;If $firstrun Then _firstrun()
+;EndIf
+
+EndSelect
 EndFunc
 ;--------------------------------------------------------------------------------------------------
+
+
 ;Func _dataLoad()
 ;Dim $tlay[8] = [$m1,$s1,$m2,$s2,$k,$m3,$m4,$e]	;слои
 ;EndFunc
@@ -138,7 +134,7 @@ EndFunc
 
 
 
-
+   ;MsgBox(4096, $ini)
 
 
 
