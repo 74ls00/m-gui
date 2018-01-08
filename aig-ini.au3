@@ -1,12 +1,43 @@
 #include <dev-ini.au3>
 $myini = @WorkingDir & "\myconf.ini"
 $sysini = @WorkingDir & "\system.ini"
-Global $windowTabs=2
+$windowTabs=1
+
+
+ ;MsgBox(4096, "lll" , $windowTabs)
+
+
+Select
+Case FileExists($myini)
+_readTab()
+EndSelect
+
+Func _readTab()
+   $windowTabs = IniRead ($myini,"system","tabs", 1)
+   If $windowTabs > 15 Then $windowTabs = 15
+EndFunc
+
 Global $strLimit=600000 ;! добавить  в ini
-Global $sLine[$windowTabs+1]
-Global $info[$windowTabs+1],$server[$windowTabs+1],$port[$windowTabs+1],$user[$windowTabs+1],$pass[$windowTabs+1]
-Global $devr[$windowTabs+1],$expath[$windowTabs+1],$exname[$windowTabs+1],$exlog[$windowTabs+1],$params[$windowTabs+1]
-Global $debug[$windowTabs+1],$exlpid[$windowTabs+1],$useregflg[$windowTabs+1],$urlprofile[$windowTabs+1],$typecmd[$windowTabs+1]
+Dim $sLine[$windowTabs+1]
+Dim $info[$windowTabs+1],$server[$windowTabs+1],$port[$windowTabs+1],$user[$windowTabs+1],$pass[$windowTabs+1]
+Dim $devr[$windowTabs+1],$expath[$windowTabs+1],$exname[$windowTabs+1],$exlog[$windowTabs+1],$params[$windowTabs+1]
+Dim $debug[$windowTabs+1],$exlpid[$windowTabs+1],$useregflg[$windowTabs+1],$urlprofile[$windowTabs+1],$typecmd[$windowTabs+1]
+
+
+;ReDim $info[3]
+
+;$strLimit = $info[2]
+ ; MsgBox(4096, $windowTabs , $strLimit)
+
+
+
+
+
+
+
+
+
+
 ;--------------------------------------------------------------------------------------------------
 Func _iniDefLoad()
 For $i=0 To $windowTabs
@@ -61,23 +92,8 @@ EndFunc
 Func _iniLoad()
 Select
    Case FileExists($myini)
-	  $windowTabs = IniRead ($myini,"system","tabs", Null)
-	  If $windowTabs > 15 Then $windowTabs = 15
-ReDim $info[$windowTabs+1]
-ReDim $devr[$windowTabs+1]
-ReDim $server[$windowTabs+1]
-ReDim $port[$windowTabs+1]
-ReDim $user[$windowTabs+1]
-ReDim $pass[$windowTabs+1]
-ReDim $expath[$windowTabs+1]
-ReDim $exname[$windowTabs+1]
-ReDim $exlog[$windowTabs+1]
-ReDim $params[$windowTabs+1]
-ReDim $typecmd[$windowTabs+1]
-ReDim $debug[$windowTabs+1]
-ReDim $exlpid[$windowTabs+1]
-ReDim $useregflg[$windowTabs+1]
-ReDim $urlprofile[$windowTabs+1]
+_readTab()
+
    For $i = 0 To $windowTabs
 Local $process = "miner"
 $info[$i] = IniRead ($myini,$process & $i,"info", $i)
@@ -97,6 +113,8 @@ $useregflg[$i] = IniRead ($myini,$process & $i,"useregflg", Null)
 $urlprofile[$i] = IniRead ($myini,$process & $i,"urlprofile", Null)
    Next
   ; MsgBox(4096, "", "1-. 1 -.1" & $server[0]  )
+
+;_redimset()
 Case Else
    _iniSave()
 EndSelect
@@ -126,7 +144,23 @@ EndFunc
 ;   $firstrun = 0
 ;EndFunc
 
-
+Func _redimset()
+ReDim $info[$windowTabs+2]
+ReDim $devr[$windowTabs+2]
+ReDim $server[$windowTabs+2]
+ReDim $port[$windowTabs+2]
+ReDim $user[$windowTabs+2]
+ReDim $pass[$windowTabs+2]
+ReDim $expath[$windowTabs+2]
+ReDim $exname[$windowTabs+2]
+ReDim $exlog[$windowTabs+2]
+ReDim $params[$windowTabs+2]
+ReDim $typecmd[$windowTabs+2]
+ReDim $debug[$windowTabs+2]
+ReDim $exlpid[$windowTabs+2]
+ReDim $useregflg[$windowTabs+2]
+ReDim $urlprofile[$windowTabs+2]
+EndFunc
 
 
 
