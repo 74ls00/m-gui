@@ -1,7 +1,7 @@
 #include <dev-ini.au3>
 $myini = @WorkingDir & "\myconf.ini"
 $sysini = @WorkingDir & "\system.ini"
-$windowTabs=1
+$windowTabs=2
 
 
  ;MsgBox(4096, "lll" , $windowTabs)
@@ -17,7 +17,7 @@ Func _readTab()
    If $windowTabs > 15 Then $windowTabs = 15
 EndFunc
 
-Global $strLimit=600000 ;! добавить  в ini
+Global $strLimit=600000 ;! РґРѕР±Р°РІРёС‚СЊ  РІ ini
 Dim $sLine[$windowTabs+1]
 Dim $info[$windowTabs+1],$server[$windowTabs+1],$port[$windowTabs+1],$user[$windowTabs+1],$pass[$windowTabs+1]
 Dim $devr[$windowTabs+1],$expath[$windowTabs+1],$exname[$windowTabs+1],$exlog[$windowTabs+1],$params[$windowTabs+1]
@@ -41,20 +41,20 @@ Dim $debug[$windowTabs+1],$exlpid[$windowTabs+1],$useregflg[$windowTabs+1],$urlp
 ;--------------------------------------------------------------------------------------------------
 Func _iniDefLoad()
 For $i=0 To $windowTabs
-$info[$i] = $i		; строка .название вкладки
-$devr[$i] = Null	; имя. устройство
-$server[$i] = Null	; параметр. сервер
-$port[$i] = Null	; параметр. порт
-$user[$i] = Null	; параметр. пользователь
-$pass[$i] = Null	; параметр. пароль
-$expath[$i] = Null	; путь к программе
-$exname[$i] = Null	; программа.exe
-$exlog[$i] = Null	; параметр. путь к логу
-$params[$i] = Null	; дополнительные параметры
-$typecmd[$i] = 0 ; тип команды. 1 через @WorkingDir . 0 без пути
-$debug[$i] = @WorkingDir & $expath[$i] & "\" & $exname[$i] & $server[$i] & $port[$i] & $user[$i] & $devr[$i] & $pass[$i] & $exlog[$i] & $params[$i] ; вывод. полученная команда
-$exlpid[$i] = Null	; pid запущеного процесса
-$useregflg[$i] = 0	; 1 = пользователь зарегестрирован на пуле , 0 = предупредить
+$info[$i] = $i		; СЃС‚СЂРѕРєР° .РЅР°Р·РІР°РЅРёРµ РІРєР»Р°РґРєРё
+$devr[$i] = Null	; РёРјСЏ. СѓСЃС‚СЂРѕР№СЃС‚РІРѕ
+$server[$i] = Null	; РїР°СЂР°РјРµС‚СЂ. СЃРµСЂРІРµСЂ
+$port[$i] = Null	; РїР°СЂР°РјРµС‚СЂ. РїРѕСЂС‚
+$user[$i] = Null	; РїР°СЂР°РјРµС‚СЂ. РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ
+$pass[$i] = Null	; РїР°СЂР°РјРµС‚СЂ. РїР°СЂРѕР»СЊ
+$expath[$i] = Null	; РїСѓС‚СЊ Рє РїСЂРѕРіСЂР°РјРјРµ
+$exname[$i] = Null	; РїСЂРѕРіСЂР°РјРјР°.exe
+$exlog[$i] = Null	; РїР°СЂР°РјРµС‚СЂ. РїСѓС‚СЊ Рє Р»РѕРіСѓ
+$params[$i] = Null	; РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Рµ РїР°СЂР°РјРµС‚СЂС‹
+$typecmd[$i] = 0 ; С‚РёРї РєРѕРјР°РЅРґС‹. 1 С‡РµСЂРµР· @WorkingDir . 0 Р±РµР· РїСѓС‚Рё
+$debug[$i] = @WorkingDir & $expath[$i] & "\" & $exname[$i] & $server[$i] & $port[$i] & $user[$i] & $devr[$i] & $pass[$i] & $exlog[$i] & $params[$i] ; РІС‹РІРѕРґ. РїРѕР»СѓС‡РµРЅРЅР°СЏ РєРѕРјР°РЅРґР°
+$exlpid[$i] = Null	; pid Р·Р°РїСѓС‰РµРЅРѕРіРѕ РїСЂРѕС†РµСЃСЃР°
+$useregflg[$i] = 0	; 1 = РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ Р·Р°СЂРµРіРµСЃС‚СЂРёСЂРѕРІР°РЅ РЅР° РїСѓР»Рµ , 0 = РїСЂРµРґСѓРїСЂРµРґРёС‚СЊ
 $urlprofile[$i] = "http:/www#"
 Next
  ;MsgBox(4096,"_iniDefLoad",$info[0])
@@ -64,8 +64,8 @@ Func _iniSave()
 
 Select
    Case Not FileExists($myini)
-   _iniDefLoad()   ; загрузить  дефолтные настройки
-   _load_dev_ini() ; загрузить личные настройки разработчика
+   _iniDefLoad()   ; Р·Р°РіСЂСѓР·РёС‚СЊ  РґРµС„РѕР»С‚РЅС‹Рµ РЅР°СЃС‚СЂРѕР№РєРё
+   _load_dev_ini() ; Р·Р°РіСЂСѓР·РёС‚СЊ Р»РёС‡РЅС‹Рµ РЅР°СЃС‚СЂРѕР№РєРё СЂР°Р·СЂР°Р±РѕС‚С‡РёРєР°
 EndSelect
 
    For $i=0 To $windowTabs
@@ -132,7 +132,7 @@ EndSelect
 EndFunc
 
 ;Func _dataLoad()
-;Dim $tlay[8] = [$m1,$s1,$m2,$s2,$k,$m3,$m4,$e]	;слои
+;Dim $tlay[8] = [$m1,$s1,$m2,$s2,$k,$m3,$m4,$e]	;СЃР»РѕРё
 ;EndFunc
 ;--------------------------------------------------------------------------------------------------
 ;Func _firstrun()
@@ -170,10 +170,10 @@ EndFunc
 
 
 
-;$debug  ; вывод. полученная команда
-; ! параметр означает что перед ним будет пробел
+;$debug  ; РІС‹РІРѕРґ. РїРѕР»СѓС‡РµРЅРЅР°СЏ РєРѕРјР°РЅРґР°
+; ! РїР°СЂР°РјРµС‚СЂ РѕР·РЅР°С‡Р°РµС‚ С‡С‚Рѕ РїРµСЂРµРґ РЅРёРј Р±СѓРґРµС‚ РїСЂРѕР±РµР»
 
-; parp="programs\" = "C:\эта папка\programs\"
+; parp="programs\" = "C:\СЌС‚Р° РїР°РїРєР°\programs\"
 ; parx=prog.exe    = "prog.exe"
 ; pars="-p pass"   = " -p pass"
 ; parn="-p pass"   = "-p pass"
