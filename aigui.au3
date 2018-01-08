@@ -22,17 +22,24 @@ AutoItSetOption("TrayAutoPause", 0)
 Global Const $WA_ACTIVE = 1
 Global Const $WA_CLICKACTIVE = 2
 Global Const $WA_INACTIVE = 0
-Global $hGUI, $iBtnStart, $iBtnStop, $iBtnClean, $iBtnPause, $iBtnUnPause, $iEdt, $iPID, $aPIDs, $sOut, $iUnSel = 1
+Global $hGUI, $hSETUP,$aMsg, $iBtnStart, $iBtnStop, $iBtnClean, $iBtnPause, $iBtnUnPause, $iEdt, $iPID, $aPIDs, $sOut, $iUnSel = 1
+
+Dim $iBtnClean[$windowTabs+1] , $setEXIT
+
+Global $iTab , $readTab ;, $sLine
+;, $readTab = GUICtrlRead($iTab)
 
 ;Dim $iMsg
+_iniLoad() ; загрузить настройки из ini aig-ini.au3
+_sLine()  ; загрузить строки
+
 
 ;$sLine = "ping -t 8.8.8.8" & @CRLF
-Global $sLine = @WorkingDir & "\nheqminer_suprnovav0.4a\nheqminer.exe -l zec.suprnova.cc:2142 -u satok.cpu0 -p cpu0p" & @CRLF
+;Global $sLine = @WorkingDir & "\nheqminer_suprnovav0.4a\nheqminer.exe -l zec.suprnova.cc:2142 -u satok.cpu0 -p cpu0p" & @CRLF
 ;$sLine = @ComSpec & " /c dir c:\windows\system32" & @CRLF
 ;$sLine = @WorkingDir & "\inp.bat" & @CRLF
 ;Global $sLine = @WorkingDir & "\debug\dcon2.exe" & @CRLF
-
-;Global $sLine =
+$sLine = $sLine[2]
 
 Global $strl4
 
@@ -44,13 +51,6 @@ Dim $WWidth = 670 , $WHeight = 450 ; ширина и высота окна
 Dim $StrTool = 35 ; сверху первая строка под вкладкой.
 Dim $THeight = $WHeight-75 ; высота консоли
 ;пользовательские настройки
-;Dim $windowTabs=1
-
-
-;Dim $mpath0 , $name0 , $server0 , $port0 , $user0 , $rig0 , $pass0 , $info0
-;Dim $mpath1 , $name1 , $server1 , $port1 , $user1 , $rig1 , $pass1 , $info1
-
-
 
 ;Dim $info[$windowTabs+1],$mpath[$windowTabs+1],$name[$windowTabs+1],$server[$windowTabs+1],$port[$windowTabs+1],$user[$windowTabs+1],$rig[$windowTabs+1],$pass[$windowTabs+1]
 
@@ -58,14 +58,7 @@ Dim $iBtnStart[$windowTabs+1],$iBtnStop[$windowTabs+1],$iBtnClean[$windowTabs+1]
 Dim $iPIDx[$windowTabs+1],$sLineX[$windowTabs+1]
 ;Dim $sOut[$windowTabs+1]
 ;For $i = 0 To $windowTabs
-  ; $info[$i] = "tabs " & $i
-  ; $mpath[$i] = $i
-  ; $name[$i] = $i
-  ; $server[$i] = $i
-  ; $port[$i] = $i
-  ; $user[$i] = $i
-  ; $rig[$i] = $i
- ;  $pass[$i] = $i
+
 
  ; $sLineX[$i] = $sLine
  ;  $iPIDx[$i] = Run(@ComSpec, Null, @SW_HIDE, $STDIN_CHILD + $STDERR_MERGED)
@@ -74,7 +67,7 @@ Dim $iPIDx[$windowTabs+1],$sLineX[$windowTabs+1]
 ;Next
 
 ;IniWrite($myini, "system", "run", "exit")
-_iniLoad() ; загрузить настройки из ini aig-ini.au3
+
 ;IniWrite($myini, "system", "run", "running")
 
  ;  Local $running = IniRead ($myini,"system","run", Null)
@@ -94,6 +87,10 @@ Select ; определение прав запуска
 	  $nGUI = " - без прав администратора"
    EndSelect
 $hGUI = GUICreate($NameGUI & " " & $version & $nGUI,$WWidth,$WHeight)
+
+ ;GUISetOnEvent($GUI_EVENT_CLOSE, '_CloseWin')
+
+
 
 $iTab = GUICtrlCreateTab(5, 5, $WWidth-10, $WHeight-10) ;создать вкладки с отступом 5 по краям окна, и 5 внутри
 GUICtrlCreateTabItem("  Панель  "); Первая вкладка для инструментов
@@ -140,7 +137,11 @@ GUICtrlCreateTabItem($info[$t]) ; Вкладка первой программы
 $iBtnStart = GUICtrlCreateButton("Старт", 14, $THeight+40 , 80, 25, $BS_DEFPUSHBUTTON)
 $iBtnStop = GUICtrlCreateButton("Стоп", 100, $THeight+40, 80, 25, 0x01) ; $BS_DEFPUSHBUTTON
 GUICtrlSetState(-1, $GUI_DISABLE)
-$iBtnClean = GUICtrlCreateButton("Очистить", 186, $THeight+40, 80, 25)
+$iBtnClean[0] = GUICtrlCreateButton("Очистить", 186, $THeight+40, 80, 25)
+
+;$iBtnClean[$t] = GUICtrlCreateButton("Очистить", 186, $THeight+40, 80, 25)
+
+
 ;$iBtnPause = GUICtrlCreateButton("Пауза", 270, $THeight+40, 80, 25)
 ;$iBtnUnPause = GUICtrlCreateButton("Продолжить", 355, $THeight+40, 80, 25)
 ;GUICtrlSetState(-1, $GUI_DISABLE)
@@ -149,19 +150,100 @@ GUICtrlSendMsg(-1, $EM_LIMITTEXT, -1, 0)
 GUIRegisterMsg($WM_ACTIVATE, "WM_ACTIVATE")
 Next
 
-GUISetState()
+GUISetState(@SW_SHOW)
+GUISwitch($hSETUP)
 
+;$hChildWin = GUICreate("Child GUI", $iGUIWidth, $iGUIHeight, $aParentWin_Pos[0] + 100, $aParentWin_Pos[1] + 100, -1, -1, $hParentWin)
 
+;	GUISetState(@SW_SHOW)
+
+;GUISetOnEvent($GUI_EVENT_CLOSE, '_CloseWin' )
 
 
 While 1
+
+;GUISetOnEvent($GUI_EVENT_CLOSE, '_CloseWin' )
+
+
+;Sleep(10)
+
+
+
+  ; $readTab = GUICtrlRead($iTab)
+   	;   MsgBox(4096,"после ини",$readTab)
    		; For $i = 0 To $windowTabs
+		;$aMsg = GUIGetMsg(1)
+	;	Select
+
+;$aMsg = GUIGetMsg(1)
+;Select
+
+  ; Case GUIGetMsg() = $btnDM
+;Run (@SystemDir & "\cmd.exe", @WorkingDir ,@SW_SHOW)
+
+		; Case GUIGetMsg() = $btnST
+		;	_settingsWin()
+
+
+
+
+
+;Case $aMsg[0] = $GUI_EVENT_CLOSE
+
+
+;Select
+;Case $aMsg[1] = $hSETUP
+
+   					;MsgBox(64, "Test", "Child GUI will now close.")
+					;Switch to the child window
+		;			GUISwitch($hSETUP)
+					;Destroy the child GUI including the controls
+		;			GUIDelete()
+		;			GUISwitch($hGUI)
+					;Check if user clicked on the close button of the parent window
+
+;Case $aMsg[1] = $hGUI
+					 ;MsgBox(64, "Test", "Parent GUI will now close.")
+					;Switch to the parent window
+	;				GUISwitch($hGUI)
+					;Destroy the parent GUI including the controls
+	;				GUIDelete()
+					;Exit the script
+	;				Exit
+
+
+
+
+;EndSelect
+
+
+
+
+
+;EndSelect
+
     Switch GUIGetMsg()
 	Case $GUI_EVENT_CLOSE
+
+	 ;  If GUIGetMsg(1)[1] = $hSETUP Then
+	;	  GUISwitch($hSETUP)
+	;	  GUIDelete($hSETUP)
+	;	  GUISwitch($hGUI)
+	;	  GUIGetMsg(0)
+
+
+	;	 ElseIf GUIGetMsg(1)[1] = $hGUI Then
+	;	  GUISwitch($hGUI)
+	;	  GUIDelete($hGUI)
+	;	  GUIGetMsg(0)
+	;ExitLoop
+	Exit
+		;  EndIf
+
+
 	   _debug_stop()
-	   ;IniWrite($myini, "system", "run", "exit")
-            Exit
-		 Case $btnDM
+            ;Exit
+		Case $btnDM
 			Run (@SystemDir & "\mmc.exe " & @SystemDir & "\devmgmt.msc" , @SystemDir ,@SW_SHOW)
 		 Case $btnTM
 			Run (@SystemDir & "\taskmgr.exe", @SystemDir ,@SW_SHOW)
@@ -169,6 +251,16 @@ While 1
 			Run (@SystemDir & "\cmd.exe", @WorkingDir ,@SW_SHOW)
 		 Case $btnCA
 			Run (@SystemDir & "\calc.exe", @WorkingDir ,@SW_SHOW)
+		 Case  $btnST
+			_settingsWin()
+
+;Case $setEXIT
+;GUISwitch($hSETUP)
+  ;  GUIDelete(@GUI_WinHandle)
+  ;GUIDelete($hSETUP)
+;GUISwitch($hGUI)
+ ;MsgBox(4096,"11","a")
+
 
 			Case $iBtnStart
 			   _debug_pid()
@@ -176,9 +268,12 @@ While 1
             GUICtrlSetState($iBtnStop, $GUI_ENABLE)
             StdinWrite($iPID, $sLine)
 
-        Case $iBtnClean
+       ; Case $iBtnClean
+
+	  Case $iBtnClean[0]
             GUICtrlSetData($iEdt, Null)
             $sOut = Null
+
         Case $iBtnStop
             GUICtrlSetState($iBtnStop, $GUI_DISABLE)
             GUICtrlSetState($iBtnStart, $GUI_ENABLE)
@@ -191,10 +286,9 @@ While 1
 			_debug_pid_stop()
 
 
-
     EndSwitch
 
-		; Next
+
 
 WEnd
 
@@ -240,7 +334,7 @@ Case $strl4 > 600000
    FileWrite($hFile, $sOut & @CRLF & ">" & $strl4 & "<")
    FileClose($hFile)
    _debug_send_file()
-   $sOut = "Превышено " & $strl4 & " знаков. Прошлый вывод сохранён в " & $nFile & @CRLF
+   $sOut = "Превышено " & $strl4 & " знаков." & @CRLF & "Прошлый вывод сохранён в " & $nFile & @CRLF
    $strl4 = 0
 EndSelect
 
@@ -294,3 +388,21 @@ Func _OnExit()
 	_debug_pid_exit()
 EndFunc   ;==>_OnExit
 
+
+Func _CloseWin()
+    GUIDelete(@GUI_WinHandle)
+EndFunc
+
+
+
+Func _settingsWin() ; окно настроек
+$setEXIT = 0
+$hSETUP = GUICreate("Child GUI", 200, 200, 300, 300, BitOR ($WS_BORDER, $WS_POPUP), -1, $hGUI)
+
+$setEXIT = GUICtrlCreateButton("s exit", 20, 20, 147, 40)
+
+GUISetState(@SW_SHOW)
+GUISwitch($hGUI)
+
+
+EndFunc
