@@ -7,8 +7,11 @@
 #include <WinAPIProc.au3>
 #include <WinAPI.au3>
 ;#include <WinAPIMisc.au3> ;_WinAPI_OemToChar
-;#include <GuiButton.au3>
-;#include <GuiImageList.au3>
+
+
+#include <aig-func.au3>
+;#include <GuiButton.au3> ;>aig-func.au3
+;#include <GuiImageList.au3>;>aig-func.au3
 
 ;ini имитация загрузки из настроек
 Global $windowTabs=1
@@ -30,8 +33,11 @@ Global Const $WA_INACTIVE = 0
 Global $hGUI, $hSETUP,$aMsg, $iBtnStart, $iBtnStop, $iBtnClean, $iBtnPause, $iBtnUnPause, $iEdt, $iPID, $aPIDs, $sOut, $iUnSel = 1
 
 
+
 Global $strl4 , $btnTM , $iTab
 
+
+Global $hImage ; элемент иконок кнопки
 ; размеры gui
 Global $NameGUI = "GUI"
 Global $WWidth = 670 , $WHeight = 450 ; ширина и высота окна
@@ -77,8 +83,13 @@ GUISetOnEvent($GUI_EVENT_CLOSE, '_ProExit', $hGUI)
 
 $iTab = GUICtrlCreateTab(5, 5, $WWidth-10, $WHeight-10) ;создать вкладки с отступом 5 по краям окна, и 5 внутри
 GUICtrlCreateTabItem("  Панель  "); Вкладка для инструментов
+
+$hImage = _GUIImageList_Create(32, 32, 5, 3, 6)
+_GUIImageList_AddIcon($hImage, "taskmgr.exe", 0, True)
 $btnTM = GUICtrlCreateButton("Диспетчер задач", 187, $WHeight-95, 147, 40)
+_GUICtrlButton_SetImageList($btnTM, $hImage)
 GUICtrlSetOnEvent(-1, "btnTM")
+
 
 For $t = 0 To $windowTabs
 GUICtrlCreateTabItem($info[$t]) ; Вкладки программ
@@ -106,18 +117,10 @@ Func btnTM()
 Run (@SystemDir & "\taskmgr.exe", @SystemDir ,@SW_SHOW)
 EndFunc
 
-Func CleanPressed()
-Local $getTab = GUICtrlRead($iTab)-1
-;GUICtrlSetData($iEdt[GUICtrlRead($iTab)-1], Null)
-GUICtrlSetData($iEdt[$getTab], Null)
-$sOut[$getTab] = Null
-EndFunc
-
 Func StartPressed()
 Local $getTab = GUICtrlRead($iTab)-1
    GUICtrlSetState($iBtnStart[$getTab], $GUI_DISABLE)
    GUICtrlSetState($iBtnStop[$getTab], $GUI_ENABLE)
-$aTab = $getTab/10
    StdinWrite($iPIDx[$getTab], $sLine[$getTab])
 EndFunc
 
@@ -134,6 +137,12 @@ Local $getTab = GUICtrlRead($iTab)-1
 		   EndIf
 EndFunc
 
+Func CleanPressed()
+Local $getTab = GUICtrlRead($iTab)-1
+;GUICtrlSetData($iEdt[GUICtrlRead($iTab)-1], Null)
+GUICtrlSetData($iEdt[$getTab], Null)
+$sOut[$getTab] = Null
+EndFunc
 
    ;MsgBox(4096, "Нажата кнопка OK",$sLine[$getTab] )
 
@@ -151,32 +160,24 @@ EndFunc
 Func WM_ACTIVATE($hWnd, $iMsg, $wParam, $lParam)
     Switch _WinAPI_LoWord($wParam)
         Case $WA_ACTIVE, $WA_CLICKACTIVE
-            AdlibRegister("_Update2")
-      ;  Case $WA_INACTIVE
-      ;      AdlibUnRegister("_Update")
+            AdlibRegister("_Update")
+        Case $WA_INACTIVE
+            AdlibUnRegister("_Update")
     EndSwitch
 EndFunc   ;==>WM_ACTIVATE
 
-Func _Update2() ;---------------------------------------------------------------------------------------------
-
-   For $i = 0 to $windowTabs
+Func _Update() ;---------------------------------------------------------------------------------------------
+For $i = 0 to $windowTabs
 
 ; Local $vTemp = $sOut & _WinAPI_OemToChar(StdoutRead($iPID)), $aSel = GUICtrlRecvMsg($iEdt, $EM_GETSEL)
 Local $vTemp = $sOut[$i] & DllCall('user32.dll', 'bool', 'OemToChar', 'str', StdoutRead($iPIDx[$i]), 'str', StdoutRead($iPIDx[$i]))[2]
-
 Local $strl4 =  StringLen ( $vTemp )
-
-;$getTab = GUICtrlRead($iTab)
-;MsgBox(4096, "$iEdt[$aTab]" ,$iEdt[$aTab] )
-
-
 Local $aSel = GUICtrlRecvMsg($iEdt[$i], $EM_GETSEL)
 
 Select
    Case $vTemp <> $sOut[$i]
 		 $sOut[$i] = $vTemp & " >" & $strl4 & @CRLF ;+ отладочная метка
 
-;_clearEdt()
 Select ; очищать окно с сохранением в файл
 Case $strl4 > $strLimit ; если строка слишком длинная
    Local $nFile = @WorkingDir & "\tmp\zLog" & "_" & $i & "_" & @YEAR & @MON & @MDAY & "." & @MIN & @SEC & ".txt"
@@ -193,7 +194,6 @@ EndSelect
 		 $vTemp = 0
 EndSelect
 
-
     If @error Or (Not @error And $aSel[0] = $aSel[1]) Then
 Select
     Case $vTemp
@@ -208,11 +208,7 @@ Select
 		; AdlibRegister("_UnSel", 5000)
 EndSelect
     EndIf
-
-
 Next
-
-
 EndFunc   ;==>_Update
 
 
@@ -238,7 +234,3 @@ Func _OnExit()
 EndFunc   ;==>_OnExit
 
 
-
-Func OKPressed()
-    MsgBox(4096, "Нажата кнопка OK", "ID=" & @GUI_CtrlId & " WinHandle=" & @GUI_WinHandle & " CtrlHandle=" & @GUI_CtrlHandle)
-EndFunc
