@@ -29,6 +29,91 @@
 ;end ImageListConstants.au3
 
 
+;ScrollBarConstants.au3
+;ScrollBarsConstants.au3
+;Global Const $SB_BOTTOM = 7
+;end ScrollBarsConstants.au3
+;end ScrollBarConstants.au3
+
+
+
+
+;WinAPIInternals.au3
+
+Func __Inc(ByRef $aData, $iIncrement = 100)
+	Select
+		Case UBound($aData, $UBOUND_COLUMNS)
+			If $iIncrement < 0 Then
+				ReDim $aData[$aData[0][0] + 1][UBound($aData, $UBOUND_COLUMNS)]
+			Else
+				$aData[0][0] += 1
+				If $aData[0][0] > UBound($aData) - 1 Then
+					ReDim $aData[$aData[0][0] + $iIncrement][UBound($aData, $UBOUND_COLUMNS)]
+				EndIf
+			EndIf
+		Case UBound($aData, $UBOUND_ROWS)
+			If $iIncrement < 0 Then
+				ReDim $aData[$aData[0] + 1]
+			Else
+				$aData[0] += 1
+				If $aData[0] > UBound($aData) - 1 Then
+					ReDim $aData[$aData[0] + $iIncrement]
+				EndIf
+			EndIf
+		Case Else
+			Return 0
+	EndSelect
+	Return 1
+EndFunc   ;==>__Inc
+
+
+
+;end WinAPIInternals.au3
+
+
+;WinAPIProc.au3
+
+Global Const $tagPROCESSENTRY32 = 'dword Size;dword Usage;dword ProcessID;ulong_ptr DefaultHeapID;dword ModuleID;dword Threads;dword ParentProcessID;long PriClassBase;dword Flags;wchar ExeFile[260]'
+
+
+; #FUNCTION# ====================================================================================================================
+; Author.........: Yashied
+; Modified.......: jpm
+; ===============================================================================================================================
+Func _WinAPI_EnumChildProcess($iPID = 0)
+	If Not $iPID Then $iPID = @AutoItPID
+
+	Local $hSnapshot = DllCall('kernel32.dll', 'handle', 'CreateToolhelp32Snapshot', 'dword', 0x00000002, 'dword', 0)
+	If @error Or ($hSnapshot[0] = Ptr(-1)) Then Return SetError(@error + 10, @extended, 0) ; $INVALID_HANDLE_VALUE
+
+	Local $tPROCESSENTRY32 = DllStructCreate($tagPROCESSENTRY32)
+	Local $aResult[101][2] = [[0]]
+
+	$hSnapshot = $hSnapshot[0]
+	DllStructSetData($tPROCESSENTRY32, 'Size', DllStructGetSize($tPROCESSENTRY32))
+	Local $aRet = DllCall('kernel32.dll', 'bool', 'Process32FirstW', 'handle', $hSnapshot, 'struct*', $tPROCESSENTRY32)
+	Local $iError = @error
+	While (Not @error) And ($aRet[0])
+		If DllStructGetData($tPROCESSENTRY32, 'ParentProcessID') = $iPID Then
+			__Inc($aResult)
+			$aResult[$aResult[0][0]][0] = DllStructGetData($tPROCESSENTRY32, 'ProcessID')
+			$aResult[$aResult[0][0]][1] = DllStructGetData($tPROCESSENTRY32, 'ExeFile')
+		EndIf
+		$aRet = DllCall('kernel32.dll', 'bool', 'Process32NextW', 'handle', $hSnapshot, 'struct*', $tPROCESSENTRY32)
+		$iError = @error
+	WEnd
+	DllCall("kernel32.dll", "bool", "CloseHandle", "handle", $hSnapshot)
+	If Not $aResult[0][0] Then Return SetError($iError + 20, 0, 0)
+
+	__Inc($aResult, -1)
+	Return $aResult
+EndFunc   ;==>_WinAPI_EnumChildProcess
+;end WinAPIProc.au3
+
+
+
+
+
 
 ;GuiButton.au3
 ; #CONSTANTS# ===================================================================================================================
