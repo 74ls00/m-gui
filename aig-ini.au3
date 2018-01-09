@@ -1,7 +1,7 @@
 #include <dev-ini.au3>
 $myini = @WorkingDir & "\myconf.ini"
 $sysini = @WorkingDir & "\system.ini"
-$windowTabs=2
+$windowTabs=4
 
 
  ;MsgBox(4096, "lll" , $windowTabs)
@@ -21,8 +21,8 @@ Global $strLimit=600000 ;! добавить  в ini
 Dim $sLine[$windowTabs+1]
 Dim $info[$windowTabs+1],$server[$windowTabs+1],$port[$windowTabs+1],$user[$windowTabs+1],$pass[$windowTabs+1]
 Dim $devr[$windowTabs+1],$expath[$windowTabs+1],$exname[$windowTabs+1],$exlog[$windowTabs+1],$params[$windowTabs+1]
-Dim $debug[$windowTabs+1],$exlpid[$windowTabs+1],$useregflg[$windowTabs+1],$urlprofile[$windowTabs+1],$typecmd[$windowTabs+1]
-
+Global $debug[$windowTabs+1],$exlpid[$windowTabs+1],$useregflg[$windowTabs+1],$urlprofile[$windowTabs+1],$typecmd[$windowTabs+1]
+$exlpid[0] = 4
 
 ;ReDim $info[3]
 

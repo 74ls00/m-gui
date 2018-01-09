@@ -16,6 +16,7 @@
 #include <Constants.au3>
 
 #include <aig-ini.au3>
+#include <asciiArt.au3>
 #include <version.au3>
 #include <debug-log.au3>
 
@@ -47,23 +48,21 @@ Opt("GUIOnEventMode", 1)
 ;EndFunc
 ;_redimset()
 
-
-
 Global Const $WA_ACTIVE = 1
 Global Const $WA_CLICKACTIVE = 2
 Global Const $WA_INACTIVE = 0
-Global $hGUI, $hSETUP, $iBtnStart, $iBtnStop, $iBtnClean, $iBtnPause, $iBtnUnPause, $aPIDs, $iUnSel = 1
+Global $hGUI, $hSETUP, $iBtnStart, $iBtnStop, $iBtnClean, $iBtnPause, $iBtnUnPause, $aPIDs, $iUnSel = 1 , $iBtnCont
 
 Global $strl4 , $iTab , $hImage ; элемент иконок кнопки
 
 ; размеры gui
 Global Const $NameGUI = "AiGUI"
-Global Const $WWidth = 670 , $WHeight = 450 ; ширина и высота окна
+Global Const $WWidth = 670 , $WHeight = 450 ; ширина и высота окна 450
 Global Const $StrTool = 35 ; сверху первая строка под вкладкой.
 Global Const $THeight = $WHeight-75 ; высота консоли
 
 Global $iBtnStart[$windowTabs+1],$iBtnStop[$windowTabs+1],$iBtnClean[$windowTabs+1],$iEdt[$windowTabs+1]
-Global $iBtnUnPause[$windowTabs+1],$iBtnPause[$windowTabs+1]
+Global $iBtnUnPause[$windowTabs+1],$iBtnPause[$windowTabs+1] , $iBtnCont[$windowTabs+1]
 Global $iPIDx[$windowTabs+1] , $aPIDs[$windowTabs+1] , $sOut[$windowTabs+1] , $getTab ;=GUICtrlRead($iTab)-1
 
 ; запускать консоли до запуска команды
@@ -73,8 +72,6 @@ Global $iPIDx[$windowTabs+1] , $aPIDs[$windowTabs+1] , $sOut[$windowTabs+1] , $g
 ;Next
 
 ;OnAutoItExitRegister("_OnExit")
-
-;Global $iExit
 
 _iniLoad() ; загрузить настройки из ini aig-ini.au3
 _sLine()  ; загрузить строки
@@ -92,13 +89,12 @@ While 1
 	  Case $TRAY_EVENT_PRIMARYUP
 		 WinSetState ( $hGUI, Null, @SW_SHOW )
 		 WinActivate ( $hGUI, Null )
-   EndSwitch
+	  EndSwitch
+_Update()
 Sleep(10)
 
 ;GUISetState($hSETUP)
 WEnd
-
-
 
 Func _Main()
 
@@ -115,8 +111,8 @@ GUISetOnEvent($GUI_EVENT_MINIMIZE, '_hideWin', $hGUI)
 $iTab = GUICtrlCreateTab(5, 5, $WWidth-10, $WHeight-10) ;создать вкладки с отступом 5 по краям окна, и 5 внутри
 GUICtrlCreateTabItem("  Панель  "); Вкладка для инструментов
 
-GUICtrlCreateGroup("", 15 , $StrTool-5 , $WWidth-30 , $THeight+5)
-GUICtrlCreateLabel($NameGUI & " - интерфейс", 20, $StrTool+5, $WWidth-40, 60)
+GUICtrlCreateGroup("", 15 , $StrTool-5 , $WWidth-32 , $THeight+30)
+GUICtrlCreateLabel($NameGUI & " - интерфейс", 20, $StrTool+5, $WWidth-42, 60)
 GUICtrlSetFont(-1, 10.5, 400, 0 , "Arial" , 5)
 GUICtrlSetBkColor(-1, 0x00FF00)
 
@@ -126,56 +122,73 @@ GUICtrlCreateLabel("индикатор2", 160, $StrTool+80)
 GUICtrlSetBkColor(-1, 0x00FF09)
 
 $hImage = _GUIImageList_Create(32, 32, 5, 3, 6)
+Select
+   Case IsAdmin()
 _GUIImageList_AddIcon($hImage, "taskmgr.exe", 0, True)
-$btnTM = GUICtrlCreateButton("Диспетчер задач", 187, $WHeight-95, 147, 40)
+Case Else
+_GUIImageList_AddIcon($hImage, "shell32.dll", 109, True)
+EndSelect
+$btnTM = GUICtrlCreateButton("Диспетчер задач", 187, $WHeight-66, 147, 40)
 _GUICtrlButton_SetImageList($btnTM, $hImage)
 GUICtrlSetOnEvent(-1, "btnTM")
 
+
 $hImage = _GUIImageList_Create(32, 32, 5, 3, 6)
+Select
+   Case IsAdmin()
 _GUIImageList_AddIcon($hImage, "devmgr.dll", 4, True)
-$btnDM = GUICtrlCreateButton("Диспетчер устройств", 25, $WHeight-95, 157, 40)
+Case Else
+_GUIImageList_AddIcon($hImage, "shell32.dll", 109, True)
+EndSelect
+$btnDM = GUICtrlCreateButton("Диспетчер устройств", 25, $WHeight-66, 157, 40)
 _GUICtrlButton_SetImageList($btnDM, $hImage)
 GUICtrlSetOnEvent(-1, "btnDM")
 
 $hImage = _GUIImageList_Create(32, 32, 5, 3, 6)
 _GUIImageList_AddIcon($hImage, "cmd.exe", 0, True)
-$btnCM = GUICtrlCreateButton("Командная строка", 339, $WHeight-95, 150, 40)
+$btnCM = GUICtrlCreateButton("Командная строка", 339, $WHeight-66, 150, 40)
 _GUICtrlButton_SetImageList($btnCM, $hImage)
 GUICtrlSetOnEvent(-1, "btnCM")
 
 $hImage = _GUIImageList_Create(32, 32, 5, 3, 6)
 _GUIImageList_AddIcon($hImage, "shell32.dll", 21, True)
-$btnST = GUICtrlCreateButton("Настройки", 494, $WHeight-95, 150, 40)
+$btnST = GUICtrlCreateButton("Настройки", 494, $WHeight-66, 150, 40)
 _GUICtrlButton_SetImageList($btnST, $hImage)
 GUICtrlSetOnEvent(-1, "btnST")
 
 $hImage = _GUIImageList_Create(32, 32, 5, 3, 6)
 _GUIImageList_AddIcon($hImage, "calc.exe", 0, True)
-$btnCA = GUICtrlCreateButton("Калькулятор", 494, $WHeight-140, 150, 40)
+$btnCA = GUICtrlCreateButton("Калькулятор", 494, $WHeight-113, 150, 40)
 _GUICtrlButton_SetImageList($btnCA, $hImage)
 GUICtrlSetOnEvent(-1, "btnCA")
 
 For $t = 0 To $windowTabs
 GUICtrlCreateTabItem($info[$t]) ; Вкладки программ
 
-$iBtnStart[$t] = GUICtrlCreateButton("Старт", 14, $THeight+40 , 80, 25, $BS_DEFPUSHBUTTON)
+$iBtnStart[$t] = GUICtrlCreateButton("Старт", 14, $THeight+35 , 80, 25, $BS_DEFPUSHBUTTON)
 GUICtrlSetOnEvent(-1, "StartPressed")
 
-$iBtnStop[$t] = GUICtrlCreateButton("Стоп", 100, $THeight+40, 80, 25, 0x01) ; $BS_DEFPUSHBUTTON
+$iBtnStop[$t] = GUICtrlCreateButton("Стоп", 100, $THeight+35, 80, 25, 0x01) ; $BS_DEFPUSHBUTTON
 GUICtrlSetOnEvent(-1, "StopPressed")
 GUICtrlSetState(-1, $GUI_DISABLE)
 
-$iBtnClean = GUICtrlCreateButton("Очистить", 186, $THeight+40, 80, 25)
+$iBtnClean = GUICtrlCreateButton("Очистить", 186, $THeight+35, 80, 25)
 GUICtrlSetOnEvent(-1, "CleanPressed")
+
+$iBtnCont[$t] = GUICtrlCreateButton("Продолжить" , 272, $THeight+35, 80, 25)
+;GUICtrlSetState($iBtnCont[$t], $GUI_DISABLE)
+GUICtrlSetOnEvent(-1, "ButtonCont");ButtonCont
+
+
 
 ;MsgBox(4096, "lll" , $windowTabs)
 ;_redimset()
-$iEdt[$t] = GUICtrlCreateEdit("==>[" & $t & "]" & @CRLF & $sLine[$t] , 14, $StrTool, $WWidth-30, $THeight, BitOR($ES_READONLY, $ES_AUTOVSCROLL, $WS_VSCROLL))
+$iEdt[$t] = GUICtrlCreateEdit("==>[" & $t & "]" & @CRLF & $sLine[$t] & $itmHello[$t] , 14, $StrTool, $WWidth-30, $THeight-8, BitOR($ES_READONLY, $ES_AUTOVSCROLL, $WS_VSCROLL))
 ;$iEdt[$t] = GUICtrlCreateEdit("==>[" & $t & "]" & @CRLF & $sLine[$t] , 14, $StrTool, $WWidth-30, $THeight, BitOR($ES_READONLY, $ES_AUTOVSCROLL, $WS_VSCROLL))
 ;$iEdt[$t] = GUICtrlCreateEdit("[" & $t & "]==>" & @CRLF & $sLine[$t] , 14, $StrTool, $WWidth-30, $THeight, BitOR($ES_READONLY, $ES_AUTOVSCROLL, $WS_VSCROLL))
 ;$iEdt[$t] = GUICtrlCreateEdit("Консоль " & $t & " . " & "Ожидаемая команда: ==>" & @CRLF & $sLine[$t] , 14, $StrTool, $WWidth-30, $THeight, BitOR($ES_READONLY, $ES_AUTOVSCROLL, $WS_VSCROLL))
 GUICtrlSendMsg(-1, $EM_LIMITTEXT, -1, 0)
-GUIRegisterMsg($WM_ACTIVATE, "WM_ACTIVATE")
+;GUIRegisterMsg($WM_ACTIVATE, "WM_ACTIVATE")
 
 Next
 
@@ -204,7 +217,7 @@ $guiCoord = WinGetPos ($hGUI)
 $hSETUP = GUICreate("Настройки", $guiCoord[2]-20, $guiCoord[3]-41, $guiCoord[0]+8, $guiCoord[1]+30, BitOR ($WS_BORDER, $WS_POPUP), -1, $hGUI)
 ;$hSETUP = GUICreate("Настройки", $guiCoord[2]-20, $guiCoord[3]-41, $guiCoord[0]+8, $guiCoord[1]+30, $WS_BORDER, -1, $hGUI)
 
-GUICtrlCreateGroup("Настройки", 9, 9 , $guiCoord[2]-36 , $guiCoord[3]-60)
+GUICtrlCreateGroup("Настройки", 9, 9 , $guiCoord[2]-38 , $guiCoord[3]-60)
 
 $setEXIT = GUICtrlCreateButton("Сохранить и выйти", 23, 32, 120, 30)
 GUICtrlSetOnEvent(-1, "CloseST")
@@ -277,6 +290,16 @@ Select
 		; AdlibRegister("_UnSel", 5000)
 EndSelect
     EndIf
+
+   ;  MsgBox(4096, $i ,  $exlpid[$i])
+;Select
+
+ ;  Case $exlpid[$i] > Null
+    GUICtrlSetData($iBtnCont,'1 минута' &  $exlpid[$i] )
+	  GUICtrlSetState($iBtnCont[$i], $GUI_ENABLE)
+
+;	EndSelect
+
 Next
 EndFunc   ;==>_Update
 
@@ -330,12 +353,22 @@ Func StartPressed()
 Local $getTab = GUICtrlRead($iTab)-1
    $iPIDx[$getTab] = Run(@ComSpec, Null, @SW_HIDE, $STDIN_CHILD + $STDERR_MERGED)
    ;OnAutoItExitRegister("_OnExit")
-   ;$exlpid[$getTab] = $iPIDx[$getTab]
-   ;_iniSave()
+   $exlpid[$getTab] = $iPIDx[$getTab]
+   _iniSave()
 	  GUICtrlSetState($iBtnStart[$getTab], $GUI_DISABLE)
 	  GUICtrlSetState($iBtnStop[$getTab], $GUI_ENABLE)
 	  StdinWrite($iPIDx[$getTab], $sLine[$getTab])
 EndFunc
+
+Func ButtonCont()
+Local $getTab = GUICtrlRead($iTab)-1
+   $iPIDx[$getTab] = $exlpid[$getTab]
+
+	  GUICtrlSetState($iBtnStart[$getTab], $GUI_DISABLE)
+	  GUICtrlSetState($iBtnStop[$getTab], $GUI_ENABLE)
+	  StdinWrite($iPIDx[$getTab], $sLine[$getTab])
+EndFunc
+
 
 Func StopPressed()
 Local $getTab = GUICtrlRead($iTab)-1
