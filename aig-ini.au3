@@ -19,7 +19,7 @@ EndFunc
 
 Global $strLimit=600000 ;! добавить  в ini
 Dim $sLine[$windowTabs+1]
-Dim $info[$windowTabs+1],$server[$windowTabs+1],$port[$windowTabs+1],$user[$windowTabs+1],$pass[$windowTabs+1]
+Global $info[$windowTabs+1],$server[$windowTabs+1],$port[$windowTabs+1],$user[$windowTabs+1],$pass[$windowTabs+1]
 Dim $devr[$windowTabs+1],$expath[$windowTabs+1],$exname[$windowTabs+1],$exlog[$windowTabs+1],$params[$windowTabs+1]
 Global $debug[$windowTabs+1],$exlpid[$windowTabs+1],$useregflg[$windowTabs+1],$urlprofile[$windowTabs+1],$typecmd[$windowTabs+1]
 $exlpid[0] = 4
@@ -70,21 +70,21 @@ EndSelect
 
    For $i=0 To $windowTabs
 Local $process = "miner"
-IniWrite($myini, $process & $i, "info", $info[$i])
+IniWrite($myini, $process & $i, "info", '"' & $info[$i] & '"')
 IniWrite($myini, $process & $i, "dev", $devr[$i])
-IniWrite($myini, $process & $i, "server", $server[$i])
-IniWrite($myini, $process & $i, "port", $port[$i])
-IniWrite($myini, $process & $i, "user", $user[$i])
-IniWrite($myini, $process & $i, "pass", $pass[$i])
-IniWrite($myini, $process & $i, "expath", $expath[$i])
-IniWrite($myini, $process & $i, "exname", $exname[$i])
-IniWrite($myini, $process & $i, "exlog", $exlog[$i])
-IniWrite($myini, $process & $i, "params", $params[$i])
+IniWrite($myini, $process & $i, "server",'"' & $server[$i] & '"')
+IniWrite($myini, $process & $i, "port",'"' & $port[$i] & '"')
+IniWrite($myini, $process & $i, "user",'"' & $user[$i] & '"')
+IniWrite($myini, $process & $i, "pass", '"' & $pass[$i] & '"')
+IniWrite($myini, $process & $i, "expath",'"' & $expath[$i] & '"')
+IniWrite($myini, $process & $i, "exname",'"' & $exname[$i] & '"')
+IniWrite($myini, $process & $i, "exlog",'"' & $exlog[$i] & '"')
+IniWrite($myini, $process & $i, "params",'"' & $params[$i] & '"')
 IniWrite($myini, $process & $i, "typecmd", $typecmd[$i])
-IniWrite($myini, $process & $i, "debug", $debug[$i])
+IniWrite($myini, $process & $i, "debug",'"' & $debug[$i] & '"')
 IniWrite($myini, $process & $i, "exlpid", $exlpid[$i])
 IniWrite($myini, $process & $i, "useregflg", $useregflg[$i])
-IniWrite($myini, $process & $i, "urlprofile", $urlprofile[$i])
+IniWrite($myini, $process & $i, "urlprofile",'"' & $urlprofile[$i] & '"')
    Next
 IniWrite($myini, "system", "tabs", $windowTabs)
 EndFunc
@@ -97,6 +97,7 @@ _readTab()
    For $i = 0 To $windowTabs
 Local $process = "miner"
 $info[$i] = IniRead ($myini,$process & $i,"info", $i)
+If $info[$i] = "" Then $info[$i] = $i ; защита  от слЄта гу€ при пустом названии вкладки
 $devr[$i] = IniRead ($myini,$process & $i,"dev", Null)
 $server[$i] = IniRead ($myini,$process & $i,"server", Null)
 $port[$i] = IniRead ($myini,$process & $i,"port", Null)
@@ -112,9 +113,7 @@ $exlpid[$i] = IniRead ($myini,$process & $i,"exlpid", Null)
 $useregflg[$i] = IniRead ($myini,$process & $i,"useregflg", Null)
 $urlprofile[$i] = IniRead ($myini,$process & $i,"urlprofile", Null)
    Next
-  ; MsgBox(4096, "", "1-. 1 -.1" & $server[0]  )
 
-;_redimset()
 Case Else
    _iniSave()
 EndSelect
@@ -123,8 +122,13 @@ EndFunc
 Func _sLine()
    For $i = 0 To $windowTabs
 Select
+Case $typecmd[$i] = 2
+$sLine[$i] =  @WorkingDir & '\' & $expath[$i] & '\' & $exname[$i] & $server[$i] & $port[$i] & $user[$i] & $devr[$i] & $pass[$i] & $exlog[$i] & $params[$i] & @CRLF
+
 Case $typecmd[$i] = 1
-$sLine[$i] = @WorkingDir & "\" & $expath[$i] & "\" & $exname[$i] & " " & $server[$i] & " " & $port[$i] & " " & $user[$i] & $devr[$i] & " " & $pass[$i] & " " & $exlog[$i] & " " & $params[$i] & @CRLF
+;$sLine[$i] =  @WorkingDir & "\" & $expath[$i] & "\" & $exname[$i] & " " & $server[$i] & " " & $port[$i] & " " & $user[$i] & $devr[$i] & " " & $pass[$i] & " " & $exlog[$i] & " " & $params[$i] & @CRLF
+$sLine[$i] =  @WorkingDir & '\' & $expath[$i] & '\' & $exname[$i] & ' ' & $server[$i] & ' ' & $port[$i] & ' ' & $user[$i] & $devr[$i] & ' ' & $pass[$i] & ' ' & $exlog[$i] & ' ' & $params[$i] & @CRLF
+
 Case $typecmd[$i] =0
 $sLine[$i] = $exname[$i] & " " & $server[$i] & " " & $port[$i] & " " & $user[$i] & $devr[$i] & " " & $pass[$i] & " " & $exlog[$i] & " " & $params[$i] & @CRLF
 EndSelect
@@ -162,6 +166,23 @@ ReDim $useregflg[$windowTabs+2]
 ReDim $urlprofile[$windowTabs+2]
 EndFunc
 
+Func _reDimTbs()
+ReDim $info[GUICtrlRead($stTabs)]
+ReDim $devr[GUICtrlRead($stTabs)]
+ReDim $server[GUICtrlRead($stTabs)]
+ReDim $port[GUICtrlRead($stTabs)]
+ReDim $user[GUICtrlRead($stTabs)]
+ReDim $pass[GUICtrlRead($stTabs)]
+ReDim $expath[GUICtrlRead($stTabs)]
+ReDim $exname[GUICtrlRead($stTabs)]
+ReDim $exlog[GUICtrlRead($stTabs)]
+ReDim $params[GUICtrlRead($stTabs)]
+ReDim $typecmd[GUICtrlRead($stTabs)]
+ReDim $debug[GUICtrlRead($stTabs)]
+ReDim $exlpid[GUICtrlRead($stTabs)]
+ReDim $useregflg[GUICtrlRead($stTabs)]
+ReDim $urlprofile[GUICtrlRead($stTabs)]
+EndFunc
 
 
    ;MsgBox(4096, $ini)
