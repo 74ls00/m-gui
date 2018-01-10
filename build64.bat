@@ -8,7 +8,7 @@ set "upxx=T:\Devel\upx394w\upx.exe"
 
 set app=AiGUI
 set app86=%app%(x86)
-set app64=%app%x64
+set app64=%app%_x64
 
 taskkill /im %app%*
 

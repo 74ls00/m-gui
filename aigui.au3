@@ -80,7 +80,7 @@ Global $iPIDx[$windowTabs+1] , $aPIDs[$windowTabs+1] , $sOut[$windowTabs+1] , $g
 ;Global $strEdt[$windowTabs+1]
 Global Const $txtQual = 3 ; сглаживание
 
-Global $sn_info[$windowTabs+1],$st_typecmd[$windowTabs+1],$st_expath[$windowTabs+1],$st_exname[$windowTabs+1],$st_server[$windowTabs+1]
+Global $sn_info[$windowTabs+1],$st_typecmd[$windowTabs+1],$st_expath[$windowTabs+1],$st_exname[$windowTabs+1],$st_server[$windowTabs+1],$st_urlprofile[$windowTabs+1]
 Global $st_port[$windowTabs+1],$st_user[$windowTabs+1],$st_devr[$windowTabs+1],$st_pass[$windowTabs+1],$st_exlog[$windowTabs+1],$st_params[$windowTabs+1]
 ; запускать консоли до запуска команды
 ;For $i = 0 To $windowTabs
@@ -150,6 +150,23 @@ EndSelect
 $btnTM = GUICtrlCreateButton("Диспетчер задач", 187, $WHeight-66, 147, 40)
 _GUICtrlButton_SetImageList($btnTM, $hImage)
 GUICtrlSetOnEvent(-1, "btnTM")
+
+
+
+$hImage = _GUIImageList_Create(32, 32, 5, 3, 6)
+$btnMC = GUICtrlCreateButton("msconfig", 25, $WHeight-113, 157, 40)
+Select
+   Case IsAdmin()
+_GUIImageList_AddIcon($hImage, "msconfig.exe", 0, True)
+Case Else
+_GUIImageList_AddIcon($hImage, "shell32.dll", 109, True)
+GUICtrlSetState(-1, $GUI_DISABLE)
+   EndSelect
+_GUICtrlButton_SetImageList($btnMC, $hImage)
+GUICtrlSetOnEvent(-1, "btnMC")
+
+
+
 
 
 $hImage = _GUIImageList_Create(32, 32, 5, 3, 6)
@@ -232,7 +249,7 @@ GUICtrlSetOnEvent(-1, "CleanPressed")
 
 ;MsgBox(4096, "lll" , $windowTabs)
 
-$iEdt[$t] = GUICtrlCreateEdit("==>[" & $t & "]" & @CRLF & $sLine[$t] & $itmHello[$t] , 14, $StrTool, $WWidth-30, $THeight-8, BitOR($ES_READONLY, $ES_AUTOVSCROLL, $WS_VSCROLL))
+$iEdt[$t] = GUICtrlCreateEdit("==>[" & $t & "]" & @CRLF & _Encoding_OEM2ANSI($sLine[$t]) & $itmHello[$t] , 14, $StrTool, $WWidth-30, $THeight-8, BitOR($ES_READONLY, $ES_AUTOVSCROLL, $WS_VSCROLL))
 GUICtrlSendMsg(-1, $EM_LIMITTEXT, -1, 0)
 ;GUIRegisterMsg($WM_ACTIVATE, "WM_ACTIVATE")
 
@@ -329,7 +346,9 @@ $st_exlog[$i] = GUICtrlCreateInput($exlog[$i], 53, $snTUD+150, $guiCoord[2]-96,2
 
 $st_params[$i] = GUICtrlCreateInput($params[$i], 20, $snTUD+180, $guiCoord[2]-63,20)
 
-
+GUICtrlCreateLabel("Url:", 20, $snTUD+210, 28, 20, 0x0200)
+;GUICtrlSetBkColor(-1,0x00FF09)
+$st_urlprofile[$i] = GUICtrlCreateInput($urlprofile[$i], 53, $snTUD+210, $guiCoord[2]-96,20)
 
 Next
 
@@ -366,13 +385,9 @@ WinActivate ( $hGUI, Null )
 EndFunc
 
 Func SetsSave()
-   $tmpStbs = GUICtrlRead($stTabs)
-   IniWrite($myini, "system", "tabs", $tmpStbs-1)
 
-Select
-   Case $tmpStbs <> $windowTabs+1
-MsgBox(4096, "Настройки : вкладки" , "Настройки изменены" & @CRLF & "Текущие вкладки: " & $windowTabs+1 & @CRLF & "После перезапуска: " & $tmpStbs & " вкладок")
-EndSelect
+
+
 
 
 For $i=0 To $windowTabs
@@ -388,8 +403,15 @@ $pass[$i] = GUICtrlRead($st_pass[$i])
 $exlog[$i] = GUICtrlRead($st_exlog[$i])
 $params[$i] = GUICtrlRead($st_params[$i])
 Next
-
    _iniSave()
+
+   $tmpStbs = GUICtrlRead($stTabs)
+   IniWrite($myini, "system", "tabs", $tmpStbs-1)
+Select
+   Case $tmpStbs <> $windowTabs+1
+MsgBox(4096, "Настройки : вкладки" , "Настройки изменены" & @CRLF & "Текущие вкладки: " & $windowTabs+1 & @CRLF & "После перезапуска: " & $tmpStbs & " вкладок")
+EndSelect
+
    SetsClose()
 EndFunc
 
@@ -567,6 +589,12 @@ EndFunc
 Func btnCA()
 Run (@SystemDir & "\calc.exe", @WorkingDir ,@SW_SHOW)
 EndFunc
+
+Func btnMC()
+Run (@SystemDir & "\msconfig.exe", @WorkingDir ,@SW_SHOW)
+EndFunc
+
+
 
 Func _ProExit()
     _OnExit()

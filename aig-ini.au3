@@ -1,4 +1,5 @@
 #include <dev-ini.au3>
+#include <Encoding.au3> ; http://autoit-script.ru/index.php?topic=510.0
 $myini = @WorkingDir & "\myconf.ini"
 $sysini = @WorkingDir & "\system.ini"
 $windowTabs=4
@@ -82,7 +83,11 @@ IniWrite($myini, $process & $i, "exname",'"' & $exname[$i] & '"')
 IniWrite($myini, $process & $i, "exlog",'"' & $exlog[$i] & '"')
 IniWrite($myini, $process & $i, "params",'"' & $params[$i] & '"')
 IniWrite($myini, $process & $i, "typecmd", $typecmd[$i])
+
+_sLine()
+$debug[$i] = StringStripWS ( $sLine[$i], 2 )
 IniWrite($myini, $process & $i, "debug",'"' & $debug[$i] & '"')
+
 IniWrite($myini, $process & $i, "exlpid", $exlpid[$i])
 IniWrite($myini, $process & $i, "useregflg", $useregflg[$i])
 IniWrite($myini, $process & $i, "urlprofile",'"' & $urlprofile[$i] & '"')
@@ -122,16 +127,34 @@ EndFunc
 ;--------------------------------------------------------------------------------------------------
 Func _sLine()
    For $i = 0 To $windowTabs
-Select
-Case $typecmd[$i] = 2
-$sLine[$i] =  @WorkingDir & '\' & $expath[$i] & '\' & $exname[$i] & $server[$i] & $port[$i] & $user[$i] & $devr[$i] & $pass[$i] & $exlog[$i] & $params[$i] & @CRLF
+Select ; тип пути. 0=без пути. 1=кирилица с пробелами в пути. 2=как 1, с пробелом между параметрами
+      Case $typecmd[$i] = 4
+$sLine[$i] = _Encoding_ANSIToOEM(@WorkingDir & '\' & $expath[$i] & '\' & $exname[$i]) & $server[$i] & $port[$i] & $user[$i] & $devr[$i] & $pass[$i] & $exlog[$i] & $params[$i] & @CRLF
 
-Case $typecmd[$i] = 1
+   Case $typecmd[$i] = 5
+$sLine[$i] = _Encoding_ANSIToOEM(@WorkingDir & '\' & $expath[$i] & '\' & $exname[$i] & $server[$i] & $port[$i] & $user[$i] & $devr[$i] & $pass[$i] & $exlog[$i] & $params[$i]) & @CRLF
+
+Case $typecmd[$i] = 3
+$sLine[$i] = _Encoding_ANSIToOEM('"' & @WorkingDir & '\' & $expath[$i] & '\' & $exname[$i] & '" ' & $server[$i] & $port[$i] & $user[$i] & $devr[$i] & $pass[$i] & $exlog[$i] & $params[$i]) & @CRLF
+
+Case $typecmd[$i] = 6
 ;$sLine[$i] =  @WorkingDir & "\" & $expath[$i] & "\" & $exname[$i] & " " & $server[$i] & " " & $port[$i] & " " & $user[$i] & $devr[$i] & " " & $pass[$i] & " " & $exlog[$i] & " " & $params[$i] & @CRLF
 $sLine[$i] =  @WorkingDir & '\' & $expath[$i] & '\' & $exname[$i] & ' ' & $server[$i] & ' ' & $port[$i] & ' ' & $user[$i] & $devr[$i] & ' ' & $pass[$i] & ' ' & $exlog[$i] & ' ' & $params[$i] & @CRLF
 
-Case $typecmd[$i] =0
+Case $typecmd[$i] = 0 ; без папки. программа.exe сервер порт пользователь”стройство ѕароль лог параметры(перевод строки)
 $sLine[$i] = $exname[$i] & " " & $server[$i] & " " & $port[$i] & " " & $user[$i] & $devr[$i] & " " & $pass[$i] & " " & $exlog[$i] & " " & $params[$i] & @CRLF
+
+Case $typecmd[$i] = 1 ; в папке программы. "(путь1251>866)" параметр1параметр2параметр3(...)(перевод строки)
+;$sLine[$i] = '"' & _Encoding_ANSIToOEM(@WorkingDir & '\' & $expath[$i] & '\' & $exname[$i]) & '" ' & $server[$i] & $port[$i] & $user[$i] & $devr[$i] & $pass[$i] & $exlog[$i] & $params[$i] & @CRLF
+$sLine[$i] = '"' & _Encoding_ANSIToOEM(@WorkingDir & '\' & $expath[$i] & '\' & $exname[$i]) & '" ' & $server[$i] & $port[$i] & $user[$i] & $devr[$i] & $pass[$i] & _Encoding_ANSIToOEM($exlog[$i]) & $params[$i] & @CRLF
+
+
+; в папке программы. "(путь1251>866)" сервер порт пользователь”стройство пароль лог параметры(перевод строки)
+Case $typecmd[$i] = 2
+;$sLine[$i] = '"' & _Encoding_ANSIToOEM(@WorkingDir & '\' & $expath[$i] & '\' & $exname[$i]) & '" ' & $server[$i] & " " & $port[$i] & " " & $user[$i] & $devr[$i] & " " & $pass[$i] & " " & $exlog[$i] & " " & $params[$i] & @CRLF
+$sLine[$i] = '"' & _Encoding_ANSIToOEM(@WorkingDir & '\' & $expath[$i] & '\' & $exname[$i]) & '" ' & $server[$i] & " " & $port[$i] & " " & $user[$i] & $devr[$i] & " " & $pass[$i] & " " & _Encoding_ANSIToOEM($exlog[$i]) & " " & $params[$i] & @CRLF
+
+
 EndSelect
    Next
 EndFunc
