@@ -2,7 +2,7 @@
 
 
 Global $itmHello[$windowTabs+11]
-Global $asciiArts[2]
+;Global $asciiArts[2]
 
 
 

@@ -238,14 +238,19 @@ Func btnST() ; окно настроек
 WinSetState ( $hGUI, Null, @SW_DISABLE )
 Local $guiCoord = WinGetPos ($hGUI)
 
-Local Const $snTabs1 = $guiCoord[2]-276
-Local Const $snTabs2 = $guiCoord[3]-438
+;local Const $snMain1 = $guiCoord[2]-38 ; шир.
+;local Const $snMain2 = $guiCoord[3]-60 ; выс.
+Local Const $snTabs1 = $guiCoord[2]-276 ; позиция_
+Local Const $snTabs2 = $guiCoord[3]-438	; вкладок.
 ;Local $stTabs
+
+
 
 $hSETUP = GUICreate("Настройки", $guiCoord[2]-20, $guiCoord[3]-41, $guiCoord[0]+8, $guiCoord[1]+30, BitOR ($WS_BORDER, $WS_POPUP), -1, $hGUI)
 ;$hSETUP = GUICreate("Настройки", $guiCoord[2]-20, $guiCoord[3]-41, $guiCoord[0]+8, $guiCoord[1]+30, $WS_BORDER, -1, $hGUI)
 
-GUICtrlCreateGroup("Настройки", 9, 9 , $guiCoord[2]-38 , $guiCoord[3]-60)
+;GUICtrlCreateGroup("Настройки", 9, 9 , $guiCoord[2]-38 , $guiCoord[3]-60)
+GUICtrlCreateGroup("Настройки", 9, 9 , $guiCoord[2]-38 , $guiCoord[3]-400)
 
 GUICtrlCreateButton("Сохранить и выйти", 23, 32, 120, 30)
 GUICtrlSetOnEvent(-1, "SetsSave")
@@ -254,18 +259,63 @@ GUICtrlCreateButton("Отменить", 155, 32, 90, 30)
 GUICtrlSetOnEvent(-1, "SetsClose")
 
 
+
 GUICtrlCreateGroup(Null, $snTabs1-123, $snTabs2-16 , 178 , 45)
 GUICtrlCreateLabel("Количество вкладок", $snTabs1-109, $snTabs2+3)
 $stTabs = GUICtrlCreateInput($tmpStbs, $snTabs1, $snTabs2, 40, 20)
 GUICtrlCreateUpdown(-1,BitOR (0x40 , 0x01, 0x20) )
 GUICtrlSetLimit(-1, 10, 1)
-GUICtrlSetBkColor(-1,0xFDFFAE)
+;GUICtrlSetBkColor(-1,0x00FF09)
 
 ;$windowTab = GUICtrlRead(-1)
 
+Local Const $snTUD = 110 ; вертикаль таблицы
+local Const $snMLen = 200 ; длина поля путь
+Local Const $snXLen = 100
+Local Const $snSWLen = 165
+Local Const $snPLen = $snSWLen-65
+Local Const $snULen = 320
+Local Const $snRLen = 50
+Local Const $snPSLen = 150
+;Local Const $snLLen = $guiCoord[2]-96
+
+GUICtrlCreateTab(9, $snTUD, $guiCoord[2]-38, 250)
+
+For $i=0 To $windowTabs
+GUICtrlCreateTabItem($i)
+
+GUICtrlCreateLabel("Mode", 20, $snTUD+30, 32)
+;GUICtrlSetBkColor(-1,0x00FF09)
+GUICtrlCreateInput($info[$i], 63, $snTUD+30, $snMLen-2,20)
+
+
+;GUICtrlSetBkColor(-1,0x00FF09)
+GUICtrlCreateLabel("Last PID " & $exlpid[$i], $snMLen+72, $snTUD+30, 100,20)
+;GUICtrlSetBkColor(-1,0x00FF09)
+
+GUICtrlCreateCombo($typecmd[$i], 20, $snTUD+60, 32, 100)
+GUICtrlCreateInput($expath[$i], 62, $snTUD+60,  $snMLen, 20)
+;$iEdt[$t] = GUICtrlCreateEdit("==>[" & $t & "]" & @CRLF & $sLine[$t] & $itmHello[$t] , 14, $StrTool, $WWidth-30, $THeight-8, BitOR($ES_READONLY, $ES_AUTOVSCROLL, $WS_VSCROLL))
+GUICtrlCreateInput($exname[$i], $snMLen+72, $snTUD+60,  $snXLen, 20)
+
+GUICtrlCreateInput($server[$i], 20, $snTUD+90, $snSWLen,20)
+GUICtrlCreateInput($port[$i], $snSWLen+30, $snTUD+90, $snPLen,20) ;$snSWLen+40+$snPLen
+
+GUICtrlCreateInput($user[$i], 20, $snTUD+120, $snULen,20)
+GUICtrlCreateLabel("&&", $snULen+23, $snTUD+120, 10, 20, 0x0200)
+;GUICtrlSetBkColor(-1,0x00FF09)
+GUICtrlCreateInput($devr[$i], $snULen+30+2, $snTUD+120, $snRLen,20)
+GUICtrlCreateInput($pass[$i], $snULen+30+2+$snRLen+10, $snTUD+120, $snPSLen,20)
+
+GUICtrlCreateLabel("Log:", 20, $snTUD+150, 28, 20, 0x0200)
+;GUICtrlSetBkColor(-1,0x00FF09)
+GUICtrlCreateInput($exlog[$i], 53, $snTUD+150, $guiCoord[2]-96,20)
+
+GUICtrlCreateInput($params[$i], 20, $snTUD+180, $guiCoord[2]-63,20)
 
 
 
+Next
 
 ;MsgBox(0, "WinGetPos активного окна", _
  ;  "Координаты:" & @LF & @TAB & _

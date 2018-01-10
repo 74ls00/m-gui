@@ -2,7 +2,7 @@
 $myini = @WorkingDir & "\myconf.ini"
 $sysini = @WorkingDir & "\system.ini"
 $windowTabs=4
-
+;$exlpid[0] = [4]
 
  ;MsgBox(4096, "lll" , $windowTabs)
 
@@ -22,7 +22,7 @@ Dim $sLine[$windowTabs+1]
 Global $info[$windowTabs+1],$server[$windowTabs+1],$port[$windowTabs+1],$user[$windowTabs+1],$pass[$windowTabs+1]
 Dim $devr[$windowTabs+1],$expath[$windowTabs+1],$exname[$windowTabs+1],$exlog[$windowTabs+1],$params[$windowTabs+1]
 Global $debug[$windowTabs+1],$exlpid[$windowTabs+1],$useregflg[$windowTabs+1],$urlprofile[$windowTabs+1],$typecmd[$windowTabs+1]
-$exlpid[0] = 4
+
 
 ;ReDim $info[3]
 
@@ -72,6 +72,7 @@ EndSelect
 Local $process = "miner"
 IniWrite($myini, $process & $i, "info", '"' & $info[$i] & '"')
 IniWrite($myini, $process & $i, "dev", $devr[$i])
+;IniWrite($myini, $process & $i, "dev",  '"' & $devr[$i] & '"')
 IniWrite($myini, $process & $i, "server",'"' & $server[$i] & '"')
 IniWrite($myini, $process & $i, "port",'"' & $port[$i] & '"')
 IniWrite($myini, $process & $i, "user",'"' & $user[$i] & '"')
