@@ -48,6 +48,8 @@ Opt("GUIOnEventMode", 1)
 ;EndFunc
 ;_redimset()
 
+Global Const $VIP = 1
+
 Global Const $WA_ACTIVE = 1
 Global Const $WA_CLICKACTIVE = 2
 Global Const $WA_INACTIVE = 0
@@ -55,6 +57,8 @@ Global $hGUI, $hSETUP, $iBtnStart, $iBtnStop, $iBtnClean, $iBtnPause, $iBtnUnPau
 
 Global $stTabs , $tmpStbs ;= $windowTabs; временное количество вкладок
 $tmpStbs = $windowTabs+1
+
+
 
 Global $strl4 , $iTab , $hImage ; элемент иконок кнопки
 
@@ -76,8 +80,8 @@ Global $iPIDx[$windowTabs+1] , $aPIDs[$windowTabs+1] , $sOut[$windowTabs+1] , $g
 ;Global $strEdt[$windowTabs+1]
 Global Const $txtQual = 3 ; сглаживание
 
-
-
+Global $sn_info[$windowTabs+1],$st_typecmd[$windowTabs+1],$st_expath[$windowTabs+1],$st_exname[$windowTabs+1],$st_server[$windowTabs+1]
+Global $st_port[$windowTabs+1],$st_user[$windowTabs+1],$st_devr[$windowTabs+1],$st_pass[$windowTabs+1],$st_exlog[$windowTabs+1],$st_params[$windowTabs+1]
 ; запускать консоли до запуска команды
 ;For $i = 0 To $windowTabs
 ;$iPIDx[$i] = Run(@ComSpec, Null, @SW_HIDE, $STDIN_CHILD + $STDERR_MERGED)
@@ -177,13 +181,22 @@ $btnCA = GUICtrlCreateButton("Калькулятор", 494, $WHeight-113, 150, 40)
 _GUICtrlButton_SetImageList($btnCA, $hImage)
 GUICtrlSetOnEvent(-1, "btnCA")
 
-;all stop
-;$hImage = _GUIImageList_Create(32, 32, 5, 3, 6)
-;_GUIImageList_AddIcon($hImage, "calc.exe", 0, True)
+
+;VIP buttons
+Switch $VIP
+   Case 1
+$hImage = _GUIImageList_Create(32, 32, 5, 3, 6)
+_GUIImageList_AddIcon($hImage, "shell32.dll", 215, True)
 $btnAllStop = GUICtrlCreateButton("Остановить всё", 494, $WHeight-160, 150, 40)
-;_GUICtrlButton_SetImageList($btnCA, $hImage)
+_GUICtrlButton_SetImageList($btnAllStop, $hImage)
 GUICtrlSetOnEvent(-1, "btnAllStop")
 GUICtrlSetState(-1, $GUI_DISABLE)
+
+EndSwitch
+;End VIP buttons
+
+
+
 
 ;$hImage = _GUIImageList_Create(32, 32, 5, 3, 6)
 ;_GUIImageList_AddIcon($hImage, "cmd.exe", 0, True)
@@ -217,21 +230,16 @@ GUICtrlSetOnEvent(-1, "CleanPressed")
 ;;GUICtrlSetState($iBtnCont[$t], $GUI_DISABLE)
 ;GUICtrlSetOnEvent(-1, "ButtonCont");ButtonCont
 
-
-
 ;MsgBox(4096, "lll" , $windowTabs)
-;_redimset()
+
 $iEdt[$t] = GUICtrlCreateEdit("==>[" & $t & "]" & @CRLF & $sLine[$t] & $itmHello[$t] , 14, $StrTool, $WWidth-30, $THeight-8, BitOR($ES_READONLY, $ES_AUTOVSCROLL, $WS_VSCROLL))
-;$iEdt[$t] = GUICtrlCreateEdit("==>[" & $t & "]" & @CRLF & $sLine[$t] , 14, $StrTool, $WWidth-30, $THeight, BitOR($ES_READONLY, $ES_AUTOVSCROLL, $WS_VSCROLL))
-;$iEdt[$t] = GUICtrlCreateEdit("[" & $t & "]==>" & @CRLF & $sLine[$t] , 14, $StrTool, $WWidth-30, $THeight, BitOR($ES_READONLY, $ES_AUTOVSCROLL, $WS_VSCROLL))
-;$iEdt[$t] = GUICtrlCreateEdit("Консоль " & $t & " . " & "Ожидаемая команда: ==>" & @CRLF & $sLine[$t] , 14, $StrTool, $WWidth-30, $THeight, BitOR($ES_READONLY, $ES_AUTOVSCROLL, $WS_VSCROLL))
 GUICtrlSendMsg(-1, $EM_LIMITTEXT, -1, 0)
 ;GUIRegisterMsg($WM_ACTIVATE, "WM_ACTIVATE")
 
 Next
 
 GUISetState(@SW_SHOW, $hGUI)
-EndFunc
+EndFunc ;==>_Main
 
 
 
@@ -281,7 +289,7 @@ Local Const $snXLen = 100
 Local Const $snSWLen = 165
 Local Const $snPLen = $snSWLen-65
 Local Const $snULen = 320
-Local Const $snRLen = 50
+Local Const $snRLen = 70 ; префикс
 Local Const $snPSLen = 150
 ;Local Const $snLLen = $guiCoord[2]-96
 
@@ -292,36 +300,41 @@ GUICtrlCreateTabItem($i)
 
 GUICtrlCreateLabel("Mode", 20, $snTUD+30, 32)
 ;GUICtrlSetBkColor(-1,0x00FF09)
-GUICtrlCreateInput($info[$i], 63, $snTUD+30, $snMLen-2,20)
+;$snInfo[$i] = GUICtrlCreateInput($info[$i], 63, $snTUD+30, $snMLen-2,20)
+;GUICtrlCreateInput($info[$i], 63, $snTUD+30, $snMLen-2,20)
+;MsgBox(0, "WinGetPos активного окна", $i)
 
+$sn_info[$i] = GUICtrlCreateInput($info[$i], 63, $snTUD+30, $snMLen-2,20)
 
 ;GUICtrlSetBkColor(-1,0x00FF09)
-GUICtrlCreateLabel("Last PID " & $exlpid[$i], $snMLen+72, $snTUD+30, 100,20)
+If $exlpid[$i] Then GUICtrlCreateLabel("Last PID " & $exlpid[$i], $snMLen+72, $snTUD+30, 100,20)
 ;GUICtrlSetBkColor(-1,0x00FF09)
 
-GUICtrlCreateCombo($typecmd[$i], 20, $snTUD+60, 32, 100)
-GUICtrlCreateInput($expath[$i], 62, $snTUD+60,  $snMLen, 20)
-;$iEdt[$t] = GUICtrlCreateEdit("==>[" & $t & "]" & @CRLF & $sLine[$t] & $itmHello[$t] , 14, $StrTool, $WWidth-30, $THeight-8, BitOR($ES_READONLY, $ES_AUTOVSCROLL, $WS_VSCROLL))
-GUICtrlCreateInput($exname[$i], $snMLen+72, $snTUD+60,  $snXLen, 20)
+$st_typecmd[$i] = GUICtrlCreateCombo($typecmd[$i], 20, $snTUD+60, 32, 100)
+$st_expath[$i] = GUICtrlCreateInput($expath[$i], 62, $snTUD+60,  $snMLen, 20)
+$st_exname[$i] = GUICtrlCreateInput($exname[$i], $snMLen+72, $snTUD+60,  $snXLen, 20)
 
-GUICtrlCreateInput($server[$i], 20, $snTUD+90, $snSWLen,20)
-GUICtrlCreateInput($port[$i], $snSWLen+30, $snTUD+90, $snPLen,20) ;$snSWLen+40+$snPLen
+$st_server[$i] = GUICtrlCreateInput($server[$i], 20, $snTUD+90, $snSWLen,20)
+$st_port[$i] = GUICtrlCreateInput($port[$i], $snSWLen+30, $snTUD+90, $snPLen,20) ;$snSWLen+40+$snPLen
 
-GUICtrlCreateInput($user[$i], 20, $snTUD+120, $snULen,20)
+$st_user[$i] = GUICtrlCreateInput($user[$i], 20, $snTUD+120, $snULen,20)
 GUICtrlCreateLabel("&&", $snULen+23, $snTUD+120, 10, 20, 0x0200)
 ;GUICtrlSetBkColor(-1,0x00FF09)
-GUICtrlCreateInput($devr[$i], $snULen+30+2, $snTUD+120, $snRLen,20)
-GUICtrlCreateInput($pass[$i], $snULen+30+2+$snRLen+10, $snTUD+120, $snPSLen,20)
+$st_devr[$i] = GUICtrlCreateInput($devr[$i], $snULen+30+2, $snTUD+120, $snRLen,20)
+$st_pass[$i] = GUICtrlCreateInput($pass[$i], $snULen+30+2+$snRLen+10, $snTUD+120, $snPSLen,20)
 
 GUICtrlCreateLabel("Log:", 20, $snTUD+150, 28, 20, 0x0200)
 ;GUICtrlSetBkColor(-1,0x00FF09)
-GUICtrlCreateInput($exlog[$i], 53, $snTUD+150, $guiCoord[2]-96,20)
+$st_exlog[$i] = GUICtrlCreateInput($exlog[$i], 53, $snTUD+150, $guiCoord[2]-96,20)
 
-GUICtrlCreateInput($params[$i], 20, $snTUD+180, $guiCoord[2]-63,20)
+$st_params[$i] = GUICtrlCreateInput($params[$i], 20, $snTUD+180, $guiCoord[2]-63,20)
 
 
 
 Next
+
+;MsgBox(0, "WinGetPos активного окна", $exname[5])
+
 
 ;MsgBox(0, "WinGetPos активного окна", _
  ;  "Координаты:" & @LF & @TAB & _
@@ -361,6 +374,22 @@ Select
 MsgBox(4096, "Настройки : вкладки" , "Настройки изменены" & @CRLF & "Текущие вкладки: " & $windowTabs+1 & @CRLF & "После перезапуска: " & $tmpStbs & " вкладок")
 EndSelect
 
+
+For $i=0 To $windowTabs
+$info[$i] = GUICtrlRead($sn_info[$i])
+$typecmd[$i] = GUICtrlRead($st_typecmd[$i])
+$expath[$i] = GUICtrlRead($st_expath[$i])
+$exname[$i] = GUICtrlRead($st_exname[$i])
+$server[$i] = GUICtrlRead($st_server[$i])
+$port[$i] = GUICtrlRead($st_port[$i])
+$user[$i] = GUICtrlRead($st_user[$i])
+$devr[$i] = GUICtrlRead($st_devr[$i])
+$pass[$i] = GUICtrlRead($st_pass[$i])
+$exlog[$i] = GUICtrlRead($st_exlog[$i])
+$params[$i] = GUICtrlRead($st_params[$i])
+Next
+
+   _iniSave()
    SetsClose()
 EndFunc
 
