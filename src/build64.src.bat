@@ -1,7 +1,7 @@
 @echo off
 rem chcp 1251
 cls
-set "srcdir=%~d0%~p0src\"
+set "srcdir=%~d0%~p0"
 set "main=%srcdir%aigui.au3"
 set outdir=%~d0%~p0
 set "autoitdir=T:\Program Files (x86)\AutoIt3"

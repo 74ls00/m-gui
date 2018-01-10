@@ -11,12 +11,15 @@ zm_0.5.7_win
 рус спр
 Тестовая папка
 test dir
+папка
+clone
 
 
 aigui - копия.ini
 aigui.ini
 _RegRead.au3
 adm.au3
+off.au3
 
 dev-ini.au3
 myconf.ini
@@ -33,6 +36,9 @@ bak/
 *.dll
 *.exe
 *.xml
+*.zip
+*.7z
+*.ini
 
 *.bak
 *.lnk

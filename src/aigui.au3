@@ -46,7 +46,7 @@ Opt("GUIOnEventMode", 1)
 ;Global $version = 0.1
 ;end ini
 ;EndFunc
-;_redimset()
+
 
 Global Const $VIP = 1
 
@@ -131,16 +131,16 @@ $iTab = GUICtrlCreateTab(5, 5, $WWidth-10, $WHeight-10) ;создать вкладки с отсту
 GUICtrlCreateTabItem("  Панель  "); Вкладка для инструментов
 
 GUICtrlCreateGroup("", 15 , $StrTool-5 , $WWidth-32 , $THeight+30)
-GUICtrlCreateLabel($NameGUI & " - интерфейс", 20, $StrTool+5, $WWidth-42, 60)
+GUICtrlCreateLabel($NameGUI & " - зелёная фигня", 20, $StrTool+5, $WWidth-42, 60)
 GUICtrlSetFont(-1, 10.5, 400, 0 , "Arial" , 5)
 GUICtrlSetBkColor(-1, 0x00FF00)
 
-GUICtrlCreateLabel("kk", 20, $StrTool+80)
+GUICtrlCreateLabel("полосочка", 20, $StrTool+80)
 GUICtrlSetBkColor(-1, 0x00FF09)
-GUICtrlCreateLabel("индикатор2", 160, $StrTool+80)
+GUICtrlCreateLabel("ещё полосочка", 160, $StrTool+80)
 GUICtrlSetBkColor(-1, 0x00FF09)
 
-$hImage = _GUIImageList_Create(32, 32, 5, 3, 6)
+$hImage = _GUIImageList_Create(32, 32, 5, 3);, 6)
 Select
    Case IsAdmin()
 _GUIImageList_AddIcon($hImage, "taskmgr.exe", 0, True)
@@ -153,8 +153,9 @@ GUICtrlSetOnEvent(-1, "btnTM")
 
 
 
-$hImage = _GUIImageList_Create(32, 32, 5, 3, 6)
-$btnMC = GUICtrlCreateButton("msconfig", 25, $WHeight-113, 157, 40)
+;$hImage = _GUIImageList_Create(32, 32, 5, 3, 6)
+$hImage = _GUIImageList_Create(16 , 16,5, 3);,5 )
+$btnMC = GUICtrlCreateButton("msconfig", 25, $WHeight-113, 80, 22) ;157 40
 Select
    Case IsAdmin()
 _GUIImageList_AddIcon($hImage, "msconfig.exe", 0, True)
@@ -169,7 +170,7 @@ GUICtrlSetOnEvent(-1, "btnMC")
 
 
 
-$hImage = _GUIImageList_Create(32, 32, 5, 3, 6)
+$hImage = _GUIImageList_Create(32, 32, 5, 3);, 6)
 Select
    Case IsAdmin()
 _GUIImageList_AddIcon($hImage, "devmgr.dll", 4, True)
@@ -180,19 +181,19 @@ $btnDM = GUICtrlCreateButton("Диспетчер устройств", 25, $WHeight-66, 157, 40)
 _GUICtrlButton_SetImageList($btnDM, $hImage)
 GUICtrlSetOnEvent(-1, "btnDM")
 
-$hImage = _GUIImageList_Create(32, 32, 5, 3, 6)
+$hImage = _GUIImageList_Create(32, 32, 5, 3);, 6)
 _GUIImageList_AddIcon($hImage, "cmd.exe", 0, True)
 $btnCM = GUICtrlCreateButton("Командная строка", 339, $WHeight-66, 150, 40)
 _GUICtrlButton_SetImageList($btnCM, $hImage)
 GUICtrlSetOnEvent(-1, "btnCM")
 
-$hImage = _GUIImageList_Create(32, 32, 5, 3, 6)
+$hImage = _GUIImageList_Create(32, 32, 5, 3);, 6)
 _GUIImageList_AddIcon($hImage, "shell32.dll", 21, True)
 $btnST = GUICtrlCreateButton("Настройки", 494, $WHeight-66, 150, 40)
 _GUICtrlButton_SetImageList($btnST, $hImage)
 GUICtrlSetOnEvent(-1, "btnST")
 
-$hImage = _GUIImageList_Create(32, 32, 5, 3, 6)
+$hImage = _GUIImageList_Create(32, 32, 5, 3);, 6)
 _GUIImageList_AddIcon($hImage, "calc.exe", 0, True)
 $btnCA = GUICtrlCreateButton("Калькулятор", 494, $WHeight-113, 150, 40)
 _GUICtrlButton_SetImageList($btnCA, $hImage)
@@ -202,7 +203,7 @@ GUICtrlSetOnEvent(-1, "btnCA")
 ;VIP buttons
 Switch $VIP
    Case 1
-$hImage = _GUIImageList_Create(32, 32, 5, 3, 6)
+$hImage = _GUIImageList_Create(32, 32, 5, 3);, 6)
 _GUIImageList_AddIcon($hImage, "shell32.dll", 215, True)
 $btnAllStop = GUICtrlCreateButton("Остановить всё", 494, $WHeight-160, 150, 40)
 _GUICtrlButton_SetImageList($btnAllStop, $hImage)

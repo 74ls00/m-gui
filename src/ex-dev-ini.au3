@@ -2,7 +2,7 @@
 Func _load_dev_ini()
 
 $info[0] = "ping 8.8.8.8"
-$server[0] = " -t 8.8.8.8
+$server[0] = " -t 8.8.8.8"
 ;$port[0] = ""
 ;$expath[0] = @SystemDir
 $exname[0] = "ping.exe"

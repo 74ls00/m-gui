@@ -19,25 +19,10 @@ Func _readTab()
 EndFunc
 
 Global $strLimit=600000 ;! добавить  в ini
-Dim $sLine[$windowTabs+1]
+Global $sLine[$windowTabs+1]
 Global $info[$windowTabs+1],$server[$windowTabs+1],$port[$windowTabs+1],$user[$windowTabs+1],$pass[$windowTabs+1]
-Dim $devr[$windowTabs+1],$expath[$windowTabs+1],$exname[$windowTabs+1],$exlog[$windowTabs+1],$params[$windowTabs+1]
+Global $devr[$windowTabs+1],$expath[$windowTabs+1],$exname[$windowTabs+1],$exlog[$windowTabs+1],$params[$windowTabs+1]
 Global $debug[$windowTabs+1],$exlpid[$windowTabs+1],$useregflg[$windowTabs+1],$urlprofile[$windowTabs+1],$typecmd[$windowTabs+1]
-
-
-;ReDim $info[3]
-
-;$strLimit = $info[2]
- ; MsgBox(4096, $windowTabs , $strLimit)
-
-
-
-
-
-
-
-
-
 
 ;--------------------------------------------------------------------------------------------------
 Func _iniDefLoad()
@@ -158,75 +143,5 @@ $sLine[$i] = '"' & _Encoding_ANSIToOEM(@WorkingDir & '\' & $expath[$i] & '\' & $
 EndSelect
    Next
 EndFunc
-
-;Func _dataLoad()
-;Dim $tlay[8] = [$m1,$s1,$m2,$s2,$k,$m3,$m4,$e]	;слои
-;EndFunc
-;--------------------------------------------------------------------------------------------------
-;Func _firstrun()
- ;  $hFile = FileOpen($myini, 1)
- ;  FileWriteLine($hFile, "$mpath" & @CRLF)
- ;  FileWriteLine($hFile, ";mode=0 Click mode" & @CRLF)
- ;  FileClose($hFile)
- ;  IniWrite($myini, "system", "firstrun", 0)
-;   $firstrun = 0
-;EndFunc
-
-Func _redimset()
-ReDim $info[$windowTabs+2]
-ReDim $devr[$windowTabs+2]
-ReDim $server[$windowTabs+2]
-ReDim $port[$windowTabs+2]
-ReDim $user[$windowTabs+2]
-ReDim $pass[$windowTabs+2]
-ReDim $expath[$windowTabs+2]
-ReDim $exname[$windowTabs+2]
-ReDim $exlog[$windowTabs+2]
-ReDim $params[$windowTabs+2]
-ReDim $typecmd[$windowTabs+2]
-ReDim $debug[$windowTabs+2]
-ReDim $exlpid[$windowTabs+2]
-ReDim $useregflg[$windowTabs+2]
-ReDim $urlprofile[$windowTabs+2]
-EndFunc
-
-Func _reDimTbs()
-ReDim $info[GUICtrlRead($stTabs)]
-ReDim $devr[GUICtrlRead($stTabs)]
-ReDim $server[GUICtrlRead($stTabs)]
-ReDim $port[GUICtrlRead($stTabs)]
-ReDim $user[GUICtrlRead($stTabs)]
-ReDim $pass[GUICtrlRead($stTabs)]
-ReDim $expath[GUICtrlRead($stTabs)]
-ReDim $exname[GUICtrlRead($stTabs)]
-ReDim $exlog[GUICtrlRead($stTabs)]
-ReDim $params[GUICtrlRead($stTabs)]
-ReDim $typecmd[GUICtrlRead($stTabs)]
-ReDim $debug[GUICtrlRead($stTabs)]
-ReDim $exlpid[GUICtrlRead($stTabs)]
-ReDim $useregflg[GUICtrlRead($stTabs)]
-ReDim $urlprofile[GUICtrlRead($stTabs)]
-EndFunc
-
-
-   ;MsgBox(4096, $ini)
-
-
-
-
-
-;$debug  ; вывод. полученная команда
-; ! параметр означает что перед ним будет пробел
-
-; parp="programs\" = "C:\эта папка\programs\"
-; parx=prog.exe    = "prog.exe"
-; pars="-p pass"   = " -p pass"
-; parn="-p pass"   = "-p pass"
-
-
-
-
-
-
 
 
