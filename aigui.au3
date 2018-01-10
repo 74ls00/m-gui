@@ -51,7 +51,7 @@ Opt("GUIOnEventMode", 1)
 Global Const $WA_ACTIVE = 1
 Global Const $WA_CLICKACTIVE = 2
 Global Const $WA_INACTIVE = 0
-Global $hGUI, $hSETUP, $iBtnStart, $iBtnStop, $iBtnClean, $iBtnPause, $iBtnUnPause, $aPIDs, $iUnSel = 1 , $iBtnCont
+Global $hGUI, $hSETUP, $iBtnStart, $iBtnStop, $iBtnClean, $iBtnPause, $iBtnUnPause, $aPIDs, $iUnSel = 1 , $iBtnCont , $btnAllStop
 
 Global $stTabs , $tmpStbs ;= $windowTabs; временное количество вкладок
 $tmpStbs = $windowTabs+1
@@ -177,7 +177,13 @@ $btnCA = GUICtrlCreateButton("Калькулятор", 494, $WHeight-113, 150, 40)
 _GUICtrlButton_SetImageList($btnCA, $hImage)
 GUICtrlSetOnEvent(-1, "btnCA")
 
-
+;all stop
+;$hImage = _GUIImageList_Create(32, 32, 5, 3, 6)
+;_GUIImageList_AddIcon($hImage, "calc.exe", 0, True)
+$btnAllStop = GUICtrlCreateButton("Остановить всё", 494, $WHeight-160, 150, 40)
+;_GUICtrlButton_SetImageList($btnCA, $hImage)
+GUICtrlSetOnEvent(-1, "btnAllStop")
+GUICtrlSetState(-1, $GUI_DISABLE)
 
 ;$hImage = _GUIImageList_Create(32, 32, 5, 3, 6)
 ;_GUIImageList_AddIcon($hImage, "cmd.exe", 0, True)
@@ -448,6 +454,7 @@ Local $getTab = GUICtrlRead($iTab)-1
    _iniSave()
 	  GUICtrlSetState($iBtnStart[$getTab], $GUI_DISABLE)
 	  GUICtrlSetState($iBtnStop[$getTab], $GUI_ENABLE)
+	  GUICtrlSetState($btnAllStop, $GUI_ENABLE)
 	  StdinWrite($iPIDx[$getTab], $sLine[$getTab])
 EndFunc
 
@@ -473,6 +480,36 @@ Local $getTab = GUICtrlRead($iTab)-1
                Next
 			   ProcessClose($iPIDs); завершить cmd по PID
 		   EndIf
+EndFunc
+
+Func btnAllStop()
+   For $i=0 To $windowTabs
+
+Select
+   Case ControlCommand($hGUI, '', $iBtnStop[$i], 'IsEnabled')
+
+;If ControlCommand($hGUI, '', $iBtnStop[$i], 'IsEnabled') Then
+GUICtrlSetState($iBtnStart[$i], $GUI_ENABLE)
+GUICtrlSetState($iBtnStop[$i], $GUI_DISABLE)
+
+
+ ;EndIf
+	   Local $iPIDs = $iPIDx[$i]
+	   Local $aPIDs = _WinAPI_EnumChildProcess($iPIDs)
+
+ If Not @error Then ; завершить дочерний процес
+			   For $n = 1 To $aPIDs[0][0]
+                    ProcessClose($aPIDs[$n][0])
+               Next
+			   ProcessClose($iPIDs); завершить cmd по PID
+			EndIf
+EndSelect
+
+   Next
+
+GUICtrlSetState($btnAllStop, $GUI_DISABLE)
+
+
 EndFunc
 
 Func CleanPressed()
