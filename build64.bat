@@ -1,26 +1,22 @@
 @echo off
-rem chcp 1251
-cls
+set "autoitdir=T:\Program Files (x86)\AutoIt3"
+set path=%path%;"%autoitdir%\Aut2Exe\"
+set "upxx="%autoitdir%\Aut2Exe\"upx.exe"
+set "outdir=%~d0%~p0"
 set "srcdir=%~d0%~p0src\"
 set "main=%srcdir%aigui.au3"
-set outdir=%~d0%~p0
-set "autoitdir=T:\Program Files (x86)\AutoIt3"
-set "upxx=T:\Devel\upx394w\upx.exe"
 
-set app=AiGUI%app64%
+set app=AiGUI
 set "icon=%srcdir%res\icon2.ico"
-rem set app86=%app%(x86)
-rem set app64=%app%_x64
 set app64=%app%
 
-echo ‡ ¢¥àè¥­¨¥ ¯à®æ¥áá 
-taskkill /im %app%*
+taskkill /im %app64%*
 
 rem %date%=YYYY-MM-DD %time%=hH:mm:ss.ms
 set now=%DATE: =0% %TIME: =0%
 rem set now=%TIME: =0%
 for /f "tokens=1-7 delims=/-:., " %%a in ( "%now%" ) do (
-rem %%a - ãîä %%b - ìåñÿö %%c - äåíü %%d - ÷àñû %%e - ìèíóòû %%f - ñåêóíäû %%g - ñîòûå
+rem %%a - Ð³Ð¾Ð´ %%b - Ð¼ÐµÑÂ¤Ñ† %%c - Ð´ÐµÐ½ÑŒ %%d - Ñ‡Ð°ÑÑ‹ %%e - Ð¼Ð¸Ð½ÑƒÑ‚Ñ‹ %%f - ÑÐµÐºÑƒÐ½Ð´Ñ‹ %%g - ÑÐ¾Ñ‚Ñ‹Ðµ
 set now=%%a%%b%%c.%%d%%e
 rem set now=%%a%%b.%%c
 )
@@ -28,14 +24,11 @@ set "now=%now:~-11%"
 rem >"%~d0%~p0version.au3" echo Dim $version = "  0.%now%"
 >"%srcdir%version.au3" echo Dim $version = "  0.%now%"
 
+"%autoitdir%\Aut2Exe\Aut2exe_x64.exe" /in %main% /out %outdir%%app64%.exe /x64 /comp 4 /icon %icon% /gui
 
-start /d "%autoitdir%\Aut2Exe" Aut2exe_x64.exe /in %main% /out %outdir%%app64%.exe /x64 /comp 4 /icon %icon% /gui
-
-rem "%autoitdir%\Aut2Exe\upx.exe" -9  -o %outdir%%app64%u.exe %outdir%%app64%.exe
-rem "%upxx%" -5 -o %outdir%%app64%u.exe %outdir%%app64%.exe
-
+del %outdir%%app64%u.exe
+%upxx% -9  -o "%outdir%%app64%u.exe" "%outdir%%app64%.exe"
+del %outdir%%app64%.exe
 timeout /t 2
-
-
-
-
+exit
+pause
