@@ -10,7 +10,8 @@ set "upxx=T:\Devel\upx394w\upx.exe"
 set app=AiGUI%app64%
 set "icon=%srcdir%res\icon2.ico"
 rem set app86=%app%(x86)
-set app64=%app%_x64
+rem set app64=%app%_x64
+set app64=%app%
 
 echo Завершение процесса
 taskkill /im %app%*
@@ -33,7 +34,7 @@ start /d "%autoitdir%\Aut2Exe" Aut2exe_x64.exe /in %main% /out %outdir%%app64%.e
 rem "%autoitdir%\Aut2Exe\upx.exe" -9  -o %outdir%%app64%u.exe %outdir%%app64%.exe
 rem "%upxx%" -5 -o %outdir%%app64%u.exe %outdir%%app64%.exe
 
-timeout /t 3
+timeout /t 2
 
 
 

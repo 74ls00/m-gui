@@ -25,7 +25,7 @@ dev-ini.au3
 myconf.ini
 debug.ini
 system.ini
-
+upxhide.tmp.vbs
 
 pict/
 backup/
@@ -33,6 +33,7 @@ com/
 local/
 bak/
 
+*.vbs
 *.dll
 *.exe
 *.xml
