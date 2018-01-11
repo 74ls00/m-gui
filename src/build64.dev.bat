@@ -1,4 +1,4 @@
-@echo off
+﻿@echo off
 set "autoitdir=T:\Program Files (x86)\AutoIt3"
 set path=%path%;"%autoitdir%\Aut2Exe\"
 set "upxx="%autoitdir%\Aut2Exe\"upx.exe"
@@ -29,6 +29,6 @@ rem >"%~d0%~p0version.au3" echo Dim $version = "  0.%now%"
 del %outdir%%app64%u.exe
 %upxx% -9  -o "%outdir%%app64%u.exe" "%outdir%%app64%.exe"
 del %outdir%%app64%.exe
-timeout /t 2
+rem timeout /t 2
 exit
 pause

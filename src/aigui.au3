@@ -141,15 +141,29 @@ GUICtrlCreateLabel("ещё полосочка", 160, $StrTool+80)
 GUICtrlSetBkColor(-1, 0x00FF09)
 
 $hImage = _GUIImageList_Create(32, 32, 5, 3);, 6)
+_GUIImageList_AddIcon($hImage, "taskmgr.exe", 0, True)
+$btnTM = GUICtrlCreateButton("Диспетчер задач", 187, $WHeight-66, 147, 40)
+
 Select
    Case IsAdmin()
-_GUIImageList_AddIcon($hImage, "taskmgr.exe", 0, True)
-Case Else
-_GUIImageList_AddIcon($hImage, "shell32.dll", 109, True)
-EndSelect
-$btnTM = GUICtrlCreateButton("Диспетчер задач", 187, $WHeight-66, 147, 40)
-_GUICtrlButton_SetImageList($btnTM, $hImage)
 GUICtrlSetOnEvent(-1, "btnTM")
+Case Else
+;_GUIImageList_AddIcon($hImage, "shell32.dll", 109, True)
+GUICtrlSetOnEvent(-1, "btnTMu")
+EndSelect
+_GUICtrlButton_SetImageList($btnTM, $hImage)
+
+$hImage = _GUIImageList_Create(32, 32, 5, 3)
+_GUIImageList_AddIcon($hImage, "devmgr.dll", 4, True)
+$btnDM = GUICtrlCreateButton("Диспетчер устройств", 25, $WHeight-66, 157, 40)
+Select
+   Case IsAdmin()
+GUICtrlSetOnEvent(-1, "btnDM")
+Case Else
+;_GUIImageList_AddIcon($hImage, "shell32.dll", 109, True)
+GUICtrlSetOnEvent(-1, "btnDMu")
+EndSelect
+_GUICtrlButton_SetImageList($btnDM, $hImage)
 
 
 
@@ -170,16 +184,7 @@ GUICtrlSetOnEvent(-1, "btnMC")
 
 
 
-$hImage = _GUIImageList_Create(32, 32, 5, 3);, 6)
-Select
-   Case IsAdmin()
-_GUIImageList_AddIcon($hImage, "devmgr.dll", 4, True)
-Case Else
-_GUIImageList_AddIcon($hImage, "shell32.dll", 109, True)
-EndSelect
-$btnDM = GUICtrlCreateButton("Диспетчер устройств", 25, $WHeight-66, 157, 40)
-_GUICtrlButton_SetImageList($btnDM, $hImage)
-GUICtrlSetOnEvent(-1, "btnDM")
+
 
 $hImage = _GUIImageList_Create(32, 32, 5, 3);, 6)
 _GUIImageList_AddIcon($hImage, "cmd.exe", 0, True)
@@ -302,11 +307,12 @@ GUICtrlSetLimit(-1, 10, 1)
 ;$windowTab = GUICtrlRead(-1)
 
 Local Const $snTUD = 110 ; вертикаль таблицы
+
 local Const $snMLen = 200 ; длина поля путь
 Local Const $snXLen = 100
 Local Const $snSWLen = 165
 Local Const $snPLen = $snSWLen-65
-Local Const $snULen = 320
+Local Const $snULen = 280 ;пользователь длина
 Local Const $snRLen = 70 ; префикс
 Local Const $snPSLen = 150
 ;Local Const $snLLen = $guiCoord[2]-96
@@ -316,12 +322,15 @@ GUICtrlCreateTab(9, $snTUD, $guiCoord[2]-38, 250)
 For $i=0 To $windowTabs
 GUICtrlCreateTabItem($i)
 
-GUICtrlCreateLabel("Mode", 20, $snTUD+30, 32)
+GUICtrlCreateLabel("Mode:", 20, $snTUD+30, 28, 20, 0x0200)
+;GUICtrlCreateLabel("Mode", 40, $snTUD+30, 32)
 ;GUICtrlSetBkColor(-1,0x00FF09)
 ;$snInfo[$i] = GUICtrlCreateInput($info[$i], 63, $snTUD+30, $snMLen-2,20)
 ;GUICtrlCreateInput($info[$i], 63, $snTUD+30, $snMLen-2,20)
 ;MsgBox(0, "WinGetPos активного окна", $i)
 
+
+;GUICtrlSetBkColor(-1,0x00FF09)
 $sn_info[$i] = GUICtrlCreateInput($info[$i], 63, $snTUD+30, $snMLen-2,20)
 
 ;GUICtrlSetBkColor(-1,0x00FF09)
@@ -329,17 +338,25 @@ If $exlpid[$i] Then GUICtrlCreateLabel("Last PID " & $exlpid[$i], $snMLen+72, $s
 ;GUICtrlSetBkColor(-1,0x00FF09)
 
 $st_typecmd[$i] = GUICtrlCreateCombo($typecmd[$i], 20, $snTUD+60, 32, 100)
+GUICtrlSetData(-1, "0|1|2",$typecmd[$i])
+
+
 $st_expath[$i] = GUICtrlCreateInput($expath[$i], 62, $snTUD+60,  $snMLen, 20)
 $st_exname[$i] = GUICtrlCreateInput($exname[$i], $snMLen+72, $snTUD+60,  $snXLen, 20)
 
-$st_server[$i] = GUICtrlCreateInput($server[$i], 20, $snTUD+90, $snSWLen,20)
-$st_port[$i] = GUICtrlCreateInput($port[$i], $snSWLen+30, $snTUD+90, $snPLen,20) ;$snSWLen+40+$snPLen
-
-$st_user[$i] = GUICtrlCreateInput($user[$i], 20, $snTUD+120, $snULen,20)
-GUICtrlCreateLabel("&&", $snULen+23, $snTUD+120, 10, 20, 0x0200)
+GUICtrlCreateLabel("Server:", 20, $snTUD+90, 35, 20, 0x0200)
 ;GUICtrlSetBkColor(-1,0x00FF09)
-$st_devr[$i] = GUICtrlCreateInput($devr[$i], $snULen+30+2, $snTUD+120, $snRLen,20)
-$st_pass[$i] = GUICtrlCreateInput($pass[$i], $snULen+30+2+$snRLen+10, $snTUD+120, $snPSLen,20)
+$st_server[$i] = GUICtrlCreateInput($server[$i], 57, $snTUD+90, $snSWLen,20)
+$st_port[$i] = GUICtrlCreateInput($port[$i], $snSWLen+30+39, $snTUD+90, $snPLen,20) ;$snSWLen+40+$snPLen
+
+GUICtrlCreateLabel("User:", 20, $snTUD+120, 28, 20, 0x0200)
+$st_user[$i] = GUICtrlCreateInput($user[$i], 50, $snTUD+120, $snULen,20)
+GUICtrlCreateLabel("&&", $snULen+51, $snTUD+120, 10, 20, 0x0200)
+;GUICtrlSetBkColor(-1,0x00FF09)
+$st_devr[$i] = GUICtrlCreateInput($devr[$i], $snULen+30+2+26, $snTUD+120, $snRLen,20)
+GUICtrlCreateLabel("Pass:", $snULen+$snRLen+60, $snTUD+120, 30, 20, 0x0200)
+;GUICtrlSetBkColor(-1,0x00FF09)
+$st_pass[$i] = GUICtrlCreateInput($pass[$i], $snULen+$snRLen+91, $snTUD+120, $snPSLen,20)
 
 GUICtrlCreateLabel("Log:", 20, $snTUD+150, 28, 20, 0x0200)
 ;GUICtrlSetBkColor(-1,0x00FF09)
@@ -577,10 +594,22 @@ EndFunc
 
 Func btnTM()
 Run (@SystemDir & "\taskmgr.exe", @SystemDir ,@SW_SHOW)
+;Run(@ComSpec & ' /c ' & @SystemDir & "\taskmgr.exe", @SystemDir, @SW_HIDE)
+EndFunc
+
+Func btnTMu()
+;Run (@SystemDir & "\taskmgr.exe", @SystemDir ,@SW_SHOW)
+Run(@ComSpec & ' /c ' & @SystemDir & "\taskmgr.exe", @SystemDir, @SW_HIDE)
 EndFunc
 
 Func btnDM()
 Run (@SystemDir & "\mmc.exe " & @SystemDir & "\devmgmt.msc" , @SystemDir ,@SW_SHOW)
+;Run(@ComSpec & ' /c ' & @SystemDir & "\mmc.exe " & @SystemDir & "\devmgmt.msc", @SystemDir, @SW_HIDE)
+EndFunc
+
+Func btnDMu()
+;Run (@SystemDir & "\mmc.exe " & @SystemDir & "\devmgmt.msc" , @SystemDir ,@SW_SHOW)
+Run(@ComSpec & ' /c ' & @SystemDir & "\mmc.exe " & @SystemDir & "\devmgmt.msc", @SystemDir, @SW_HIDE)
 EndFunc
 
 Func btnCM()
