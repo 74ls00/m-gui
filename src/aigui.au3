@@ -87,6 +87,9 @@ Global $st_port[$windowTabs+1],$st_user[$windowTabs+1],$st_devr[$windowTabs+1],$
 ;$iPIDx[$i] = Run(@ComSpec, Null, @SW_HIDE, $STDIN_CHILD + $STDERR_MERGED)
 ;OnAutoItExitRegister("_OnExit")
 ;Next
+Global $lbT[$windowTabs+1]; активность
+Global Const $lbTAct = 0x00FF09
+Global Const $lbTdeact = 0xFBD7F4
 
 ;OnAutoItExitRegister("_OnExit")
 
@@ -122,6 +125,7 @@ Select ; определение прав запуска
 	  $nGUI = " - без прав администратора"
    EndSelect
 $hGUI = GUICreate($NameGUI & " " & $version & $nGUI,$WWidth,$WHeight)
+;GUISetIcon(@SystemDir & "\cmd.exe", 0)
 GUISetOnEvent($GUI_EVENT_CLOSE, '_ProExit', $hGUI)
 GUISetOnEvent($GUI_EVENT_MINIMIZE, '_hideWin', $hGUI)
 
@@ -135,10 +139,50 @@ GUICtrlCreateLabel($NameGUI & " - зелёная фигня", 20, $StrTool+5, $WWidth-42, 60
 GUICtrlSetFont(-1, 10.5, 400, 0 , "Arial" , 5)
 GUICtrlSetBkColor(-1, 0x00FF00)
 
-GUICtrlCreateLabel("полосочка", 20, $StrTool+80)
-GUICtrlSetBkColor(-1, 0x00FF09)
-GUICtrlCreateLabel("ещё полосочка", 160, $StrTool+80)
-GUICtrlSetBkColor(-1, 0x00FF09)
+Local Const $tCordLbtL = 33 ; левый край
+Local Const $tCordLbtT = $StrTool+80 ;верхний край
+Local Const $tCordSV = 20 ;вертикальный шаг
+Local Const $tCordSzV = 18 ; высота надписи
+Local Const $tCordSzH = 150 ; длина надписи
+;Local $z , $x
+
+GUICtrlCreateGroup("", $tCordLbtL-8 , $tCordLbtT-14 , $tCordSzH*2+21 , $tCordSV*9+1)
+
+;For $f=0 To $windowTabs/8
+For $i=0 To $windowTabs
+
+Select
+Case $i < 8
+
+  ; $x=$tCordLbtT+($i*$tCordSV)
+  ; $z=$tCordLbtL
+   $lbT[$i] = GUICtrlCreateLabel(" " & $info[$i] & " ", $tCordLbtL,  $tCordLbtT+($i*$tCordSV), $tCordSzH, $tCordSzV, 0x0200)
+case Else
+   $lbT[$i] = GUICtrlCreateLabel(" " & $info[$i] & " ", $tCordLbtL+$tCordSzH+5,  $tCordLbtT+($i*$tCordSV)-($tCordSV*8), $tCordSzH, $tCordSzV, 0x0200)
+ ;  $x=$tCordLbtT+($i*$tCordSV)-($tCordSV*8)
+;   $z=$tCordLbtL+$tCordSzH+5
+EndSelect
+
+;If $i > 7 Then
+
+;$lbT[$i] = GUICtrlCreateLabel(" " & $info[$i] & " ", $z,  $x, $tCordSzH, $tCordSzV, 0x0200)
+;$lbT[$i] = GUICtrlCreateLabel(" " & $iPIDx[$i] & " " & $info[$i] & " ", $tCordLbtL,  $tCordLbtT+($tCordSV*$i), $tCordSzH, $tCordSzV, 0x0200)
+
+;GUICtrlSetBkColor(-1, 0x23F009)
+
+;Next
+Next
+;$lbT[1] = GUICtrlCreateLabel("222:", $tCordLbtL,  $tCordLbtT+$tCordSV, $tCordSzH, $tCordSzV, 0x0200)
+;F  I
+;0	0
+;0	1
+
+;GUICtrlSetBkColor(-1, 0x23F009)
+
+
+
+;GUICtrlCreateLabel("ещё полосочка", 160, $StrTool+80)
+;GUICtrlSetBkColor(-1, 0x00FF09)
 
 $hImage = _GUIImageList_Create(32, 32, 5, 3);, 6)
 _GUIImageList_AddIcon($hImage, "taskmgr.exe", 0, True)
@@ -285,7 +329,6 @@ Local Const $snTabs2 = $guiCoord[3]-438	; вкладок.
 
 $hSETUP = GUICreate("Настройки", $guiCoord[2]-20, $guiCoord[3]-41, $guiCoord[0]+8, $guiCoord[1]+30, BitOR ($WS_BORDER, $WS_POPUP), -1, $hGUI)
 ;$hSETUP = GUICreate("Настройки", $guiCoord[2]-20, $guiCoord[3]-41, $guiCoord[0]+8, $guiCoord[1]+30, $WS_BORDER, -1, $hGUI)
-
 ;GUICtrlCreateGroup("Настройки", 9, 9 , $guiCoord[2]-38 , $guiCoord[3]-60)
 GUICtrlCreateGroup("Настройки", 9, 9 , $guiCoord[2]-38 , $guiCoord[3]-400)
 
@@ -518,6 +561,7 @@ EndFunc   ;==>_UnSel
 Func StartPressed()
 Local $getTab = GUICtrlRead($iTab)-1
    $iPIDx[$getTab] = Run(@ComSpec, Null, @SW_HIDE, $STDIN_CHILD + $STDERR_MERGED)
+   If ProcessExists ( $iPIDx[$getTab] ) Then GUICtrlSetBkColor($lbT[$getTab], $lbTAct)
    ;OnAutoItExitRegister("_OnExit")
    $exlpid[$getTab] = $iPIDx[$getTab]
    _iniSave()
@@ -538,6 +582,8 @@ EndFunc
 
 
 Func StopPressed()
+   GUICtrlSetBkColor($lbT[$getTab], 0xEBA794)
+
 Local $getTab = GUICtrlRead($iTab)-1
    GUICtrlSetState($iBtnStop[$getTab], $GUI_DISABLE)
    GUICtrlSetState($iBtnStart[$getTab], $GUI_ENABLE)
@@ -548,6 +594,7 @@ Local $getTab = GUICtrlRead($iTab)-1
                     ProcessClose($aPIDs[$n][0])
                Next
 			   ProcessClose($iPIDs); завершить cmd по PID
+			   If Not ProcessExists ( $iPIDx[$getTab] ) Then GUICtrlSetBkColor($lbT[$getTab], $lbTdeact)
 		   EndIf
 EndFunc
 
@@ -573,7 +620,7 @@ GUICtrlSetState($iBtnStop[$i], $GUI_DISABLE)
 			   ProcessClose($iPIDs); завершить cmd по PID
 			EndIf
 EndSelect
-
+If Not ProcessExists ( $iPIDx[$i] ) Then GUICtrlSetBkColor($lbT[$i], $lbTdeact)
    Next
 
 GUICtrlSetState($btnAllStop, $GUI_DISABLE)

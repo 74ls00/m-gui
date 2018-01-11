@@ -7,7 +7,7 @@ set "srcdir=%~d0%~p0"
 set "main=%srcdir%aigui.au3"
 
 set app=AiGUI
-set "icon=%srcdir%res\icon2.ico"
+set "icon=%srcdir%res\icon5.ico"
 set app64=%app%_x64
 
 taskkill /im %app64%*
@@ -21,7 +21,6 @@ set now=%%a%%b%%c.%%d%%e
 rem set now=%%a%%b.%%c
 )
 set "now=%now:~-11%"
-rem >"%~d0%~p0version.au3" echo Dim $version = "  0.%now%"
 >"%srcdir%version.au3" echo Dim $version = "  0.%now% dev"
 
 "%autoitdir%\Aut2Exe\Aut2exe_x64.exe" /in %main% /out %outdir%%app64%.exe /x64 /comp 4 /icon %icon% /gui

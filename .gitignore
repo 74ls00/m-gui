@@ -4,7 +4,11 @@ git.txt
 1
 tmp
 log
-
+pict/
+backup/
+com/
+local/
+bak/
 nheqminer_0.3a_flypool
 nheqminer_suprnovav0.4a
 zm_0.5.7_win
@@ -27,11 +31,7 @@ debug.ini
 system.ini
 upxhide.tmp.vbs
 
-pict/
-backup/
-com/
-local/
-bak/
+
 
 *.vbs
 *.dll
