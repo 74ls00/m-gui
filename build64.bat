@@ -1,4 +1,4 @@
-п»ї@echo off
+@echo off
 set "autoitdir=T:\Program Files (x86)\AutoIt3"
 set path=%path%;"%autoitdir%\Aut2Exe\"
 set "upxx="%autoitdir%\Aut2Exe\"upx.exe"
@@ -16,7 +16,7 @@ rem %date%=YYYY-MM-DD %time%=hH:mm:ss.ms
 set now=%DATE: =0% %TIME: =0%
 rem set now=%TIME: =0%
 for /f "tokens=1-7 delims=/-:., " %%a in ( "%now%" ) do (
-rem %%a - РіРѕРґ %%b - РјРµСЃВ¤С† %%c - РґРµРЅСЊ %%d - С‡Р°СЃС‹ %%e - РјРёРЅСѓС‚С‹ %%f - СЃРµРєСѓРЅРґС‹ %%g - СЃРѕС‚С‹Рµ
+rem %%a - год %%b - мес¤ц %%c - день %%d - часы %%e - минуты %%f - секунды %%g - сотые
 set now=%%a%%b%%c.%%d%%e
 rem set now=%%a%%b.%%c
 )
