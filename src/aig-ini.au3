@@ -3,7 +3,7 @@
 Global $myini = @WorkingDir & "\myconf.ini"
 Global $sysini = @WorkingDir & "\system.ini"
 Global $windowTabs=4
-Global $trayexit=1 ;0=tray. 1=exit
+Global $trayexit=0 ;1=tray. 0=exit
 Global $strLimit=600000 ;! добавить  в ini
 
 Select
