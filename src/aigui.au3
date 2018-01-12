@@ -31,8 +31,8 @@ Opt("GUIOnEventMode", 1)
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 _debug_start()
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-Select ; не запускать вторую копию программы
-   Case IniRead ($sysini,"RUN","RunPID", Null) <> "" ; добавить. если пид есть, искать по нему процесс и тогда ... >
+Select ; РЅРµ Р·Р°РїСѓСЃРєР°С‚СЊ РІС‚РѕСЂСѓСЋ РєРѕРїРёСЋ РїСЂРѕРіСЂР°РјРјС‹
+   Case IniRead ($sysini,"RUN","RunPID", Null) <> "" ; РґРѕР±Р°РІРёС‚СЊ. РµСЃР»Рё РїРёРґ РµСЃС‚СЊ, РёСЃРєР°С‚СЊ РїРѕ РЅРµРјСѓ РїСЂРѕС†РµСЃСЃ Рё С‚РѕРіРґР° ... >
 	  Select
 		 Case ProcessExists ( IniRead ($sysini,"RUN","RunPID", Null) )
 			WinSetState ( IniRead ($sysini,"RUN","RunGUI", Null), Null, @SW_SHOW )
@@ -48,36 +48,36 @@ Global Const $WA_INACTIVE = 0
 Global Const $VIP = 1
 
 Global $hGUI, $hSETUP, $iBtnStart, $iBtnStop, $iBtnClean, $iBtnPause, $iBtnUnPause, $aPIDs, $iUnSel = 1 , $btnAllStop
-Global $stTabs , $tmpStbs ;= $windowTabs; временное количество вкладок
+Global $stTabs , $tmpStbs ;= $windowTabs; РІСЂРµРјРµРЅРЅРѕРµ РєРѕР»РёС‡РµСЃС‚РІРѕ РІРєР»Р°РґРѕРє
 $tmpStbs = $windowTabs+1
-Global $strl4 , $iTab , $hImage ; элемент иконок кнопки
+Global $strl4 , $iTab , $hImage ; СЌР»РµРјРµРЅС‚ РёРєРѕРЅРѕРє РєРЅРѕРїРєРё
 
-; размеры gui
+; СЂР°Р·РјРµСЂС‹ gui
 Global Const $NameGUI = "AiGUI"
-Global Const $WWidth = 670 , $WHeight = 450 ; ширина и высота окна 450
-Global Const $StrTool = 35 ; сверху первая строка под вкладкой.
-Global Const $THeight = $WHeight-75 ; высота консоли
+Global Const $WWidth = 670 , $WHeight = 450 ; С€РёСЂРёРЅР° Рё РІС‹СЃРѕС‚Р° РѕРєРЅР° 450
+Global Const $StrTool = 35 ; СЃРІРµСЂС…Сѓ РїРµСЂРІР°СЏ СЃС‚СЂРѕРєР° РїРѕРґ РІРєР»Р°РґРєРѕР№.
+Global Const $THeight = $WHeight-75 ; РІС‹СЃРѕС‚Р° РєРѕРЅСЃРѕР»Рё
 
 
-_iniLoad() ; загрузить настройки из ini <aig-ini.au3>
-_sLine()  ; загрузить строки
+_iniLoad() ; Р·Р°РіСЂСѓР·РёС‚СЊ РЅР°СЃС‚СЂРѕР№РєРё РёР· ini <aig-ini.au3>
+_sLine()  ; Р·Р°РіСЂСѓР·РёС‚СЊ СЃС‚СЂРѕРєРё
 Global $iBtnStart[$windowTabs+1],$iBtnStop[$windowTabs+1],$iBtnClean[$windowTabs+1],$iEdt[$windowTabs+1]
 Global $iBtnUnPause[$windowTabs+1],$iBtnPause[$windowTabs+1] , $iBtnCont[$windowTabs+1]
 Global $iPIDx[$windowTabs+1] , $aPIDs[$windowTabs+1] , $sOut[$windowTabs+1] , $getTab ;=GUICtrlRead($iTab)-1
 Global $sn_info[$windowTabs+1],$st_typecmd[$windowTabs+1],$st_expath[$windowTabs+1],$st_exname[$windowTabs+1],$st_server[$windowTabs+1],$st_urlprofile[$windowTabs+1]
 
 Global $st_port[$windowTabs+1],$st_user[$windowTabs+1],$st_devr[$windowTabs+1],$st_pass[$windowTabs+1],$st_exlog[$windowTabs+1],$st_params[$windowTabs+1]
-Global $conOut[$windowTabs+1] = [0]; временная переменная вываода
+Global $conOut[$windowTabs+1] = [0]; РІСЂРµРјРµРЅРЅР°СЏ РїРµСЂРµРјРµРЅРЅР°СЏ РІС‹РІР°РѕРґР°
 Global $aSel[2]
 
-Global Const $txtQual = 3 ; сглаживание
+Global Const $txtQual = 3 ; СЃРіР»Р°Р¶РёРІР°РЅРёРµ
 Global $st_trayexit
 
-Global $lbT[$windowTabs+1]; активность
-Global Const $lbTAct = 0x00FF09 ;цвет активного индикатора
-Global Const $lbTdeact = 0xFBD7F4 ;цвет НЕактивного индикатора
+Global $lbT[$windowTabs+1]; Р°РєС‚РёРІРЅРѕСЃС‚СЊ
+Global Const $lbTAct = 0x00FF09 ;С†РІРµС‚ Р°РєС‚РёРІРЅРѕРіРѕ РёРЅРґРёРєР°С‚РѕСЂР°
+Global Const $lbTdeact = 0xFBD7F4 ;С†РІРµС‚ РќР•Р°РєС‚РёРІРЅРѕРіРѕ РёРЅРґРёРєР°С‚РѕСЂР°
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-TraySetState(1) ; Показывает меню трея
+TraySetState(1) ; РџРѕРєР°Р·С‹РІР°РµС‚ РјРµРЅСЋ С‚СЂРµСЏ
 ;OnAutoItExitRegister("_OnExit")
 
 _Main()
@@ -108,28 +108,28 @@ WEnd
 ;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 Func _Main()
 
-Select ; определение прав запуска
+Select ; РѕРїСЂРµРґРµР»РµРЅРёРµ РїСЂР°РІ Р·Р°РїСѓСЃРєР°
    Case IsAdmin()
-	  $nGUI = " - Администратор"
+	  $nGUI = " - РђРґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂ"
    Case Else
-	  $nGUI = " - без прав администратора"
+	  $nGUI = " - Р±РµР· РїСЂР°РІ Р°РґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂР°"
    EndSelect
 $hGUI = GUICreate($NameGUI & " " & $version & $nGUI,$WWidth,$WHeight)
-IniWrite($sysini, "RUN", "RunPID", WinGetProcess ( $hGUI )); отметить что программа запущена
+IniWrite($sysini, "RUN", "RunPID", WinGetProcess ( $hGUI )); РѕС‚РјРµС‚РёС‚СЊ С‡С‚Рѕ РїСЂРѕРіСЂР°РјРјР° Р·Р°РїСѓС‰РµРЅР°
 IniWrite($sysini, "RUN", "RunGUI", '"' & $NameGUI & " " & $version & $nGUI & '"')
 
 ;GUISetIcon(@SystemDir & "\cmd.exe", 0)
 GUISetOnEvent($GUI_EVENT_CLOSE, '_closeWin', $hGUI)
 GUISetOnEvent($GUI_EVENT_MINIMIZE, '_hideWin', $hGUI)
 
-GUISetFont(8.5, Null, Null, Null ,$hGUI , $txtQual);бесполезный код
+GUISetFont(8.5, Null, Null, Null ,$hGUI , $txtQual);Р±РµСЃРїРѕР»РµР·РЅС‹Р№ РєРѕРґ
 
-$iTab = GUICtrlCreateTab(5, 5, $WWidth-10, $WHeight-10) ;создать вкладки с отступом 5 по краям окна, и 5 внутри ;$TCS_HOTTRACK
+$iTab = GUICtrlCreateTab(5, 5, $WWidth-10, $WHeight-10) ;СЃРѕР·РґР°С‚СЊ РІРєР»Р°РґРєРё СЃ РѕС‚СЃС‚СѓРїРѕРј 5 РїРѕ РєСЂР°СЏРј РѕРєРЅР°, Рё 5 РІРЅСѓС‚СЂРё ;$TCS_HOTTRACK
 ;..................................................................................................
-GUICtrlCreateTabItem("  Панель  "); Вкладка для инструментов
+GUICtrlCreateTabItem("  РџР°РЅРµР»СЊ  "); Р’РєР»Р°РґРєР° РґР»СЏ РёРЅСЃС‚СЂСѓРјРµРЅС‚РѕРІ
 
 GUICtrlCreateGroup("", 15 , $StrTool-5 , $WWidth-32 , $THeight+30)
-GUICtrlCreateLabel($NameGUI & " - зелёная фигня", 20, $StrTool+5, $WWidth-42-70, 60)
+GUICtrlCreateLabel($NameGUI & " - Р·РµР»С‘РЅР°СЏ С„РёРіРЅСЏ", 20, $StrTool+5, $WWidth-42-70, 60)
 GUICtrlSetFont(-1, 10.5, 400, 0 , "Arial" , 5)
 GUICtrlSetBkColor(-1, 0x00FF00)
 
@@ -137,13 +137,13 @@ $btnHL = GUICtrlCreateButton("", $WWidth-67+16+1, $WHeight-404-1, 24, 24, $BS_IC
 GUICtrlSetImage ( -1, "shell32.dll", 154+109 ,0);154 215
 GUICtrlSetOnEvent(-1, "btnHL")
 
-Local Const $tCordLbtL = 33 ; левый край
-Local Const $tCordLbtT = $StrTool+80 ;верхний край
-Local Const $tCordSV = 20 ;вертикальный шаг
-Local Const $tCordSzV = 18 ; высота надписи
-Local Const $tCordSzH = 150 ; длина надписи
+Local Const $tCordLbtL = 33 ; Р»РµРІС‹Р№ РєСЂР°Р№
+Local Const $tCordLbtT = $StrTool+80 ;РІРµСЂС…РЅРёР№ РєСЂР°Р№
+Local Const $tCordSV = 20 ;РІРµСЂС‚РёРєР°Р»СЊРЅС‹Р№ С€Р°Рі
+Local Const $tCordSzV = 18 ; РІС‹СЃРѕС‚Р° РЅР°РґРїРёСЃРё
+Local Const $tCordSzH = 150 ; РґР»РёРЅР° РЅР°РґРїРёСЃРё
 GUICtrlCreateGroup("", $tCordLbtL-8 , $tCordLbtT-14 , $tCordSzH*2+21 , $tCordSV*9+1)
-For $i=0 To $windowTabs ; рисуем индикаторы
+For $i=0 To $windowTabs ; СЂРёСЃСѓРµРј РёРЅРґРёРєР°С‚РѕСЂС‹
    Select
 Case $i < 8
 $lbT[$i] = GUICtrlCreateLabel(" " & $info[$i] & " ", $tCordLbtL,  $tCordLbtT+($i*$tCordSV), $tCordSzH, $tCordSzV, 0x0200)
@@ -160,7 +160,7 @@ Next
 
 $hImage = _GUIImageList_Create(32, 32, 5, 3);, 6)
 _GUIImageList_AddIcon($hImage, "taskmgr.exe", 0, True)
-$btnTM = GUICtrlCreateButton("Диспетчер задач", 187, $WHeight-97, 147, 40)
+$btnTM = GUICtrlCreateButton("Р”РёСЃРїРµС‚С‡РµСЂ Р·Р°РґР°С‡", 187, $WHeight-97, 147, 40)
 Select
    Case IsAdmin()
 GUICtrlSetOnEvent(-1, "btnTM")
@@ -172,7 +172,7 @@ _GUICtrlButton_SetImageList($btnTM, $hImage)
 
 $hImage = _GUIImageList_Create(32, 32, 5, 3)
 _GUIImageList_AddIcon($hImage, "devmgr.dll", 4, True)
-$btnDM = GUICtrlCreateButton("Диспетчер устройств", 25, $WHeight-97, 157, 40)
+$btnDM = GUICtrlCreateButton("Р”РёСЃРїРµС‚С‡РµСЂ СѓСЃС‚СЂРѕР№СЃС‚РІ", 25, $WHeight-97, 157, 40)
 Select
    Case IsAdmin()
 GUICtrlSetOnEvent(-1, "btnDM")
@@ -189,19 +189,19 @@ _GUICtrlButton_SetImageList($btnDM, $hImage)
 
 $hImage = _GUIImageList_Create(32, 32, 5, 3);, 6)
 _GUIImageList_AddIcon($hImage, "cmd.exe", 0, True)
-$btnCM = GUICtrlCreateButton("Командная строка", 339, $WHeight-97, 150, 40) ; 339 $WWidth-331
+$btnCM = GUICtrlCreateButton("РљРѕРјР°РЅРґРЅР°СЏ СЃС‚СЂРѕРєР°", 339, $WHeight-97, 150, 40) ; 339 $WWidth-331
 _GUICtrlButton_SetImageList($btnCM, $hImage)
 GUICtrlSetOnEvent(-1, "btnCM")
 
 $hImage = _GUIImageList_Create(32, 32, 5, 3);, 6)
 _GUIImageList_AddIcon($hImage, "shell32.dll", 21, True)
-$btnST = GUICtrlCreateButton("Настройки", 494 , $WHeight-97, 150, 40);494 $WWidth-176
+$btnST = GUICtrlCreateButton("РќР°СЃС‚СЂРѕР№РєРё", 494 , $WHeight-97, 150, 40);494 $WWidth-176
 _GUICtrlButton_SetImageList($btnST, $hImage)
 GUICtrlSetOnEvent(-1, "btnST")
 
 $hImage = _GUIImageList_Create(32, 32, 5, 3);, 6)
 _GUIImageList_AddIcon($hImage, "calc.exe", 0, True)
-$btnCA = GUICtrlCreateButton("Калькулятор", 494-145, $WHeight-197, 150, 40)
+$btnCA = GUICtrlCreateButton("РљР°Р»СЊРєСѓР»СЏС‚РѕСЂ", 494-145, $WHeight-197, 150, 40)
 _GUICtrlButton_SetImageList($btnCA, $hImage)
 GUICtrlSetOnEvent(-1, "btnCA")
 
@@ -226,7 +226,7 @@ Switch $VIP
    Case 1
 $hImage = _GUIImageList_Create(32, 32, 5, 3);, 6)
 _GUIImageList_AddIcon($hImage, "shell32.dll", 215, True)
-$btnAllStop = GUICtrlCreateButton("Остановить всё", $WWidth-176, $tCordLbtT-8, 150, 40) ;$WWidth-176 ;;494-145
+$btnAllStop = GUICtrlCreateButton("РћСЃС‚Р°РЅРѕРІРёС‚СЊ РІСЃС‘", $WWidth-176, $tCordLbtT-8, 150, 40) ;$WWidth-176 ;;494-145
 _GUICtrlButton_SetImageList($btnAllStop, $hImage)
 GUICtrlSetOnEvent(-1, "btnAllStop")
 GUICtrlSetState(-1, $GUI_DISABLE)
@@ -236,19 +236,19 @@ EndSwitch
 
 ;..................................................................................................
 For $t = 0 To $windowTabs
-GUICtrlCreateTabItem($info[$t]) ; Вкладки программ
+GUICtrlCreateTabItem($info[$t]) ; Р’РєР»Р°РґРєРё РїСЂРѕРіСЂР°РјРј
 
-$iBtnStart[$t] = GUICtrlCreateButton("Старт", 14, $THeight+35 , 80, 25, $BS_DEFPUSHBUTTON)
+$iBtnStart[$t] = GUICtrlCreateButton("РЎС‚Р°СЂС‚", 14, $THeight+35 , 80, 25, $BS_DEFPUSHBUTTON)
 GUICtrlSetOnEvent(-1, "StartPressed")
 
-$iBtnStop[$t] = GUICtrlCreateButton("Стоп", 100, $THeight+35, 80, 25, 0x01) ; $BS_DEFPUSHBUTTON
+$iBtnStop[$t] = GUICtrlCreateButton("РЎС‚РѕРї", 100, $THeight+35, 80, 25, 0x01) ; $BS_DEFPUSHBUTTON
 GUICtrlSetOnEvent(-1, "StopPressed")
 GUICtrlSetState(-1, $GUI_DISABLE)
 
-$iBtnClean = GUICtrlCreateButton("Очистить", 186, $THeight+35, 80, 25)
+$iBtnClean = GUICtrlCreateButton("РћС‡РёСЃС‚РёС‚СЊ", 186, $THeight+35, 80, 25)
 GUICtrlSetOnEvent(-1, "CleanPressed")
 
-;$iBtnCont[$t] = GUICtrlCreateButton("Продолжить" , 272, $THeight+35, 80, 25)
+;$iBtnCont[$t] = GUICtrlCreateButton("РџСЂРѕРґРѕР»Р¶РёС‚СЊ" , 272, $THeight+35, 80, 25)
 ;;GUICtrlSetState($iBtnCont[$t], $GUI_DISABLE)
 ;GUICtrlSetOnEvent(-1, "ButtonCont");ButtonCont
 
@@ -265,7 +265,7 @@ EndFunc ;==>_Main
 
 
 ;--------------------------------------------------------------------------------------------------
-Func btnST() ; окно настроек
+Func btnST() ; РѕРєРЅРѕ РЅР°СЃС‚СЂРѕРµРє
 ;$setEXIT = 0
 ;$guiSZ = WinGetClientSize ($hGUI );670 450
 ;$guiCoord = WinGetPos ($hGUI);676 478
@@ -274,49 +274,49 @@ Func btnST() ; окно настроек
 WinSetState ( $hGUI, Null, @SW_DISABLE )
 Local $guiCoord = WinGetPos ($hGUI)
 
-;local Const $snMain1 = $guiCoord[2]-38 ; шир.
-;local Const $snMain2 = $guiCoord[3]-60 ; выс.
+;local Const $snMain1 = $guiCoord[2]-38 ; С€РёСЂ.
+;local Const $snMain2 = $guiCoord[3]-60 ; РІС‹СЃ.
 
 ;Local $stTabs
 
 
 
-$hSETUP = GUICreate("Настройки", $guiCoord[2]-20, $guiCoord[3]-41, $guiCoord[0]+8, $guiCoord[1]+30, BitOR ($WS_BORDER, $WS_POPUP), -1, $hGUI)
-;$hSETUP = GUICreate("Настройки", $guiCoord[2]-20, $guiCoord[3]-41, $guiCoord[0]+8, $guiCoord[1]+30, $WS_BORDER, -1, $hGUI)
-;GUICtrlCreateGroup("Настройки", 9, 9 , $guiCoord[2]-38 , $guiCoord[3]-60)
-GUICtrlCreateGroup("Настройки", 9, 9 , $guiCoord[2]-38 , $guiCoord[3]-400)
+$hSETUP = GUICreate("РќР°СЃС‚СЂРѕР№РєРё", $guiCoord[2]-20, $guiCoord[3]-41, $guiCoord[0]+8, $guiCoord[1]+30, BitOR ($WS_BORDER, $WS_POPUP), -1, $hGUI)
+;$hSETUP = GUICreate("РќР°СЃС‚СЂРѕР№РєРё", $guiCoord[2]-20, $guiCoord[3]-41, $guiCoord[0]+8, $guiCoord[1]+30, $WS_BORDER, -1, $hGUI)
+;GUICtrlCreateGroup("РќР°СЃС‚СЂРѕР№РєРё", 9, 9 , $guiCoord[2]-38 , $guiCoord[3]-60)
+GUICtrlCreateGroup("РќР°СЃС‚СЂРѕР№РєРё", 9, 9 , $guiCoord[2]-38 , $guiCoord[3]-400)
 
 
 
 
 
-;$btnCM = GUICtrlCreateButton("Командная строка", 339, $WHeight-97, 150, 40) ; 339 $WWidth-331
+;$btnCM = GUICtrlCreateButton("РљРѕРјР°РЅРґРЅР°СЏ СЃС‚СЂРѕРєР°", 339, $WHeight-97, 150, 40) ; 339 $WWidth-331
 
 
 
 
 $hImage = _GUIImageList_Create(24, 24, 5, 3);, 6)
 _GUIImageList_AddIcon($hImage, "DeviceCenter.dll", 3, True)
-GUICtrlCreateButton("Сохранить", 23, 32, 100, 32)
+GUICtrlCreateButton("РЎРѕС…СЂР°РЅРёС‚СЊ", 23, 32, 100, 32)
 GUICtrlSetOnEvent(-1, "SetsSave")
 _GUICtrlButton_SetImageList(-1, $hImage)
 
 
 
-GUICtrlCreateButton("Закрыть", 155, 32, 90, 30)
+GUICtrlCreateButton("Р—Р°РєСЂС‹С‚СЊ", 155, 32, 90, 30)
 GUICtrlSetOnEvent(-1, "SetsClose")
 
 
 ;;..................................................................................................
-Local Const $snTabs1 = $guiCoord[2]-85 ; позиция_ ;276
-Local Const $snTabs2 = $guiCoord[3]-80	; вкладок. ;438
+Local Const $snTabs1 = $guiCoord[2]-85 ; РїРѕР·РёС†РёСЏ_ ;276
+Local Const $snTabs2 = $guiCoord[3]-80	; РІРєР»Р°РґРѕРє. ;438
 GUICtrlCreateGroup(Null, $snTabs1-123, $snTabs2-16 , 178 , 45)
-GUICtrlCreateLabel("Количество вкладок", $snTabs1-109, $snTabs2+3)
+GUICtrlCreateLabel("РљРѕР»РёС‡РµСЃС‚РІРѕ РІРєР»Р°РґРѕРє", $snTabs1-109, $snTabs2+3)
 $stTabs = GUICtrlCreateInput($tmpStbs, $snTabs1, $snTabs2, 40, 20)
 GUICtrlCreateUpdown(-1,BitOR (0x40 , 0x01, 0x20) )
 GUICtrlSetLimit(-1, 10, 1)
 ;;..................................................................................................
-$st_trayexit = GUICtrlCreateCheckbox("Сворачивать в трей", $guiCoord[2]-160, $guiCoord[3]-455, 120, 20, $BS_RIGHTBUTTON)
+$st_trayexit = GUICtrlCreateCheckbox("РЎРІРѕСЂР°С‡РёРІР°С‚СЊ РІ С‚СЂРµР№", $guiCoord[2]-160, $guiCoord[3]-455, 120, 20, $BS_RIGHTBUTTON)
 Switch $trayexit
    Case 1
 	  GUICtrlSetState ( $st_trayexit, 1 ) ;$GUI_CHECKED 1
@@ -331,19 +331,19 @@ EndSwitch
 ;Local Const $snTray1 = $guiCoord[2]-300 ;left
 ;Local Const $snTray2 = $guiCoord[3]-400	; top
 
-;GUICtrlCreateLabel("Сворачивать в трей", $snTray1, $snTray2, 110, 20, 0x0200)
+;GUICtrlCreateLabel("РЎРІРѕСЂР°С‡РёРІР°С‚СЊ РІ С‚СЂРµР№", $snTray1, $snTray2, 110, 20, 0x0200)
 
 
 
 ;;..................................................................................................
-Local Const $snTUD = 110 ; вертикаль таблицы
+Local Const $snTUD = 110 ; РІРµСЂС‚РёРєР°Р»СЊ С‚Р°Р±Р»РёС†С‹
 
-local Const $snMLen = 200 ; длина поля путь
+local Const $snMLen = 200 ; РґР»РёРЅР° РїРѕР»СЏ РїСѓС‚СЊ
 Local Const $snXLen = 100
 Local Const $snSWLen = 165
 Local Const $snPLen = $snSWLen-65
-Local Const $snULen = 280 ;пользователь длина
-Local Const $snRLen = 70 ; префикс
+Local Const $snULen = 280 ;РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ РґР»РёРЅР°
+Local Const $snRLen = 70 ; РїСЂРµС„РёРєСЃ
 Local Const $snPSLen = 150
 ;Local Const $snLLen = $guiCoord[2]-96
 
@@ -357,7 +357,7 @@ GUICtrlCreateLabel("Mode:", 20, $snTUD+30, 28, 20, 0x0200)
 ;GUICtrlSetBkColor(-1,0x00FF09)
 ;$snInfo[$i] = GUICtrlCreateInput($info[$i], 63, $snTUD+30, $snMLen-2,20)
 ;GUICtrlCreateInput($info[$i], 63, $snTUD+30, $snMLen-2,20)
-;MsgBox(0, "WinGetPos активного окна", $i)
+;MsgBox(0, "WinGetPos Р°РєС‚РёРІРЅРѕРіРѕ РѕРєРЅР°", $i)
 
 
 $sn_info[$i] = GUICtrlCreateInput($info[$i], 63, $snTUD+30, $snMLen-2,20)
@@ -399,16 +399,16 @@ Next
 
 
 
-;MsgBox(0, "WinGetPos активного окна", $exname[5])
+;MsgBox(0, "WinGetPos Р°РєС‚РёРІРЅРѕРіРѕ РѕРєРЅР°", $exname[5])
 
 
-;MsgBox(0, "WinGetPos активного окна", _
- ;  "Координаты:" & @LF & @TAB & _
+;MsgBox(0, "WinGetPos Р°РєС‚РёРІРЅРѕРіРѕ РѕРєРЅР°", _
+ ;  "РљРѕРѕСЂРґРёРЅР°С‚С‹:" & @LF & @TAB & _
   ;"X=" & $guiCoord[0] & @LF & @TAB & _
  ;"Y=" & $guiCoord[1] & @LF & @LF & _
-;"Размеры:" & @LF & @TAB & _
-;"ширина =  " & $guiCoord[2] & @LF & @TAB & _
-;"высота  =  " & $guiCoord[3])
+;"Р Р°Р·РјРµСЂС‹:" & @LF & @TAB & _
+;"С€РёСЂРёРЅР° =  " & $guiCoord[2] & @LF & @TAB & _
+;"РІС‹СЃРѕС‚Р°  =  " & $guiCoord[3])
 
 
 
@@ -416,7 +416,7 @@ GUISetState(@SW_SHOW)
 ;GUISwitch($hGUI)
 EndFunc
 ;--------------------------------------------------------------------------------------------------
-Func SetsClose(); закрыть окно настроек
+Func SetsClose(); Р·Р°РєСЂС‹С‚СЊ РѕРєРЅРѕ РЅР°СЃС‚СЂРѕРµРє
 GUIDelete(@GUI_WinHandle);@GUI_WinHandle ;$hSETUP
 WinSetState ( $hGUI, Null, @SW_ENABLE )
 WinSetState ( $hGUI, Null, @SW_SHOW )
@@ -454,12 +454,12 @@ EndSwitch
 _saveSysIni()
 
    ;$st_trayexit = GUICtrlRead($st_trayexit)
-   ;MsgBox(4096, "Настройки : вкладки" ,GUICtrlRead($st_trayexit))
+   ;MsgBox(4096, "РќР°СЃС‚СЂРѕР№РєРё : РІРєР»Р°РґРєРё" ,GUICtrlRead($st_trayexit))
 
 
 Select
    Case $tmpStbs <> $windowTabs+1
-MsgBox(4096, "Настройки : вкладки" , "Настройки изменены" & @CRLF & "Текущие вкладки: " & $windowTabs+1 & @CRLF & "После перезапуска: " & $tmpStbs & " вкладок")
+MsgBox(4096, "РќР°СЃС‚СЂРѕР№РєРё : РІРєР»Р°РґРєРё" , "РќР°СЃС‚СЂРѕР№РєРё РёР·РјРµРЅРµРЅС‹" & @CRLF & "РўРµРєСѓС‰РёРµ РІРєР»Р°РґРєРё: " & $windowTabs+1 & @CRLF & "РџРѕСЃР»Рµ РїРµСЂРµР·Р°РїСѓСЃРєР°: " & $tmpStbs & " РІРєР»Р°РґРѕРє")
 EndSelect
 
    SetsClose()
@@ -484,17 +484,17 @@ Local $aSel = GUICtrlRecvMsg($iEdt[$i],0xB0 ); 0xB0 $EM_GETSEL$selectTime
 
 Select
    Case $vTemp <> $sOut[$i]
-		 ;$sOut[$i] = $vTemp & " >" & $strl4 & @CRLF ;+ отладочная метка
+		 ;$sOut[$i] = $vTemp & " >" & $strl4 & @CRLF ;+ РѕС‚Р»Р°РґРѕС‡РЅР°СЏ РјРµС‚РєР°
 		 $sOut[$i] = $vTemp;	 & @CRLF
 
-Select ; очищать окно с сохранением в файл
-Case $strl4 > $strLimit ; если строка слишком длинная
+Select ; РѕС‡РёС‰Р°С‚СЊ РѕРєРЅРѕ СЃ СЃРѕС…СЂР°РЅРµРЅРёРµРј РІ С„Р°Р№Р»
+Case $strl4 > $strLimit ; РµСЃР»Рё СЃС‚СЂРѕРєР° СЃР»РёС€РєРѕРј РґР»РёРЅРЅР°СЏ
    Local $nFile = @WorkingDir & "\tmp\zLog" & "_" & $i & "_" & @YEAR & @MON & @MDAY & "." & @MIN & @SEC & ".txt"
    $hFile = FileOpen($nFile, 1)
    FileWrite($hFile, $sOut[$i] & @CRLF & ">" & $strl4 & "<")
    FileClose($hFile)
  ;  _debug_send_file()
-   $sOut[$i] = "Превышено " & $strl4 & " знаков." & @CRLF & "Прошлый вывод сохранён в " & $nFile & @CRLF
+   $sOut[$i] = "РџСЂРµРІС‹С€РµРЅРѕ " & $strl4 & " Р·РЅР°РєРѕРІ." & @CRLF & "РџСЂРѕС€Р»С‹Р№ РІС‹РІРѕРґ СЃРѕС…СЂР°РЅС‘РЅ РІ " & $nFile & @CRLF
    $strl4 = 0
 EndSelect
 
@@ -522,7 +522,7 @@ EndSelect
 ;Select
 
  ;  Case $exlpid[$i] > Null
-   ; GUICtrlSetData($iBtnCont,'1 минута' &  $exlpid[$i] )
+   ; GUICtrlSetData($iBtnCont,'1 РјРёРЅСѓС‚Р°' &  $exlpid[$i] )
 	;  GUICtrlSetState($iBtnCont[$i], $GUI_ENABLE)
 
 ;	EndSelect
@@ -537,7 +537,7 @@ Local $getTab = GUICtrlRead($iTab)-1
 
 For $i = 0 to $windowTabs
 
-;прочитать поток во временную переменную $vTemp
+;РїСЂРѕС‡РёС‚Р°С‚СЊ РїРѕС‚РѕРє РІРѕ РІСЂРµРјРµРЅРЅСѓСЋ РїРµСЂРµРјРµРЅРЅСѓСЋ $vTemp
 ; Local $vTemp = $sOut & _WinAPI_OemToChar(StdoutRead($iPID)), $aSel = GUICtrlRecvMsg($iEdt, $EM_GETSEL)
 Local $vTemp = $sOut[$i] & DllCall('user32.dll', 'bool', 'OemToChar', 'str', StdoutRead($iPIDx[$i]), 'str', StdoutRead($iPIDx[$i]))[2]
 ;Local $strl4 =  StringLen ( $vTemp )
@@ -554,19 +554,19 @@ EndSelect
 ;Local $aSel = $conOut[$i]
 
 
-Select ; усли вывод $sOut[$i] не равен $vTemp, сделать таким и использовать $vTemp как флаг 1
+Select ; СѓСЃР»Рё РІС‹РІРѕРґ $sOut[$i] РЅРµ СЂР°РІРµРЅ $vTemp, СЃРґРµР»Р°С‚СЊ С‚Р°РєРёРј Рё РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ $vTemp РєР°Рє С„Р»Р°Рі 1
    Case $vTemp <> $sOut[$i]
-		 ;$sOut[$i] = $vTemp & " >" & $strl4 & @CRLF ;+ отладочная метка
+		 ;$sOut[$i] = $vTemp & " >" & $strl4 & @CRLF ;+ РѕС‚Р»Р°РґРѕС‡РЅР°СЏ РјРµС‚РєР°
 		 $sOut[$i] = $vTemp;	 & @CRLF
 
-;Select ; очищать окно с сохранением в файл
-;Case $strl4 > $strLimit ; если строка слишком длинная
+;Select ; РѕС‡РёС‰Р°С‚СЊ РѕРєРЅРѕ СЃ СЃРѕС…СЂР°РЅРµРЅРёРµРј РІ С„Р°Р№Р»
+;Case $strl4 > $strLimit ; РµСЃР»Рё СЃС‚СЂРѕРєР° СЃР»РёС€РєРѕРј РґР»РёРЅРЅР°СЏ
   ; Local $nFile = @WorkingDir & "\tmp\zLog" & "_" & $i & "_" & @YEAR & @MON & @MDAY & "." & @MIN & @SEC & ".txt"
    ;$hFile = FileOpen($nFile, 1)
    ;FileWrite($hFile, $sOut[$i] & @CRLF & ">" & $strl4 & "<")
    ;FileClose($hFile)
  ;  _debug_send_file()
- ;  $sOut[$i] = "Превышено " & $strl4 & " знаков." & @CRLF & "Прошлый вывод сохранён в " & $nFile & @CRLF
+ ;  $sOut[$i] = "РџСЂРµРІС‹С€РµРЅРѕ " & $strl4 & " Р·РЅР°РєРѕРІ." & @CRLF & "РџСЂРѕС€Р»С‹Р№ РІС‹РІРѕРґ СЃРѕС…СЂР°РЅС‘РЅ РІ " & $nFile & @CRLF
   ; $strl4 = 0
 ;EndSelect
 
@@ -601,7 +601,7 @@ EndSelect
 ;Select
 
  ;  Case $exlpid[$i] > Null
-   ; GUICtrlSetData($iBtnCont,'1 минута' &  $exlpid[$i] )
+   ; GUICtrlSetData($iBtnCont,'1 РјРёРЅСѓС‚Р°' &  $exlpid[$i] )
 	;  GUICtrlSetState($iBtnCont[$i], $GUI_ENABLE)
 
 ;	EndSelect
@@ -659,11 +659,11 @@ Local $getTab = GUICtrlRead($iTab)-1
    GUICtrlSetState($iBtnStart[$getTab], $GUI_ENABLE)
 	  Local $iPIDs = $iPIDx[$getTab]
 	  Local $aPIDs = _WinAPI_EnumChildProcess($iPIDs)
-           If Not @error Then ; завершить дочерний процес
+           If Not @error Then ; Р·Р°РІРµСЂС€РёС‚СЊ РґРѕС‡РµСЂРЅРёР№ РїСЂРѕС†РµСЃ
 			   For $n = 1 To $aPIDs[0][0]
                     ProcessClose($aPIDs[$n][0])
                Next
-			   ProcessClose($iPIDs); завершить cmd по PID
+			   ProcessClose($iPIDs); Р·Р°РІРµСЂС€РёС‚СЊ cmd РїРѕ PID
 			   If Not ProcessExists ( $iPIDx[$getTab] ) Then GUICtrlSetBkColor($lbT[$getTab], $lbTdeact)
 		   EndIf
 EndFunc
@@ -683,11 +683,11 @@ GUICtrlSetState($iBtnStop[$i], $GUI_DISABLE)
 	   Local $iPIDs = $iPIDx[$i]
 	   Local $aPIDs = _WinAPI_EnumChildProcess($iPIDs)
 
- If Not @error Then ; завершить дочерний процес
+ If Not @error Then ; Р·Р°РІРµСЂС€РёС‚СЊ РґРѕС‡РµСЂРЅРёР№ РїСЂРѕС†РµСЃ
 			   For $n = 1 To $aPIDs[0][0]
                     ProcessClose($aPIDs[$n][0])
                Next
-			   ProcessClose($iPIDs); завершить cmd по PID
+			   ProcessClose($iPIDs); Р·Р°РІРµСЂС€РёС‚СЊ cmd РїРѕ PID
 			EndIf
 EndSelect
 If Not ProcessExists ( $iPIDx[$i] ) Then GUICtrlSetBkColor($lbT[$i], $lbTdeact)
@@ -739,7 +739,7 @@ Func btnMC()
 Run (@SystemDir & "\msconfig.exe", @WorkingDir ,@SW_SHOW)
 EndFunc
 ;--------------------------------------------------------------------------------------------------
-Func _closeWin(); кнопка закрытия окна
+Func _closeWin(); РєРЅРѕРїРєР° Р·Р°РєСЂС‹С‚РёСЏ РѕРєРЅР°
    Switch $trayexit
 	  Case 1
 		 _hideWin()
@@ -748,7 +748,7 @@ Func _closeWin(); кнопка закрытия окна
    EndSwitch
 EndFunc
 ;--------------------------------------------------------------------------------------------------
-Func _hideWin(); скрыть главное окно
+Func _hideWin(); СЃРєСЂС‹С‚СЊ РіР»Р°РІРЅРѕРµ РѕРєРЅРѕ
  ;  AdlibUnRegister("_UnSel")
 WinSetState ( $hGUI, Null, @SW_HIDE )
 EndFunc

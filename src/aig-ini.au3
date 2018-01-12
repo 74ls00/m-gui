@@ -4,7 +4,7 @@ Global $myini = @WorkingDir & "\myconf.ini"
 Global $sysini = @WorkingDir & "\system.ini"
 Global $windowTabs=4
 Global $trayexit=0 ;1=tray. 0=exit
-Global $strLimit=600000 ;! ‰Ó·‡‚ËÚ¸  ‚ ini
+Global $strLimit=600000 ;! –¥–æ–±–∞–≤–∏—Ç—å  –≤ ini
 
 Global $streadmode = 0 ;0 _Update(), 1 _Update()
 Global $selectTime = 5000 ;ms
@@ -34,20 +34,20 @@ Global $debug[$windowTabs+1],$exlpid[$windowTabs+1],$useregflg[$windowTabs+1],$u
 ;--------------------------------------------------------------------------------------------------
 Func _iniDefLoad()
 For $i=0 To $windowTabs
-$info[$i] = $i		; ÒÚÓÍ‡ .Ì‡Á‚‡ÌËÂ ‚ÍÎ‡‰ÍË
-$devr[$i] = Null	; ËÏˇ. ÛÒÚÓÈÒÚ‚Ó
-$server[$i] = Null	; Ô‡‡ÏÂÚ. ÒÂ‚Â
-$port[$i] = Null	; Ô‡‡ÏÂÚ. ÔÓÚ
-$user[$i] = Null	; Ô‡‡ÏÂÚ. ÔÓÎ¸ÁÓ‚‡ÚÂÎ¸
-$pass[$i] = Null	; Ô‡‡ÏÂÚ. Ô‡ÓÎ¸
-$expath[$i] = Null	; ÔÛÚ¸ Í ÔÓ„‡ÏÏÂ
-$exname[$i] = Null	; ÔÓ„‡ÏÏ‡.exe
-$exlog[$i] = Null	; Ô‡‡ÏÂÚ. ÔÛÚ¸ Í ÎÓ„Û
-$params[$i] = Null	; ‰ÓÔÓÎÌËÚÂÎ¸Ì˚Â Ô‡‡ÏÂÚ˚
-$typecmd[$i] = 0 ; ÚËÔ ÍÓÏ‡Ì‰˚. 1 ˜ÂÂÁ @WorkingDir . 0 ·ÂÁ ÔÛÚË
-$debug[$i] = @WorkingDir & $expath[$i] & "\" & $exname[$i] & $server[$i] & $port[$i] & $user[$i] & $devr[$i] & $pass[$i] & $exlog[$i] & $params[$i] ; ‚˚‚Ó‰. ÔÓÎÛ˜ÂÌÌ‡ˇ ÍÓÏ‡Ì‰‡
-$exlpid[$i] = Null	; pid Á‡ÔÛ˘ÂÌÓ„Ó ÔÓˆÂÒÒ‡
-$useregflg[$i] = 0	; 1 = ÔÓÎ¸ÁÓ‚‡ÚÂÎ¸ Á‡Â„ÂÒÚËÓ‚‡Ì Ì‡ ÔÛÎÂ , 0 = ÔÂ‰ÛÔÂ‰ËÚ¸
+$info[$i] = $i		; —Å—Ç—Ä–æ–∫–∞ .–Ω–∞–∑–≤–∞–Ω–∏–µ –≤–∫–ª–∞–¥–∫–∏
+$devr[$i] = Null	; –∏–º—è. —É—Å—Ç—Ä–æ–π—Å—Ç–≤–æ
+$server[$i] = Null	; –ø–∞—Ä–∞–º–µ—Ç—Ä. —Å–µ—Ä–≤–µ—Ä
+$port[$i] = Null	; –ø–∞—Ä–∞–º–µ—Ç—Ä. –ø–æ—Ä—Ç
+$user[$i] = Null	; –ø–∞—Ä–∞–º–µ—Ç—Ä. –ø–æ–ª—å–∑–æ–≤–∞—Ç–µ–ª—å
+$pass[$i] = Null	; –ø–∞—Ä–∞–º–µ—Ç—Ä. –ø–∞—Ä–æ–ª—å
+$expath[$i] = Null	; –ø—É—Ç—å –∫ –ø—Ä–æ–≥—Ä–∞–º–º–µ
+$exname[$i] = Null	; –ø—Ä–æ–≥—Ä–∞–º–º–∞.exe
+$exlog[$i] = Null	; –ø–∞—Ä–∞–º–µ—Ç—Ä. –ø—É—Ç—å –∫ –ª–æ–≥—É
+$params[$i] = Null	; –¥–æ–ø–æ–ª–Ω–∏—Ç–µ–ª—å–Ω—ã–µ –ø–∞—Ä–∞–º–µ—Ç—Ä—ã
+$typecmd[$i] = 0 ; —Ç–∏–ø –∫–æ–º–∞–Ω–¥—ã. 1 —á–µ—Ä–µ–∑ @WorkingDir . 0 –±–µ–∑ –ø—É—Ç–∏
+$debug[$i] = @WorkingDir & $expath[$i] & "\" & $exname[$i] & $server[$i] & $port[$i] & $user[$i] & $devr[$i] & $pass[$i] & $exlog[$i] & $params[$i] ; –≤—ã–≤–æ–¥. –ø–æ–ª—É—á–µ–Ω–Ω–∞—è –∫–æ–º–∞–Ω–¥–∞
+$exlpid[$i] = Null	; pid –∑–∞–ø—É—â–µ–Ω–æ–≥–æ –ø—Ä–æ—Ü–µ—Å—Å–∞
+$useregflg[$i] = 0	; 1 = –ø–æ–ª—å–∑–æ–≤–∞—Ç–µ–ª—å –∑–∞—Ä–µ–≥–µ—Å—Ç—Ä–∏—Ä–æ–≤–∞–Ω –Ω–∞ –ø—É–ª–µ , 0 = –ø—Ä–µ–¥—É–ø—Ä–µ–¥–∏—Ç—å
 $urlprofile[$i] = "http:/www#"
 Next
  ;MsgBox(4096,"_iniDefLoad",$info[0])
@@ -57,8 +57,8 @@ Func _iniSave()
 
 Select
    Case Not FileExists($myini)
-   _iniDefLoad()   ; Á‡„ÛÁËÚ¸  ‰ÂÙÓÎÚÌ˚Â Ì‡ÒÚÓÈÍË
-   _load_dev_ini() ; Á‡„ÛÁËÚ¸ ÎË˜Ì˚Â Ì‡ÒÚÓÈÍË ‡Á‡·ÓÚ˜ËÍ‡
+   _iniDefLoad()   ; –∑–∞–≥—Ä—É–∑–∏—Ç—å  –¥–µ—Ñ–æ–ª—Ç–Ω—ã–µ –Ω–∞—Å—Ç—Ä–æ–π–∫–∏
+   _load_dev_ini() ; –∑–∞–≥—Ä—É–∑–∏—Ç—å –ª–∏—á–Ω—ã–µ –Ω–∞—Å—Ç—Ä–æ–π–∫–∏ —Ä–∞–∑—Ä–∞–±–æ—Ç—á–∏–∫–∞
 EndSelect
 
    For $i=0 To $windowTabs
@@ -106,7 +106,7 @@ _readTab()
    For $i = 0 To $windowTabs
 Local $process = "miner"
 $info[$i] = IniRead ($myini,$process & $i,"info", $i)
-If $info[$i] = "" Then $info[$i] = $i ; Á‡˘ËÚ‡  ÓÚ ÒÎ∏Ú‡ „Ûˇ ÔË ÔÛÒÚÓÏ Ì‡Á‚‡ÌËË ‚ÍÎ‡‰ÍË
+If $info[$i] = "" Then $info[$i] = $i ; –∑–∞—â–∏—Ç–∞  –æ—Ç —Å–ª—ë—Ç–∞ –≥—É—è –ø—Ä–∏ –ø—É—Å—Ç–æ–º –Ω–∞–∑–≤–∞–Ω–∏–∏ –≤–∫–ª–∞–¥–∫–∏
 $devr[$i] = IniRead ($myini,$process & $i,"dev", Null)
 $server[$i] = IniRead ($myini,$process & $i,"server", Null)
 $port[$i] = IniRead ($myini,$process & $i,"port", Null)
@@ -130,7 +130,7 @@ EndFunc
 ;--------------------------------------------------------------------------------------------------
 Func _sLine()
    For $i = 0 To $windowTabs
-Select ; ÚËÔ ÔÛÚË. 0=·ÂÁ ÔÛÚË. 1=ÍËËÎËˆ‡ Ò ÔÓ·ÂÎ‡ÏË ‚ ÔÛÚË. 2=Í‡Í 1, Ò ÔÓ·ÂÎÓÏ ÏÂÊ‰Û Ô‡‡ÏÂÚ‡ÏË
+Select ; —Ç–∏–ø –ø—É—Ç–∏. 0=–±–µ–∑ –ø—É—Ç–∏. 1=–∫–∏—Ä–∏–ª–∏—Ü–∞ —Å –ø—Ä–æ–±–µ–ª–∞–º–∏ –≤ –ø—É—Ç–∏. 2=–∫–∞–∫ 1, —Å –ø—Ä–æ–±–µ–ª–æ–º –º–µ–∂–¥—É –ø–∞—Ä–∞–º–µ—Ç—Ä–∞–º–∏
       Case $typecmd[$i] = 4
 $sLine[$i] = _Encoding_ANSIToOEM(@WorkingDir & '\' & $expath[$i] & '\' & $exname[$i]) & $server[$i] & $port[$i] & $user[$i] & $devr[$i] & $pass[$i] & $exlog[$i] & $params[$i] & @CRLF
 
@@ -144,15 +144,15 @@ Case $typecmd[$i] = 6
 ;$sLine[$i] =  @WorkingDir & "\" & $expath[$i] & "\" & $exname[$i] & " " & $server[$i] & " " & $port[$i] & " " & $user[$i] & $devr[$i] & " " & $pass[$i] & " " & $exlog[$i] & " " & $params[$i] & @CRLF
 $sLine[$i] =  @WorkingDir & '\' & $expath[$i] & '\' & $exname[$i] & ' ' & $server[$i] & ' ' & $port[$i] & ' ' & $user[$i] & $devr[$i] & ' ' & $pass[$i] & ' ' & $exlog[$i] & ' ' & $params[$i] & @CRLF
 
-Case $typecmd[$i] = 0 ; ·ÂÁ Ô‡ÔÍË. ÔÓ„‡ÏÏ‡.exe ÒÂ‚Â ÔÓÚ ÔÓÎ¸ÁÓ‚‡ÚÂÎ¸”ÒÚÓÈÒÚ‚Ó œ‡ÓÎ¸ ÎÓ„ Ô‡‡ÏÂÚ˚(ÔÂÂ‚Ó‰ ÒÚÓÍË)
+Case $typecmd[$i] = 0 ; –±–µ–∑ –ø–∞–ø–∫–∏. –ø—Ä–æ–≥—Ä–∞–º–º–∞.exe —Å–µ—Ä–≤–µ—Ä –ø–æ—Ä—Ç –ø–æ–ª—å–∑–æ–≤–∞—Ç–µ–ª—å–£—Å—Ç—Ä–æ–π—Å—Ç–≤–æ –ü–∞—Ä–æ–ª—å –ª–æ–≥ –ø–∞—Ä–∞–º–µ—Ç—Ä—ã(–ø–µ—Ä–µ–≤–æ–¥ —Å—Ç—Ä–æ–∫–∏)
 $sLine[$i] = $exname[$i] & " " & $server[$i] & " " & $port[$i] & " " & $user[$i] & $devr[$i] & " " & $pass[$i] & " " & $exlog[$i] & " " & $params[$i] & @CRLF
 
-Case $typecmd[$i] = 1 ; ‚ Ô‡ÔÍÂ ÔÓ„‡ÏÏ˚. "(ÔÛÚ¸1251>866)" Ô‡‡ÏÂÚ1Ô‡‡ÏÂÚ2Ô‡‡ÏÂÚ3(...)(ÔÂÂ‚Ó‰ ÒÚÓÍË)
+Case $typecmd[$i] = 1 ; –≤ –ø–∞–ø–∫–µ –ø—Ä–æ–≥—Ä–∞–º–º—ã. "(–ø—É—Ç—å1251>866)" –ø–∞—Ä–∞–º–µ—Ç—Ä1–ø–∞—Ä–∞–º–µ—Ç—Ä2–ø–∞—Ä–∞–º–µ—Ç—Ä3(...)(–ø–µ—Ä–µ–≤–æ–¥ —Å—Ç—Ä–æ–∫–∏)
 ;$sLine[$i] = '"' & _Encoding_ANSIToOEM(@WorkingDir & '\' & $expath[$i] & '\' & $exname[$i]) & '" ' & $server[$i] & $port[$i] & $user[$i] & $devr[$i] & $pass[$i] & $exlog[$i] & $params[$i] & @CRLF
 $sLine[$i] = '"' & _Encoding_ANSIToOEM(@WorkingDir & '\' & $expath[$i] & '\' & $exname[$i]) & '" ' & $server[$i] & $port[$i] & $user[$i] & $devr[$i] & $pass[$i] & _Encoding_ANSIToOEM($exlog[$i]) & $params[$i] & @CRLF
 
 
-; ‚ Ô‡ÔÍÂ ÔÓ„‡ÏÏ˚. "(ÔÛÚ¸1251>866)" ÒÂ‚Â ÔÓÚ ÔÓÎ¸ÁÓ‚‡ÚÂÎ¸”ÒÚÓÈÒÚ‚Ó Ô‡ÓÎ¸ ÎÓ„ Ô‡‡ÏÂÚ˚(ÔÂÂ‚Ó‰ ÒÚÓÍË)
+; –≤ –ø–∞–ø–∫–µ –ø—Ä–æ–≥—Ä–∞–º–º—ã. "(–ø—É—Ç—å1251>866)" —Å–µ—Ä–≤–µ—Ä –ø–æ—Ä—Ç –ø–æ–ª—å–∑–æ–≤–∞—Ç–µ–ª—å–£—Å—Ç—Ä–æ–π—Å—Ç–≤–æ –ø–∞—Ä–æ–ª—å –ª–æ–≥ –ø–∞—Ä–∞–º–µ—Ç—Ä—ã(–ø–µ—Ä–µ–≤–æ–¥ —Å—Ç—Ä–æ–∫–∏)
 Case $typecmd[$i] = 2
 ;$sLine[$i] = '"' & _Encoding_ANSIToOEM(@WorkingDir & '\' & $expath[$i] & '\' & $exname[$i]) & '" ' & $server[$i] & " " & $port[$i] & " " & $user[$i] & $devr[$i] & " " & $pass[$i] & " " & $exlog[$i] & " " & $params[$i] & @CRLF
 $sLine[$i] = '"' & _Encoding_ANSIToOEM(@WorkingDir & '\' & $expath[$i] & '\' & $exname[$i]) & '" ' & $server[$i] & " " & $port[$i] & " " & $user[$i] & $devr[$i] & " " & $pass[$i] & " " & _Encoding_ANSIToOEM($exlog[$i]) & " " & $params[$i] & @CRLF
