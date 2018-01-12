@@ -137,7 +137,7 @@ Next
 
 $hImage = _GUIImageList_Create(32, 32, 5, 3);, 6)
 _GUIImageList_AddIcon($hImage, "taskmgr.exe", 0, True)
-$btnTM = GUICtrlCreateButton("Диспетчер задач", 187, $WHeight-66, 147, 40)
+$btnTM = GUICtrlCreateButton("Диспетчер задач", 187, $WHeight-97, 147, 40)
 
 Select
    Case IsAdmin()
@@ -150,7 +150,7 @@ _GUICtrlButton_SetImageList($btnTM, $hImage)
 
 $hImage = _GUIImageList_Create(32, 32, 5, 3)
 _GUIImageList_AddIcon($hImage, "devmgr.dll", 4, True)
-$btnDM = GUICtrlCreateButton("Диспетчер устройств", 25, $WHeight-66, 157, 40)
+$btnDM = GUICtrlCreateButton("Диспетчер устройств", 25, $WHeight-97, 157, 40)
 Select
    Case IsAdmin()
 GUICtrlSetOnEvent(-1, "btnDM")
@@ -164,7 +164,7 @@ _GUICtrlButton_SetImageList($btnDM, $hImage)
 
 ;$hImage = _GUIImageList_Create(32, 32, 5, 3, 6)
 $hImage = _GUIImageList_Create(16 , 16,5, 3);,5 )
-$btnMC = GUICtrlCreateButton("msconfig", 25, $WHeight-113, 80, 22) ;157 40
+$btnMC = GUICtrlCreateButton("msconfig", 25, $WHeight-48, 80, 22) ;157 40
 Select
    Case IsAdmin()
 _GUIImageList_AddIcon($hImage, "msconfig.exe", 0, True)
@@ -178,19 +178,19 @@ GUICtrlSetOnEvent(-1, "btnMC")
 
 $hImage = _GUIImageList_Create(32, 32, 5, 3);, 6)
 _GUIImageList_AddIcon($hImage, "cmd.exe", 0, True)
-$btnCM = GUICtrlCreateButton("Командная строка", 339, $WHeight-66, 150, 40)
+$btnCM = GUICtrlCreateButton("Командная строка", 339, $WHeight-97, 150, 40)
 _GUICtrlButton_SetImageList($btnCM, $hImage)
 GUICtrlSetOnEvent(-1, "btnCM")
 
 $hImage = _GUIImageList_Create(32, 32, 5, 3);, 6)
 _GUIImageList_AddIcon($hImage, "shell32.dll", 21, True)
-$btnST = GUICtrlCreateButton("Настройки", 494, $WHeight-66, 150, 40)
+$btnST = GUICtrlCreateButton("Настройки", 494, $WHeight-97, 150, 40)
 _GUICtrlButton_SetImageList($btnST, $hImage)
 GUICtrlSetOnEvent(-1, "btnST")
 
 $hImage = _GUIImageList_Create(32, 32, 5, 3);, 6)
 _GUIImageList_AddIcon($hImage, "calc.exe", 0, True)
-$btnCA = GUICtrlCreateButton("Калькулятор", 494, $WHeight-113, 150, 40)
+$btnCA = GUICtrlCreateButton("Калькулятор", 494-145, $WHeight-197, 150, 40)
 _GUICtrlButton_SetImageList($btnCA, $hImage)
 GUICtrlSetOnEvent(-1, "btnCA")
 
@@ -200,7 +200,7 @@ Switch $VIP
    Case 1
 $hImage = _GUIImageList_Create(32, 32, 5, 3);, 6)
 _GUIImageList_AddIcon($hImage, "shell32.dll", 215, True)
-$btnAllStop = GUICtrlCreateButton("Остановить всё", 494, $WHeight-160, 150, 40)
+$btnAllStop = GUICtrlCreateButton("Остановить всё", 494-145, $tCordLbtT-8, 150, 40)
 _GUICtrlButton_SetImageList($btnAllStop, $hImage)
 GUICtrlSetOnEvent(-1, "btnAllStop")
 GUICtrlSetState(-1, $GUI_DISABLE)
