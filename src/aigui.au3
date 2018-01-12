@@ -65,7 +65,10 @@ Global $iBtnStart[$windowTabs+1],$iBtnStop[$windowTabs+1],$iBtnClean[$windowTabs
 Global $iBtnUnPause[$windowTabs+1],$iBtnPause[$windowTabs+1] , $iBtnCont[$windowTabs+1]
 Global $iPIDx[$windowTabs+1] , $aPIDs[$windowTabs+1] , $sOut[$windowTabs+1] , $getTab ;=GUICtrlRead($iTab)-1
 Global $sn_info[$windowTabs+1],$st_typecmd[$windowTabs+1],$st_expath[$windowTabs+1],$st_exname[$windowTabs+1],$st_server[$windowTabs+1],$st_urlprofile[$windowTabs+1]
+
 Global $st_port[$windowTabs+1],$st_user[$windowTabs+1],$st_devr[$windowTabs+1],$st_pass[$windowTabs+1],$st_exlog[$windowTabs+1],$st_params[$windowTabs+1]
+Global $conOut[$windowTabs+1] = [0]; временная переменная вываода
+Global $aSel[2]
 
 Global Const $txtQual = 3 ; сглаживание
 Global $st_trayexit
@@ -87,7 +90,18 @@ While 1
 		 WinSetState ( $hGUI, Null, @SW_SHOW )
 		 WinActivate ( $hGUI, Null )
 	  EndSwitch
-_Update()
+
+Switch $streadmode; = 0 ;0 _Update(), 1 _Update()
+Case 0
+ ;  MsgBox(4096, "lll" , "0" & $streadmode)
+	  _Update()
+	 ; MsgBox(4096, "lll" , "0" & $streadmode)
+   Case Else
+	 ; MsgBox(4096, "lll" , "1" & $streadmode)
+	  _Update2()
+EndSwitch
+
+
 Sleep(10)
 ;GUISetState($hSETUP)
 WEnd
@@ -119,8 +133,8 @@ GUICtrlCreateLabel($NameGUI & " - зелёная фигня", 20, $StrTool+5, $WWidth-42-70,
 GUICtrlSetFont(-1, 10.5, 400, 0 , "Arial" , 5)
 GUICtrlSetBkColor(-1, 0x00FF00)
 
-$btnHL = GUICtrlCreateButton("", $WWidth-67+16, $WHeight-404, 24, 24, $BS_ICON)
-GUICtrlSetImage ( -1, "shell32.dll", 154+109 ,0)
+$btnHL = GUICtrlCreateButton("", $WWidth-67+16+1, $WHeight-404-1, 24, 24, $BS_ICON)
+GUICtrlSetImage ( -1, "shell32.dll", 154+109 ,0);154 215
 GUICtrlSetOnEvent(-1, "btnHL")
 
 Local Const $tCordLbtL = 33 ; левый край
@@ -272,10 +286,24 @@ $hSETUP = GUICreate("Настройки", $guiCoord[2]-20, $guiCoord[3]-41, $guiCoord[0]+
 ;GUICtrlCreateGroup("Настройки", 9, 9 , $guiCoord[2]-38 , $guiCoord[3]-60)
 GUICtrlCreateGroup("Настройки", 9, 9 , $guiCoord[2]-38 , $guiCoord[3]-400)
 
-GUICtrlCreateButton("Сохранить и выйти", 23, 32, 120, 30)
-GUICtrlSetOnEvent(-1, "SetsSave")
 
-GUICtrlCreateButton("Отменить", 155, 32, 90, 30)
+
+
+
+;$btnCM = GUICtrlCreateButton("Командная строка", 339, $WHeight-97, 150, 40) ; 339 $WWidth-331
+
+
+
+
+$hImage = _GUIImageList_Create(24, 24, 5, 3);, 6)
+_GUIImageList_AddIcon($hImage, "DeviceCenter.dll", 3, True)
+GUICtrlCreateButton("Сохранить", 23, 32, 100, 32)
+GUICtrlSetOnEvent(-1, "SetsSave")
+_GUICtrlButton_SetImageList(-1, $hImage)
+
+
+
+GUICtrlCreateButton("Закрыть", 155, 32, 90, 30)
 GUICtrlSetOnEvent(-1, "SetsClose")
 
 
@@ -452,7 +480,7 @@ For $i = 0 to $windowTabs
 ; Local $vTemp = $sOut & _WinAPI_OemToChar(StdoutRead($iPID)), $aSel = GUICtrlRecvMsg($iEdt, $EM_GETSEL)
 Local $vTemp = $sOut[$i] & DllCall('user32.dll', 'bool', 'OemToChar', 'str', StdoutRead($iPIDx[$i]), 'str', StdoutRead($iPIDx[$i]))[2]
 Local $strl4 =  StringLen ( $vTemp )
-Local $aSel = GUICtrlRecvMsg($iEdt[$i], $EM_GETSEL)
+Local $aSel = GUICtrlRecvMsg($iEdt[$i],0xB0 ); 0xB0 $EM_GETSEL$selectTime
 
 Select
    Case $vTemp <> $sOut[$i]
@@ -486,7 +514,7 @@ Select
 Select
     Case $iUnSel
 		 $iUnSel = 0
-		; AdlibRegister("_UnSel", 5000)
+		; AdlibRegister("_UnSel", 5000);$selectTime
 EndSelect
     EndIf
 
@@ -494,14 +522,95 @@ EndSelect
 ;Select
 
  ;  Case $exlpid[$i] > Null
-    GUICtrlSetData($iBtnCont,'1 минута' &  $exlpid[$i] )
-	  GUICtrlSetState($iBtnCont[$i], $GUI_ENABLE)
+   ; GUICtrlSetData($iBtnCont,'1 минута' &  $exlpid[$i] )
+	;  GUICtrlSetState($iBtnCont[$i], $GUI_ENABLE)
 
 ;	EndSelect
 
 Next
 EndFunc   ;==>_Update
 ;--------------------------------------------------------------------------------------------------
+
+Func _Update2()
+
+Local $getTab = GUICtrlRead($iTab)-1
+
+For $i = 0 to $windowTabs
+
+;прочитать поток во временную переменную $vTemp
+; Local $vTemp = $sOut & _WinAPI_OemToChar(StdoutRead($iPID)), $aSel = GUICtrlRecvMsg($iEdt, $EM_GETSEL)
+Local $vTemp = $sOut[$i] & DllCall('user32.dll', 'bool', 'OemToChar', 'str', StdoutRead($iPIDx[$i]), 'str', StdoutRead($iPIDx[$i]))[2]
+;Local $strl4 =  StringLen ( $vTemp )
+
+
+Select
+   Case $getTab > -1
+	  Local $aSel = GUICtrlRecvMsg($iEdt[$getTab], 0xB0 ); 0xB0 $EM_GETSEL
+EndSelect
+
+;MsgBox(4096,"_iniDefLoad",$aSelt[0]&" "&$aSelt[0])
+
+
+;Local $aSel = $conOut[$i]
+
+
+Select ; усли вывод $sOut[$i] не равен $vTemp, сделать таким и использовать $vTemp как флаг 1
+   Case $vTemp <> $sOut[$i]
+		 ;$sOut[$i] = $vTemp & " >" & $strl4 & @CRLF ;+ отладочная метка
+		 $sOut[$i] = $vTemp;	 & @CRLF
+
+;Select ; очищать окно с сохранением в файл
+;Case $strl4 > $strLimit ; если строка слишком длинная
+  ; Local $nFile = @WorkingDir & "\tmp\zLog" & "_" & $i & "_" & @YEAR & @MON & @MDAY & "." & @MIN & @SEC & ".txt"
+   ;$hFile = FileOpen($nFile, 1)
+   ;FileWrite($hFile, $sOut[$i] & @CRLF & ">" & $strl4 & "<")
+   ;FileClose($hFile)
+ ;  _debug_send_file()
+ ;  $sOut[$i] = "Превышено " & $strl4 & " знаков." & @CRLF & "Прошлый вывод сохранён в " & $nFile & @CRLF
+  ; $strl4 = 0
+;EndSelect
+
+		 $vTemp = 1
+   Case Else
+		 $vTemp = 0
+EndSelect
+
+    If @error Or (Not @error And $aSel[0] = $aSel[1]) Then
+Select
+    Case $vTemp ;=1
+
+		;Select
+		; Case $getTab = $i
+		GUICtrlSetData($iEdt[$getTab], $sOut[$getTab])
+		 GUICtrlSendMsg($iEdt[$getTab], $EM_SCROLL, 7, 0);$SB_BOTTOM=7
+		; EndSelect
+
+
+
+	  EndSelect
+
+	 Else
+Select
+    Case $iUnSel
+		 $iUnSel = 0
+		 AdlibRegister("_UnSel", $selectTime)
+EndSelect
+    EndIf
+
+   ;  MsgBox(4096, $i ,  $exlpid[$i])
+;Select
+
+ ;  Case $exlpid[$i] > Null
+   ; GUICtrlSetData($iBtnCont,'1 минута' &  $exlpid[$i] )
+	;  GUICtrlSetState($iBtnCont[$i], $GUI_ENABLE)
+
+;	EndSelect
+
+Next
+EndFunc   ;==>_Update2
+;--------------------------------------------------------------------------------------------------
+
+
 Func _UnSel()
 
   Local $getTab = GUICtrlRead($iTab)-1
@@ -640,6 +749,7 @@ Func _closeWin(); кнопка закрытия окна
 EndFunc
 ;--------------------------------------------------------------------------------------------------
 Func _hideWin(); скрыть главное окно
+ ;  AdlibUnRegister("_UnSel")
 WinSetState ( $hGUI, Null, @SW_HIDE )
 EndFunc
 ;--------------------------------------------------------------------------------------------------
@@ -662,3 +772,6 @@ For $i = 0 To $windowTabs
 Next
 EndFunc   ;==>_OnExit
 ;--------------------------------------------------------------------------------------------------
+
+Func btnHL()
+EndFunc

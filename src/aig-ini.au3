@@ -6,6 +6,9 @@ Global $windowTabs=4
 Global $trayexit=0 ;1=tray. 0=exit
 Global $strLimit=600000 ;! добавить  в ini
 
+Global $streadmode = 0 ;0 _Update(), 1 _Update()
+Global $selectTime = 5000 ;ms
+
 Select
 Case Not FileExists($sysini)
 _saveSysIni()

@@ -1,3 +1,5 @@
+Global $iPID
+
 Func _debug_start()
 
 Local $nFile = @WorkingDir & "\log\debugLog.txt"

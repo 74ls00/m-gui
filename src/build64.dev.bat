@@ -1,5 +1,6 @@
 @echo off
-set "autoitdir=T:\Program Files (x86)\AutoIt3"
+set "autoitdir=C:\Program Files (x86)\AutoIt3"
+rem set "autoitdir=T:\Program Files (x86)\AutoIt3"
 set path=%path%;"%autoitdir%\Aut2Exe\"
 set "upxx="%autoitdir%\Aut2Exe\"upx.exe"
 set "outdir=%~d0%~p0"
