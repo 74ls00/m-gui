@@ -8,6 +8,7 @@
 ;#include <WinAPIProc.au3>
 #include <WinAPI.au3>
 ;#include <WinAPIMisc.au3> ;_WinAPI_OemToChar
+#include <TabConstants.au3>
 
 #include <aig-func.au3>
 ;#include <GuiButton.au3> ;>aig-func.au3
@@ -91,6 +92,7 @@ Global $lbT[$windowTabs+1]; активность
 Global Const $lbTAct = 0x00FF09
 Global Const $lbTdeact = 0xFBD7F4
 
+TraySetState(1) ; Показывает меню трея
 ;OnAutoItExitRegister("_OnExit")
 
 ;_iniLoad() ; загрузить настройки из ini aig-ini.au3
@@ -99,7 +101,7 @@ Global Const $lbTdeact = 0xFBD7F4
 _Main()
 
 ;Func _trayIcon()
-TraySetState(1) ; Показывает меню трея
+
 ;TrayCreateItem("")
 ;$iExit = TrayCreateItem("Выход")
 ;EndFunc
@@ -131,7 +133,7 @@ GUISetOnEvent($GUI_EVENT_MINIMIZE, '_hideWin', $hGUI)
 
 GUISetFont(8.5, Null, Null, Null ,$hGUI , $txtQual)
 
-$iTab = GUICtrlCreateTab(5, 5, $WWidth-10, $WHeight-10) ;создать вкладки с отступом 5 по краям окна, и 5 внутри
+$iTab = GUICtrlCreateTab(5, 5, $WWidth-10, $WHeight-10) ;создать вкладки с отступом 5 по краям окна, и 5 внутри ;$TCS_HOTTRACK
 GUICtrlCreateTabItem("  Панель  "); Вкладка для инструментов
 
 GUICtrlCreateGroup("", 15 , $StrTool-5 , $WWidth-32 , $THeight+30)
@@ -144,45 +146,18 @@ Local Const $tCordLbtT = $StrTool+80 ;верхний край
 Local Const $tCordSV = 20 ;вертикальный шаг
 Local Const $tCordSzV = 18 ; высота надписи
 Local Const $tCordSzH = 150 ; длина надписи
-;Local $z , $x
-
 GUICtrlCreateGroup("", $tCordLbtL-8 , $tCordLbtT-14 , $tCordSzH*2+21 , $tCordSV*9+1)
-
-;For $f=0 To $windowTabs/8
 For $i=0 To $windowTabs
-
-Select
+   Select
 Case $i < 8
-
-  ; $x=$tCordLbtT+($i*$tCordSV)
-  ; $z=$tCordLbtL
-   $lbT[$i] = GUICtrlCreateLabel(" " & $info[$i] & " ", $tCordLbtL,  $tCordLbtT+($i*$tCordSV), $tCordSzH, $tCordSzV, 0x0200)
+$lbT[$i] = GUICtrlCreateLabel(" " & $info[$i] & " ", $tCordLbtL,  $tCordLbtT+($i*$tCordSV), $tCordSzH, $tCordSzV, 0x0200)
 case Else
-   $lbT[$i] = GUICtrlCreateLabel(" " & $info[$i] & " ", $tCordLbtL+$tCordSzH+5,  $tCordLbtT+($i*$tCordSV)-($tCordSV*8), $tCordSzH, $tCordSzV, 0x0200)
- ;  $x=$tCordLbtT+($i*$tCordSV)-($tCordSV*8)
-;   $z=$tCordLbtL+$tCordSzH+5
-EndSelect
-
-;If $i > 7 Then
-
-;$lbT[$i] = GUICtrlCreateLabel(" " & $info[$i] & " ", $z,  $x, $tCordSzH, $tCordSzV, 0x0200)
-;$lbT[$i] = GUICtrlCreateLabel(" " & $iPIDx[$i] & " " & $info[$i] & " ", $tCordLbtL,  $tCordLbtT+($tCordSV*$i), $tCordSzH, $tCordSzV, 0x0200)
-
-;GUICtrlSetBkColor(-1, 0x23F009)
-
-;Next
+$lbT[$i] = GUICtrlCreateLabel(" " & $info[$i] & " ", $tCordLbtL+$tCordSzH+5,  $tCordLbtT+($i*$tCordSV)-($tCordSV*8), $tCordSzH, $tCordSzV, 0x0200);x=a+(n*b)-(b*8)
+   EndSelect
 Next
-;$lbT[1] = GUICtrlCreateLabel("222:", $tCordLbtL,  $tCordLbtT+$tCordSV, $tCordSzH, $tCordSzV, 0x0200)
-;F  I
-;0	0
-;0	1
-
 ;GUICtrlSetBkColor(-1, 0x23F009)
 
 
-
-;GUICtrlCreateLabel("ещё полосочка", 160, $StrTool+80)
-;GUICtrlSetBkColor(-1, 0x00FF09)
 
 $hImage = _GUIImageList_Create(32, 32, 5, 3);, 6)
 _GUIImageList_AddIcon($hImage, "taskmgr.exe", 0, True)

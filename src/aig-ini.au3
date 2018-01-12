@@ -1,12 +1,17 @@
 #include <dev-ini.au3>
 #include <Encoding.au3> ; http://autoit-script.ru/index.php?topic=510.0
-$myini = @WorkingDir & "\myconf.ini"
-$sysini = @WorkingDir & "\system.ini"
-$windowTabs=4
-;$exlpid[0] = [4]
+Global $myini = @WorkingDir & "\myconf.ini"
+Global $sysini = @WorkingDir & "\system.ini"
+Global $windowTabs=4
+Global $trayexit=0 ;0=tray. 1=exit
+Global $strLimit=600000 ;! добавить  в ini
 
- ;MsgBox(4096, "lll" , $windowTabs)
-
+Select
+Case Not FileExists($sysini)
+_saveSysIni()
+EndSelect
+_loadSysIni()
+;MsgBox(4096, "lll" , $trayexit & $strLimit)
 
 Select
 Case FileExists($myini)
@@ -18,11 +23,10 @@ Func _readTab()
    If $windowTabs > 15 Then $windowTabs = 15
 EndFunc
 
-Global $strLimit=600000 ;! добавить  в ini
-Global $sLine[$windowTabs+1]
+Global $sLine[$windowTabs+1],$typecmd[$windowTabs+1]
 Global $info[$windowTabs+1],$server[$windowTabs+1],$port[$windowTabs+1],$user[$windowTabs+1],$pass[$windowTabs+1]
 Global $devr[$windowTabs+1],$expath[$windowTabs+1],$exname[$windowTabs+1],$exlog[$windowTabs+1],$params[$windowTabs+1]
-Global $debug[$windowTabs+1],$exlpid[$windowTabs+1],$useregflg[$windowTabs+1],$urlprofile[$windowTabs+1],$typecmd[$windowTabs+1]
+Global $debug[$windowTabs+1],$exlpid[$windowTabs+1],$useregflg[$windowTabs+1],$urlprofile[$windowTabs+1]
 
 ;--------------------------------------------------------------------------------------------------
 Func _iniDefLoad()
@@ -78,6 +82,17 @@ IniWrite($myini, $process & $i, "useregflg", $useregflg[$i])
 IniWrite($myini, $process & $i, "urlprofile",'"' & $urlprofile[$i] & '"')
    Next
 IniWrite($myini, "system", "tabs", $windowTabs)
+EndFunc
+;--------------------------------------------------------------------------------------------------
+Func _saveSysIni()
+IniWrite($sysini, "GUI", "Tray0_Exit1",$trayexit)
+IniWrite($sysini, "GUI", "ListingLimit",$strLimit)
+
+EndFunc
+;--------------------------------------------------------------------------------------------------
+Func _loadSysIni()
+$trayexit = IniRead ($sysini,"GUI","Tray0_Exit1", $trayexit)
+$strLimit = IniRead ($sysini,"GUI","ListingLimit", $strLimit)
 EndFunc
 ;--------------------------------------------------------------------------------------------------
 Func _iniLoad()
