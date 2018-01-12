@@ -7,7 +7,7 @@ set "srcdir=%~d0%~p0"
 set "main=%srcdir%aigui.au3"
 cls
 set app=GUI
-set "icon=%srcdir%res\icon5.ico"
+set "icon=%srcdir%res\icon12.ico"
 set app64=%app%_x64
 set upxend=u
 taskkill /im %app64%*
