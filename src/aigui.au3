@@ -30,6 +30,8 @@ Opt('TrayMenuMode', 3)	;	http://autoit-script.ru/autoit3_docs/functions/AutoItSe
 Opt("GUIOnEventMode", 1)
 ;Opt ("TrayIconDebug" , 1)
 
+
+
 ;Func dissable()
 ;ini имитаци€ загрузки из настроек
 ;Global $windowTabs=2
@@ -54,11 +56,42 @@ Global Const $VIP = 1
 Global Const $WA_ACTIVE = 1
 Global Const $WA_CLICKACTIVE = 2
 Global Const $WA_INACTIVE = 0
-Global $hGUI, $hSETUP, $iBtnStart, $iBtnStop, $iBtnClean, $iBtnPause, $iBtnUnPause, $aPIDs, $iUnSel = 1 , $iBtnCont , $btnAllStop
+Global $hGUI, $hSETUP, $iBtnStart, $iBtnStop, $iBtnClean, $iBtnPause, $iBtnUnPause, $aPIDs, $iUnSel = 1 , $btnAllStop
 
 Global $stTabs , $tmpStbs ;= $windowTabs; временное количество вкладок
 $tmpStbs = $windowTabs+1
 
+; $win = IniRead ($sysini,"RUN","RunPID", Null)
+;MsgBox(4096,$myini,"-" & $win & "-")
+;exit
+Select
+   Case IniRead ($sysini,"RUN","RunPID", Null) <> "" ; добавить. если пид есть, искать по нему процесс и тогда ... >
+	  Select
+		 Case ProcessExists ( IniRead ($sysini,"RUN","RunPID", Null) )
+			WinSetState ( IniRead ($sysini,"RUN","RunGUI", Null), Null, @SW_SHOW )
+			WinActivate ( IniRead ($sysini,"RUN","RunGUI", Null), Null )
+			Exit
+	  EndSelect
+EndSelect
+;WinSetState ( IniRead ($sysini,"RUN","RunPID", Null), Null, @SW_SHOW )
+
+
+
+  ; MsgBox(4096,"_iniDefLoad","-" & IniRead ($sysini,"RUN","RunPID", Null) & "-")
+
+
+ ;WinSetState ( $hGUI, Null, @SW_SHOW )
+	;	 WinActivate ( $hGUI, Null )
+
+  ; exit
+;Case Else
+  ; Exit
+; MsgBox(4096,"_iniDefLoad",6)
+
+
+
+
+;IniWrite($sysini, "RUN", "RunPID", WinGetProcess ( $hGUI ))
 
 
 Global $strl4 , $iTab , $hImage ; элемент иконок кнопки
@@ -95,6 +128,20 @@ Global Const $lbTdeact = 0xFBD7F4
 TraySetState(1) ; ѕоказывает меню тре€
 ;OnAutoItExitRegister("_OnExit")
 
+
+
+
+;Switch IniRead ($myini,"GUI","RunPID", Null)
+ ;  Case Not ""
+
+;Exit
+;Case Else
+
+ ;
+;EndSwitch
+
+
+
 ;_iniLoad() ; загрузить настройки из ini aig-ini.au3
 ;_sLine()  ; загрузить строки
 
@@ -127,6 +174,13 @@ Select ; определение прав запуска
 	  $nGUI = " - без прав администратора"
    EndSelect
 $hGUI = GUICreate($NameGUI & " " & $version & $nGUI,$WWidth,$WHeight)
+;IniWrite($sysini, "GUI", "run_version", '"' & $NameGUI & " " & $version & $nGUI & '"')
+;IniWrite($sysini, "GUI", "RunPID", WinGetProcess ( $hGUI ))
+IniWrite($sysini, "RUN", "RunPID", WinGetProcess ( $hGUI ))
+IniWrite($sysini, "RUN", "RunGUI", '"' & $NameGUI & " " & $version & $nGUI & '"')
+
+;IniWrite($sysini, "GUI", "run_version", '"' & $NameGUI & " " & $version & $nGUI & '"')
+
 ;GUISetIcon(@SystemDir & "\cmd.exe", 0)
 GUISetOnEvent($GUI_EVENT_CLOSE, '_ProExit', $hGUI)
 GUISetOnEvent($GUI_EVENT_MINIMIZE, '_hideWin', $hGUI)
@@ -651,6 +705,9 @@ EndFunc
 Func _ProExit()
     _OnExit()
 	_debug_stop()
+	;IniWrite($sysini, "RUN", "RunPID", "")
+	;IniWrite($sysini, "RUN", "RunGUI", "")
+	IniDelete ( $sysini, "RUN" )
     Exit
  EndFunc
 

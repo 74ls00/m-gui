@@ -5,11 +5,11 @@ set "upxx="%autoitdir%\Aut2Exe\"upx.exe"
 set "outdir=%~d0%~p0"
 set "srcdir=%~d0%~p0"
 set "main=%srcdir%aigui.au3"
-
-set app=AiGUI
+cls
+set app=GUI
 set "icon=%srcdir%res\icon5.ico"
 set app64=%app%_x64
-
+set upxend=u
 taskkill /im %app64%*
 
 rem %date%=YYYY-MM-DD %time%=hH:mm:ss.ms
@@ -21,11 +21,11 @@ set now=%%a%%b%%c.%%d%%e
 rem set now=%%a%%b.%%c
 )
 set "now=%now:~-11%"
->"%srcdir%version.au3" echo Dim $version = "  0.%now% dev"
+>"%srcdir%version.au3" echo Global Const $version = "  0.%now% dev"
 
 "%autoitdir%\Aut2Exe\Aut2exe_x64.exe" /in %main% /out %outdir%%app64%.exe /x64 /comp 4 /icon %icon% /gui
 
-del %outdir%%app64%u.exe
+del %outdir%%app64%%upxend%.exe
 %upxx% -9  -o "%outdir%%app64%u.exe" "%outdir%%app64%.exe"
 del %outdir%%app64%.exe
 rem timeout /t 2

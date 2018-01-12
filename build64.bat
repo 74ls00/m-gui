@@ -21,7 +21,7 @@ set now=%%a%%b%%c.%%d%%e
 rem set now=%%a%%b.%%c
 )
 set "now=%now:~-11%"
->"%srcdir%version.au3" echo Dim $version = "  0.%now%"
+>"%srcdir%version.au3" echo Global Const $version = "  0.%now%"
 
 "%autoitdir%\Aut2Exe\Aut2exe_x64.exe" /in %main% /out %outdir%%app64%.exe /x64 /comp 4 /icon %icon% /gui
 

@@ -1,1 +1,1 @@
-Dim $version = "  0.180111.2346 dev"
+Global Const $version = "  0.180112.0718"

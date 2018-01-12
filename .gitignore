@@ -2,6 +2,7 @@ git.txt
 
 0
 1
+z
 tmp
 log
 pict/
@@ -17,6 +18,9 @@ zm_0.5.7_win
 test dir
 папка
 clone
+cyglite
+
+
 
 
 aigui - копия.ini
@@ -30,7 +34,8 @@ myconf.ini
 debug.ini
 system.ini
 upxhide.tmp.vbs
-
+z.au3
+z.bat
 
 
 *.vbs
