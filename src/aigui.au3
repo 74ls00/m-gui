@@ -68,6 +68,7 @@ Global $sn_info[$windowTabs+1],$st_typecmd[$windowTabs+1],$st_expath[$windowTabs
 Global $st_port[$windowTabs+1],$st_user[$windowTabs+1],$st_devr[$windowTabs+1],$st_pass[$windowTabs+1],$st_exlog[$windowTabs+1],$st_params[$windowTabs+1]
 
 Global Const $txtQual = 3 ; сглаживание
+Global $st_trayexit
 
 Global $lbT[$windowTabs+1]; активность
 Global Const $lbTAct = 0x00FF09 ;цвет активного индикатора
@@ -278,16 +279,33 @@ GUICtrlCreateButton("Отменить", 155, 32, 90, 30)
 GUICtrlSetOnEvent(-1, "SetsClose")
 
 
-;.....................................................
+;;..................................................................................................
 GUICtrlCreateGroup(Null, $snTabs1-123, $snTabs2-16 , 178 , 45)
 GUICtrlCreateLabel("Количество вкладок", $snTabs1-109, $snTabs2+3)
 $stTabs = GUICtrlCreateInput($tmpStbs, $snTabs1, $snTabs2, 40, 20)
 GUICtrlCreateUpdown(-1,BitOR (0x40 , 0x01, 0x20) )
 GUICtrlSetLimit(-1, 10, 1)
-;GUICtrlSetBkColor(-1,0x00FF09)
+;;..................................................................................................
+$st_trayexit = GUICtrlCreateCheckbox("Сворачивать в трей", $guiCoord[2]-160, $guiCoord[3]-455, 120, 20, $BS_RIGHTBUTTON)
+Switch $trayexit
+   Case 1
+	  GUICtrlSetState ( $st_trayexit, 1 ) ;$GUI_CHECKED 1
+   Case Else
+	  GUICtrlSetState ( $st_trayexit, 4 ) ; $GUI_UNCHECKED 4
+EndSwitch
 
-;$windowTab = GUICtrlRead(-1)
-;.....................................................
+
+
+;GUICtrlSetData ( $st_trayexit, data [, default ] )
+
+;Local Const $snTray1 = $guiCoord[2]-300 ;left
+;Local Const $snTray2 = $guiCoord[3]-400	; top
+
+;GUICtrlCreateLabel("Сворачивать в трей", $snTray1, $snTray2, 110, 20, 0x0200)
+
+
+
+;;..................................................................................................
 Local Const $snTUD = 110 ; вертикаль таблицы
 
 local Const $snMLen = 200 ; длина поля путь
@@ -345,7 +363,12 @@ GUICtrlCreateLabel("Url:", 20, $snTUD+210, 28, 20, 0x0200)
 $st_urlprofile[$i] = GUICtrlCreateInput($urlprofile[$i], 53, $snTUD+210, $guiCoord[2]-96,20)
 
 Next
-;.....................................................
+
+;$stTabs = GUICtrlCreateInput($tmpStbs, $snTabs1, $snTabs2, 40, 20)
+
+
+
+
 ;MsgBox(0, "WinGetPos активного окна", $exname[5])
 
 
@@ -385,10 +408,25 @@ $pass[$i] = GUICtrlRead($st_pass[$i])
 $exlog[$i] = GUICtrlRead($st_exlog[$i])
 $params[$i] = GUICtrlRead($st_params[$i])
 Next
-   _iniSave()
 
-   $tmpStbs = GUICtrlRead($stTabs)
-   IniWrite($myini, "system", "tabs", $tmpStbs-1)
+_iniSave()
+
+$tmpStbs = GUICtrlRead($stTabs)
+IniWrite($myini, "system", "tabs", $tmpStbs-1)
+
+Switch GUICtrlRead($st_trayexit)
+   Case 1
+	  $trayexit = 1
+   Case Else
+	  $trayexit = 0
+EndSwitch
+
+_saveSysIni()
+
+   ;$st_trayexit = GUICtrlRead($st_trayexit)
+   ;MsgBox(4096, "Настройки : вкладки" ,GUICtrlRead($st_trayexit))
+
+
 Select
    Case $tmpStbs <> $windowTabs+1
 MsgBox(4096, "Настройки : вкладки" , "Настройки изменены" & @CRLF & "Текущие вкладки: " & $windowTabs+1 & @CRLF & "После перезапуска: " & $tmpStbs & " вкладок")
