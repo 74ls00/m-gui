@@ -21,7 +21,6 @@ set "now=%now:~-11%"
 >"%srcdir%version.au3" echo Global Const $version = "  0.%now% dev"
 
  "%autoitdir%\SciTE\AutoIt3Wrapper\AutoIt3Wrapper.exe" /in "%srcdir%aigui.au3" /out %outdir%%app64%w.exe /nopack /Gui 
-timeout /t 
 
 rem "%autoitdir%\Aut2Exe\Aut2exe_x64.exe" /in "%srcdir%aigui.au3" /out %outdir%%app64%.exe /x64 /comp 4 /icon %icon% /gui
 

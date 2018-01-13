@@ -1,7 +1,7 @@
 #Region
 #AutoIt3Wrapper_Res_LegalCopyright=author
 #AutoIt3Wrapper_Icon=res\icon12.ico
-#AutoIt3Wrapper_Res_Icon_Add=res\imageres149fix.ico;53
+;#AutoIt3Wrapper_Res_Icon_Add=res\icon13.ico
 ;#AutoIt3Wrapper_Versioning=y
 ;#AutoIt3Wrapper_Res_Icon_Add=
 ;#AutoIt3Wrapper_Res_Icon_Add=
@@ -29,6 +29,9 @@
 #include <asciiArt.au3>
 #include <version.au3>
 #include <debug-log.au3>
+
+
+;#include <WinAPIShellEx.au3>
 
 Opt("TrayAutoPause", 0)
 Opt('TrayMenuMode', 3)	;	http://autoit-script.ru/autoit3_docs/functions/AutoItSetOption.htm
@@ -142,8 +145,11 @@ GUICtrlCreateLabel($NameGUI & " - зелёная фигня", 20, $StrTool+5, $W
 GUICtrlSetFont(-1, 10.5, 400, 0 , "Arial" , 5)
 GUICtrlSetBkColor(-1, 0x00FF00)
 
+
+;_GUIImageList_AddIcon($hImage, @ScriptName, 201, True)
 $btnHL = GUICtrlCreateButton("", $WWidth-67+16+1, $WHeight-404-1, 24, 24, $BS_ICON)
 GUICtrlSetImage ( -1, "shell32.dll", 154+109 ,0);154 215
+;GUICtrlSetImage ( -1, @ScriptName, 201 ,0);154 215
 GUICtrlSetOnEvent(-1, "btnHL")
 
 Local Const $tCordLbtL = 33 ; левый край
@@ -305,16 +311,20 @@ GUICtrlCreateGroup("Настройки", 9, 9 , $guiCoord[2]-38 , $guiCoord[3]-4
 
 
 $hImage = _GUIImageList_Create(24, 24, 5, 3);, 6)
-_GUIImageList_AddIcon($hImage, "DeviceCenter.dll", 3, True)
-;_GUIImageList_AddIcon($hImage, @ScriptName, 201, True)
-GUICtrlCreateButton("Сохранить", 23, 32, 100, 32)
+;_GUIImageList_AddIcon($hImage, "DeviceCenter.dll", 3, True)
+_GUIImageList_AddIcon($hImage, "shell32.dll", 165, True)
+;_GUIImageList_AddIcon($hImage, "imageres.dll", 111, True)
+GUICtrlCreateButton("Сохранить", 135, 32, 100, 32)
 GUICtrlSetOnEvent(-1, "SetsSave")
 _GUICtrlButton_SetImageList(-1, $hImage)
 
 
-
-GUICtrlCreateButton("Закрыть", 155, 32, 90, 30)
+$hImage = _GUIImageList_Create(24, 24, 5, 3);, 6)
+;_GUIImageList_AddIcon($hImage, "shell32.dll", 146, True)
+_GUIImageList_AddIcon($hImage, "imageres.dll", 218, True) ;161
+GUICtrlCreateButton("Закрыть", 23, 32, 100, 32)
 GUICtrlSetOnEvent(-1, "SetsClose")
+_GUICtrlButton_SetImageList(-1, $hImage)
 
 
 ;;..................................................................................................
