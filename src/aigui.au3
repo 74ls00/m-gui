@@ -1,9 +1,14 @@
 #Region
-#AutoIt3Wrapper_Res_LegalCopyright=author
+#AutoIt3Wrapper_UseX64=y
+#AutoIt3Wrapper_Res_FileVersion_AutoIncrement=y
+#AutoIt3Wrapper_Res_Description=Окно консоли
+#AutoIt3Wrapper_Res_Fileversion=0.1.0.12
+#AutoIt3Wrapper_Res_ProductVersion=0.1α 2018.1
+#AutoIt3Wrapper_Res_LegalCopyright=anonimus
+#AutoIt3Wrapper_Res_Comment=Consoles GUI
+#AutoIt3Wrapper_Res_Language=1049
 #AutoIt3Wrapper_Icon=res\icon12.ico
 ;#AutoIt3Wrapper_Res_Icon_Add=res\icon13.ico
-;#AutoIt3Wrapper_Versioning=y
-;#AutoIt3Wrapper_Res_Icon_Add=
 ;#AutoIt3Wrapper_Res_Icon_Add=
 #EndRegion
 
@@ -26,6 +31,7 @@
 #include <Constants.au3>
 
 #include <aig-ini.au3>
+;#include <aig-funkbtn.au3>
 #include <asciiArt.au3>
 #include <version.au3>
 #include <aig-log.au3>
@@ -45,13 +51,10 @@ Opt("GUIOnEventMode", 1)
 _debug_start()
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Select ; не запускать вторую копию программы ; @ScriptName
-   Case IniRead ($sysini,"RUN","RunPID", Null) <> "" ; добавить. если пид есть, искать по нему процесс и тогда ... >
-	  Select
-		 Case ProcessExists ( IniRead ($sysini,"RUN","RunPID", Null) )
+Case IniRead ($sysini,"RUN","RunPID", Null) <> "" And ProcessExists ( IniRead ($sysini,"RUN","RunPID", Null) )
 			WinSetState ( IniRead ($sysini,"RUN","RunGUI", Null), Null, @SW_SHOW )
 			WinActivate ( IniRead ($sysini,"RUN","RunGUI", Null), Null )
 			Exit
-	  EndSelect
 EndSelect
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Switch IniRead ($sysini,"LOG","CheckDll", "")
@@ -83,10 +86,9 @@ Global $iBtnStart[$windowTabs+1],$iBtnStop[$windowTabs+1],$iBtnClean[$windowTabs
 Global $iBtnUnPause[$windowTabs+1],$iBtnPause[$windowTabs+1] , $iBtnCont[$windowTabs+1]
 Global $iPIDx[$windowTabs+1] , $aPIDs[$windowTabs+1] , $sOut[$windowTabs+1] , $getTab ;=GUICtrlRead($iTab)-1
 Global $sn_info[$windowTabs+1],$st_typecmd[$windowTabs+1],$st_expath[$windowTabs+1],$st_exname[$windowTabs+1],$st_server[$windowTabs+1],$st_urlprofile[$windowTabs+1]
-
 Global $st_port[$windowTabs+1],$st_user[$windowTabs+1],$st_devr[$windowTabs+1],$st_pass[$windowTabs+1],$st_exlog[$windowTabs+1],$st_params[$windowTabs+1]
 Global $conOut[$windowTabs+1] = [0]; временная переменная вываода
-Global $aSel[2]
+;Global $aSel[2]
 
 Global Const $txtQual = 3 ; сглаживание
 Global $st_trayexit
@@ -100,7 +102,6 @@ TraySetState(1) ; Показывает меню трея
 
 _Main()
 
-;Func _trayIcon()
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 While 1
    Switch TrayGetMsg()
@@ -110,15 +111,11 @@ While 1
 	  EndSwitch
 
 Switch $streadmode; = 0 ;0 _Update(), 1 _Update()
-Case 0
- ;  MsgBox(4096, "lll" , "0" & $streadmode)
-	  _Update()
-	 ; MsgBox(4096, "lll" , "0" & $streadmode)
-   Case Else
-	 ; MsgBox(4096, "lll" , "1" & $streadmode)
+	Case 0
+		_Update()
+	Case Else
 	  _Update2()
 EndSwitch
-
 
 Sleep(10)
 ;GUISetState($hSETUP)
@@ -188,25 +185,25 @@ Next
 $hImage = _GUIImageList_Create(32, 32, 5, 3);, 6)
 _GUIImageList_AddIcon($hImage, "taskmgr.exe", 0, True)
 $btnTM = GUICtrlCreateButton("Диспетчер задач", 187, $WHeight-100, 147, 40)
-Select
-   Case IsAdmin()
+;Select
+;   Case IsAdmin()
 GUICtrlSetOnEvent(-1, "btnTM")
-Case Else
+;Case Else
 ;_GUIImageList_AddIcon($hImage, "shell32.dll", 109, True)
-GUICtrlSetOnEvent(-1, "btnTMu")
-EndSelect
+;GUICtrlSetOnEvent(-1, "btnTMu")
+;EndSelect
 _GUICtrlButton_SetImageList($btnTM, $hImage)
 
 $hImage = _GUIImageList_Create(32, 32, 5, 3)
 _GUIImageList_AddIcon($hImage, "devmgr.dll", 4, True)
 $btnDM = GUICtrlCreateButton("Диспетчер устройств", 25, $WHeight-100, 157, 40)
-Select
-   Case IsAdmin()
+;Select
+;   Case IsAdmin()
 GUICtrlSetOnEvent(-1, "btnDM")
-Case Else
+;Case Else
 ;_GUIImageList_AddIcon($hImage, "shell32.dll", 109, True)
-GUICtrlSetOnEvent(-1, "btnDMu")
-EndSelect
+;GUICtrlSetOnEvent(-1, "btnDMu")
+;EndSelect
 _GUICtrlButton_SetImageList($btnDM, $hImage)
 
 
@@ -306,14 +303,11 @@ Next
 
 GUISetState(@SW_SHOW, $hGUI)
 EndFunc ;==>_Main
-
-
 ;--------------------------------------------------------------------------------------------------
 Func btnST() ; окно настроек
 ;$setEXIT = 0
 ;$guiSZ = WinGetClientSize ($hGUI );670 450
 ;$guiCoord = WinGetPos ($hGUI);676 478
-
 
 WinSetState ( $hGUI, Null, @SW_DISABLE )
 Local $guiCoord = WinGetPos ($hGUI)
@@ -322,8 +316,6 @@ Local $guiCoord = WinGetPos ($hGUI)
 ;local Const $snMain2 = $guiCoord[3]-60 ; выс.
 
 ;Local $stTabs
-
-
 
 $hSETUP = GUICreate("Настройки", $guiCoord[2]-20, $guiCoord[3]-41, $guiCoord[0]+8, $guiCoord[1]+30, BitOR ($WS_BORDER, $WS_POPUP), -1, $hGUI)
 ;$hSETUP = GUICreate("Настройки", $guiCoord[2]-20, $guiCoord[3]-41, $guiCoord[0]+8, $guiCoord[1]+30, $WS_BORDER, -1, $hGUI)
@@ -336,7 +328,12 @@ GUICtrlCreateGroup("Настройки", 9, 9 , $guiCoord[2]-38 , 70)
 
 ;$btnCM = GUICtrlCreateButton("Командная строка", 339, $WHeight-97, 150, 40) ; 339 $WWidth-331
 
-
+$hImage = _GUIImageList_Create(24, 24, 5, 3);, 6)
+;_GUIImageList_AddIcon($hImage, "shell32.dll", 146, True)
+_GUIImageList_AddIcon($hImage, "imageres.dll", 161, True) ;161 ;218 not win10
+GUICtrlCreateButton("Закрыть", 23, 32, 100, 32)
+GUICtrlSetOnEvent(-1, "SetsClose")
+_GUICtrlButton_SetImageList(-1, $hImage)
 
 
 $hImage = _GUIImageList_Create(24, 24, 5, 3);, 6)
@@ -348,12 +345,7 @@ GUICtrlSetOnEvent(-1, "SetsSave")
 _GUICtrlButton_SetImageList(-1, $hImage)
 
 
-$hImage = _GUIImageList_Create(24, 24, 5, 3);, 6)
-;_GUIImageList_AddIcon($hImage, "shell32.dll", 146, True)
-_GUIImageList_AddIcon($hImage, "imageres.dll", 161, True) ;161 ;218 not win10
-GUICtrlCreateButton("Закрыть", 23, 32, 100, 32)
-GUICtrlSetOnEvent(-1, "SetsClose")
-_GUICtrlButton_SetImageList(-1, $hImage)
+
 
 
 ;;..................................................................................................
@@ -374,21 +366,8 @@ Switch $trayexit
    Case Else
 	  GUICtrlSetState ( $st_trayexit, 4 ) ; $GUI_UNCHECKED 4
 EndSwitch
-
-
-
-;GUICtrlSetData ( $st_trayexit, data [, default ] )
-
-;Local Const $snTray1 = $guiCoord[2]-300 ;left
-;Local Const $snTray2 = $guiCoord[3]-400	; top
-
-;GUICtrlCreateLabel("Сворачивать в трей", $snTray1, $snTray2, 110, 20, 0x0200)
-
-
-
-;;..................................................................................................
+;..................................................................................................
 Local Const $snTUD = 110 ; вертикаль таблицы
-
 local Const $snMLen = 200 ; длина поля путь
 Local Const $snXLen = 100
 Local Const $snSWLen = 165
@@ -451,18 +430,11 @@ Next
 
 
 ;MsgBox(0, "WinGetPos активного окна", $exname[5])
-
-
-;MsgBox(0, "WinGetPos активного окна", _
- ;  "Координаты:" & @LF & @TAB & _
   ;"X=" & $guiCoord[0] & @LF & @TAB & _
  ;"Y=" & $guiCoord[1] & @LF & @LF & _
 ;"Размеры:" & @LF & @TAB & _
 ;"ширина =  " & $guiCoord[2] & @LF & @TAB & _
 ;"высота  =  " & $guiCoord[3])
-
-
-
 GUISetState(@SW_SHOW)
 ;GUISwitch($hGUI)
 EndFunc
@@ -504,7 +476,6 @@ EndSwitch
 
 _saveSysIni()
 
-   ;$st_trayexit = GUICtrlRead($st_trayexit)
    ;MsgBox(4096, "Настройки : вкладки" ,GUICtrlRead($st_trayexit))
 
 
@@ -589,7 +560,6 @@ Local $getTab = GUICtrlRead($iTab)-1
 For $i = 0 to $windowTabs
 
 ;прочитать поток во временную переменную $vTemp
-; Local $vTemp = $sOut & _WinAPI_OemToChar(StdoutRead($iPID)), $aSel = GUICtrlRecvMsg($iEdt, $EM_GETSEL)
 Local $vTemp = $sOut[$i] & DllCall('user32.dll', 'bool', 'OemToChar', 'str', StdoutRead($iPIDx[$i]), 'str', StdoutRead($iPIDx[$i]))[2]
 ;Local $strl4 =  StringLen ( $vTemp )
 
@@ -660,8 +630,6 @@ EndSelect
 Next
 EndFunc   ;==>_Update2
 ;--------------------------------------------------------------------------------------------------
-
-
 Func _UnSel()
 
   Local $getTab = GUICtrlRead($iTab)-1
@@ -672,12 +640,6 @@ Func _UnSel()
     AdlibUnRegister("_UnSel")
     $iUnSel = 1
 EndFunc   ;==>_UnSel
-
-
-
-
-
-
 ;--------------------------------------------------------------------------------------------------
 Func StartPressed()
 Local $getTab = GUICtrlRead($iTab)-1
@@ -689,15 +651,6 @@ Local $getTab = GUICtrlRead($iTab)-1
 	  GUICtrlSetState($iBtnStart[$getTab], $GUI_DISABLE)
 	  GUICtrlSetState($iBtnStop[$getTab], $GUI_ENABLE)
 	  GUICtrlSetState($btnAllStop, $GUI_ENABLE)
-	  StdinWrite($iPIDx[$getTab], $sLine[$getTab])
-EndFunc
-;--------------------------------------------------------------------------------------------------
-Func ButtonCont()
-Local $getTab = GUICtrlRead($iTab)-1
-   $iPIDx[$getTab] = $exlpid[$getTab]
-
-	  GUICtrlSetState($iBtnStart[$getTab], $GUI_DISABLE)
-	  GUICtrlSetState($iBtnStop[$getTab], $GUI_ENABLE)
 	  StdinWrite($iPIDx[$getTab], $sLine[$getTab])
 EndFunc
 
@@ -755,40 +708,15 @@ Local $getTab = GUICtrlRead($iTab)-1
 GUICtrlSetData($iEdt[$getTab], Null)
 $sOut[$getTab] = Null
 EndFunc
-
-
 ;--------------------------------------------------------------------------------------------------
-Func btnTM()
-Run (@SystemDir & "\taskmgr.exe", @SystemDir ,@SW_SHOW)
-;Run(@ComSpec & ' /c ' & @SystemDir & "\taskmgr.exe", @SystemDir, @SW_HIDE)
-EndFunc
-;--------------------------------------------------------------------------------------------------
-Func btnTMu()
-;Run (@SystemDir & "\taskmgr.exe", @SystemDir ,@SW_SHOW)
-Run(@ComSpec & ' /c ' & @SystemDir & "\taskmgr.exe", @SystemDir, @SW_HIDE)
-EndFunc
-;--------------------------------------------------------------------------------------------------
-Func btnDM()
-Run (@SystemDir & "\mmc.exe " & @SystemDir & "\devmgmt.msc" , @SystemDir ,@SW_SHOW)
-;Run(@ComSpec & ' /c ' & @SystemDir & "\mmc.exe " & @SystemDir & "\devmgmt.msc", @SystemDir, @SW_HIDE)
-EndFunc
-;--------------------------------------------------------------------------------------------------
-Func btnDMu()
-;Run (@SystemDir & "\mmc.exe " & @SystemDir & "\devmgmt.msc" , @SystemDir ,@SW_SHOW)
-Run(@ComSpec & ' /c ' & @SystemDir & "\mmc.exe " & @SystemDir & "\devmgmt.msc", @SystemDir, @SW_HIDE)
-EndFunc
-;--------------------------------------------------------------------------------------------------
-Func btnCM()
-Run (@SystemDir & "\cmd.exe", @WorkingDir ,@SW_SHOW)
-EndFunc
-;--------------------------------------------------------------------------------------------------
-Func btnCA()
-Run (@SystemDir & "\calc.exe", @WorkingDir ,@SW_SHOW)
-EndFunc
-;--------------------------------------------------------------------------------------------------
-Func btnMC()
-Run (@SystemDir & "\msconfig.exe", @WorkingDir ,@SW_SHOW)
-EndFunc
+;Func ButtonCont()
+;Local $getTab = GUICtrlRead($iTab)-1
+;   $iPIDx[$getTab] = $exlpid[$getTab]
+;
+;	  GUICtrlSetState($iBtnStart[$getTab], $GUI_DISABLE)
+;	  GUICtrlSetState($iBtnStop[$getTab], $GUI_ENABLE)
+;	  StdinWrite($iPIDx[$getTab], $sLine[$getTab])
+;EndFunc
 ;--------------------------------------------------------------------------------------------------
 Func _closeWin(); кнопка закрытия окна
    Switch $trayexit
@@ -823,6 +751,57 @@ For $i = 0 To $windowTabs
 Next
 EndFunc   ;==>_OnExit
 ;--------------------------------------------------------------------------------------------------
-
 Func btnHL()
 EndFunc
+;--------------------------------------------------------------------------------------------------
+Func btnTM()
+ShellExecute(@SystemDir & '\taskmgr.exe', '', '', '', @SW_SHOW)
+;Run (@SystemDir & "\taskmgr.exe", @SystemDir ,@SW_SHOW)
+;Run(@ComSpec & ' /c ' & @SystemDir & "\taskmgr.exe", @SystemDir, @SW_HIDE)
+EndFunc
+;--------------------------------------------------------------------------------------------------
+;Func btnTMu()
+;btnTM()
+;Run(@ComSpec & ' /c ' & @SystemDir & "\taskmgr.exe", @SystemDir, @SW_HIDE)
+;Run (@SystemDir & "\taskmgr.exe", @SystemDir ,@SW_SHOW)
+;EndFunc
+;--------------------------------------------------------------------------------------------------
+Func btnDM()
+ShellExecute(@SystemDir & '\mmc.exe', @SystemDir & "\devmgmt.msc", '', '', @SW_SHOW)
+;Run (@SystemDir & "\mmc.exe " & @SystemDir & "\devmgmt.msc" , @SystemDir ,@SW_SHOW)
+;;Run(@ComSpec & ' /c ' & @SystemDir & "\mmc.exe " & @SystemDir & "\devmgmt.msc", @SystemDir, @SW_HIDE)
+EndFunc
+;--------------------------------------------------------------------------------------------------
+;Func btnDMu()
+;btnDM()
+;;Run (@SystemDir & "\mmc.exe " & @SystemDir & "\devmgmt.msc" , @SystemDir ,@SW_SHOW)
+;Run(@ComSpec & ' /c ' & @SystemDir & "\mmc.exe " & @SystemDir & "\devmgmt.msc", @SystemDir, @SW_HIDE)
+;EndFunc
+;--------------------------------------------------------------------------------------------------
+Func btnCM()
+ShellExecute(@SystemDir & '\cmd.exe', '', '', '', @SW_SHOW)
+;Run (@SystemDir & "\cmd.exe", @WorkingDir ,@SW_SHOW)
+EndFunc
+;--------------------------------------------------------------------------------------------------
+Func btnCA()
+ShellExecute(@SystemDir & '\calc.exe', '', '', '', @SW_SHOW)
+;Run (@SystemDir & "\calc.exe", @WorkingDir ,@SW_SHOW)
+EndFunc
+;--------------------------------------------------------------------------------------------------
+Func btnMC()
+ShellExecute(@SystemDir & '\msconfig.exe', '', '', '', @SW_SHOW)
+;Run (@SystemDir & "\msconfig.exe", @WorkingDir ,@SW_SHOW)
+EndFunc
+;--------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
