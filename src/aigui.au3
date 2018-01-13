@@ -140,7 +140,7 @@ $iTab = GUICtrlCreateTab(5, 5, $WWidth-10, $WHeight-10) ;создать вкла
 ;..................................................................................................
 GUICtrlCreateTabItem("  Панель  "); Вкладка для инструментов
 
-GUICtrlCreateGroup("", 15 , $StrTool-5 , $WWidth-32 , $THeight+30)
+GUICtrlCreateGroup("", 15 , $StrTool-5 , $WWidth-32 , $WHeight-46)
 GUICtrlCreateLabel($NameGUI & " - зелёная фигня", 20, $StrTool+5, $WWidth-42-70, 60)
 GUICtrlSetFont(-1, 10.5, 400, 0 , "Arial" , 5)
 GUICtrlSetBkColor(-1, 0x00FF00)
@@ -176,7 +176,7 @@ Next
 
 $hImage = _GUIImageList_Create(32, 32, 5, 3);, 6)
 _GUIImageList_AddIcon($hImage, "taskmgr.exe", 0, True)
-$btnTM = GUICtrlCreateButton("Диспетчер задач", 187, $WHeight-97, 147, 40)
+$btnTM = GUICtrlCreateButton("Диспетчер задач", 187, $WHeight-100, 147, 40)
 Select
    Case IsAdmin()
 GUICtrlSetOnEvent(-1, "btnTM")
@@ -188,7 +188,7 @@ _GUICtrlButton_SetImageList($btnTM, $hImage)
 
 $hImage = _GUIImageList_Create(32, 32, 5, 3)
 _GUIImageList_AddIcon($hImage, "devmgr.dll", 4, True)
-$btnDM = GUICtrlCreateButton("Диспетчер устройств", 25, $WHeight-97, 157, 40)
+$btnDM = GUICtrlCreateButton("Диспетчер устройств", 25, $WHeight-100, 157, 40)
 Select
    Case IsAdmin()
 GUICtrlSetOnEvent(-1, "btnDM")
@@ -205,26 +205,26 @@ _GUICtrlButton_SetImageList($btnDM, $hImage)
 
 $hImage = _GUIImageList_Create(32, 32, 5, 3);, 6)
 _GUIImageList_AddIcon($hImage, "cmd.exe", 0, True)
-$btnCM = GUICtrlCreateButton("Командная строка", 339, $WHeight-97, 150, 40) ; 339 $WWidth-331
+$btnCM = GUICtrlCreateButton("Командная строка", 339, $WHeight-100, 150, 40) ; 339 $WWidth-331
 _GUICtrlButton_SetImageList($btnCM, $hImage)
 GUICtrlSetOnEvent(-1, "btnCM")
 
 $hImage = _GUIImageList_Create(32, 32, 5, 3);, 6)
 _GUIImageList_AddIcon($hImage, "shell32.dll", 21, True)
-$btnST = GUICtrlCreateButton("Настройки", 494 , $WHeight-97, 150, 40);494 $WWidth-176
+$btnST = GUICtrlCreateButton("Настройки", 494 , $WHeight-100, 150, 40);494 $WWidth-176
 _GUICtrlButton_SetImageList($btnST, $hImage)
 GUICtrlSetOnEvent(-1, "btnST")
 
 $hImage = _GUIImageList_Create(32, 32, 5, 3);, 6)
 _GUIImageList_AddIcon($hImage, "calc.exe", 0, True)
-$btnCA = GUICtrlCreateButton("Калькулятор", 494-145, $WHeight-197, 150, 40)
+$btnCA = GUICtrlCreateButton("Калькулятор", 494-145, $WHeight-200, 150, 40)
 _GUICtrlButton_SetImageList($btnCA, $hImage)
 GUICtrlSetOnEvent(-1, "btnCA")
 
 
 ;$hImage = _GUIImageList_Create(32, 32, 5, 3, 6)
 $hImage = _GUIImageList_Create(16 , 16,5, 3);,5 )
-$btnMC = GUICtrlCreateButton("msconfig", 25, $WHeight-$THeight, 80, 24) ;157 40
+$btnMC = GUICtrlCreateButton("msconfig", 25, $WHeight-51, 80, 24) ;157 40
 Select
    Case IsAdmin()
 _GUIImageList_AddIcon($hImage, "msconfig.exe", 0, True)
@@ -277,7 +277,7 @@ $iBtnClean = GUICtrlCreateButton("Очистить", 186+10+10+10, $THeight+35, 
 GUICtrlSetOnEvent(-1, "CleanPressed")
 _GUICtrlButton_SetImageList(-1, $hImage)
 
-GUICtrlCreateIcon("mblctr.exe", 133, $WWidth-42, $THeight+31)
+GUICtrlCreateIcon("mblctr.exe", 133, $WWidth-44, $WHeight-47)
 ;GUICtrlSetImage ( -1, "winhlp32.exe", 0 ,0);154 215
 
 
