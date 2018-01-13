@@ -1,3 +1,12 @@
+#Region
+#AutoIt3Wrapper_Res_LegalCopyright=author
+#AutoIt3Wrapper_Icon=res\icon12.ico
+#AutoIt3Wrapper_Res_Icon_Add=res\imageres149fix.ico;53
+;#AutoIt3Wrapper_Versioning=y
+;#AutoIt3Wrapper_Res_Icon_Add=
+;#AutoIt3Wrapper_Res_Icon_Add=
+#EndRegion
+
 #NoTrayIcon
 #include <GuiConstantsEx.au3> ;EditConstants.au3
 ;#include <ScrollBarConstants.au3>;#include <ScrollBarsConstants.au3>
@@ -31,7 +40,7 @@ Opt("GUIOnEventMode", 1)
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 _debug_start()
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-Select ; не запускать вторую копию программы
+Select ; не запускать вторую копию программы ; @ScriptName
    Case IniRead ($sysini,"RUN","RunPID", Null) <> "" ; добавить. если пид есть, искать по нему процесс и тогда ... >
 	  Select
 		 Case ProcessExists ( IniRead ($sysini,"RUN","RunPID", Null) )
@@ -297,6 +306,7 @@ GUICtrlCreateGroup("Настройки", 9, 9 , $guiCoord[2]-38 , $guiCoord[3]-4
 
 $hImage = _GUIImageList_Create(24, 24, 5, 3);, 6)
 _GUIImageList_AddIcon($hImage, "DeviceCenter.dll", 3, True)
+;_GUIImageList_AddIcon($hImage, @ScriptName, 201, True)
 GUICtrlCreateButton("Сохранить", 23, 32, 100, 32)
 GUICtrlSetOnEvent(-1, "SetsSave")
 _GUICtrlButton_SetImageList(-1, $hImage)
