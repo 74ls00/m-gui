@@ -147,7 +147,7 @@ GUICtrlSetBkColor(-1, 0x00FF00)
 
 
 ;_GUIImageList_AddIcon($hImage, @ScriptName, 201, True)
-$btnHL = GUICtrlCreateButton("", $WWidth-67+16+1, $WHeight-404-1, 24, 24, $BS_ICON)
+$btnHL = GUICtrlCreateButton("", $WWidth-50, $StrTool+9, 24, 24, $BS_ICON)
 ;GUICtrlSetImage ( -1, "shell32.dll", 154+109 ,0);154 215
 GUICtrlSetImage ( -1, "winhlp32.exe", 0 ,0);154 215
 ;GUICtrlSetImage ( -1, @ScriptName, 201 ,0);154 215
