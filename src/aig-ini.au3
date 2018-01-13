@@ -97,18 +97,16 @@ EndFunc
 Func _loadSysIni()
 	Select
 		Case Not FileExists($sysini)
-			IniWrite($sysini, "LOG", "CheckDllDissable", 1)
+			IniWrite($sysini, "LOG", "CheckDll", 1)
 		Case Else
 			Select
-				Case IniRead ($sysini,"LOG","CheckDllDissable", Null) = ""
-				IniWrite($sysini, "LOG", "CheckDllDissable", 1)
+				Case IniRead ($sysini,"LOG","CheckDll", Null) = ""
+				IniWrite($sysini, "LOG", "CheckDll", 1)
 			EndSelect
 	EndSelect
 
 $trayexit = IniRead ($sysini,"GUI","Tray1_Exit", $trayexit)
 $strLimit = IniRead ($sysini,"GUI","ListingLimit", $strLimit)
-
-
 
 EndFunc
 ;--------------------------------------------------------------------------------------------------
