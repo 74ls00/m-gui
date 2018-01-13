@@ -148,7 +148,8 @@ GUICtrlSetBkColor(-1, 0x00FF00)
 
 ;_GUIImageList_AddIcon($hImage, @ScriptName, 201, True)
 $btnHL = GUICtrlCreateButton("", $WWidth-67+16+1, $WHeight-404-1, 24, 24, $BS_ICON)
-GUICtrlSetImage ( -1, "shell32.dll", 154+109 ,0);154 215
+;GUICtrlSetImage ( -1, "shell32.dll", 154+109 ,0);154 215
+GUICtrlSetImage ( -1, "winhlp32.exe", 0 ,0);154 215
 ;GUICtrlSetImage ( -1, @ScriptName, 201 ,0);154 215
 GUICtrlSetOnEvent(-1, "btnHL")
 
@@ -253,15 +254,28 @@ EndSwitch
 For $t = 0 To $windowTabs
 GUICtrlCreateTabItem($info[$t]) ; Вкладки программ
 
-$iBtnStart[$t] = GUICtrlCreateButton("Старт", 14, $THeight+35 , 80, 25, $BS_DEFPUSHBUTTON)
+;gameux.dll
+$hImage = _GUIImageList_Create(24, 24, 5, 3);, 6)
+;_GUIImageList_AddIcon($hImage, "gameux.dll", 2, True)
+_GUIImageList_AddIcon($hImage, "shell32.dll", 137, True)
+$iBtnStart[$t] = GUICtrlCreateButton("Старт", 14, $THeight+35 , 85, 30, $BS_DEFPUSHBUTTON)
 GUICtrlSetOnEvent(-1, "StartPressed")
+_GUICtrlButton_SetImageList(-1, $hImage)
 
-$iBtnStop[$t] = GUICtrlCreateButton("Стоп", 100, $THeight+35, 80, 25, 0x01) ; $BS_DEFPUSHBUTTON
+$hImage = _GUIImageList_Create(20, 20, 5, 3);, 6)
+_GUIImageList_AddIcon($hImage, "SyncCenter.dll", 5, True)
+$iBtnStop[$t] = GUICtrlCreateButton("Стоп", 100+5, $THeight+35, 85, 26, 0x01) ; $BS_DEFPUSHBUTTON
 GUICtrlSetOnEvent(-1, "StopPressed")
 GUICtrlSetState(-1, $GUI_DISABLE)
+_GUICtrlButton_SetImageList(-1, $hImage)
 
-$iBtnClean = GUICtrlCreateButton("Очистить", 186, $THeight+35, 80, 25)
+$iBtnClean = GUICtrlCreateButton("Очистить", 186+10, $THeight+35, 85, 26)
 GUICtrlSetOnEvent(-1, "CleanPressed")
+
+
+GUICtrlCreateIcon("mblctr.exe", 133, $WWidth-42, $THeight+31)
+;GUICtrlSetImage ( -1, "winhlp32.exe", 0 ,0);154 215
+
 
 ;$iBtnCont[$t] = GUICtrlCreateButton("Продолжить" , 272, $THeight+35, 80, 25)
 ;;GUICtrlSetState($iBtnCont[$t], $GUI_DISABLE)
@@ -321,7 +335,7 @@ _GUICtrlButton_SetImageList(-1, $hImage)
 
 $hImage = _GUIImageList_Create(24, 24, 5, 3);, 6)
 ;_GUIImageList_AddIcon($hImage, "shell32.dll", 146, True)
-_GUIImageList_AddIcon($hImage, "imageres.dll", 218, True) ;161
+_GUIImageList_AddIcon($hImage, "imageres.dll", 161, True) ;161 ;218 not win10
 GUICtrlCreateButton("Закрыть", 23, 32, 100, 32)
 GUICtrlSetOnEvent(-1, "SetsClose")
 _GUICtrlButton_SetImageList(-1, $hImage)
