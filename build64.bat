@@ -1,12 +1,12 @@
 @echo off
-set "autoitdir=T:\Program Files (x86)\AutoIt3"
+set "autoitdir=C:\Program Files (x86)\AutoIt3"
 set path=%path%;"%autoitdir%\Aut2Exe\"
 set "upxx="%autoitdir%\Aut2Exe\"upx.exe"
 set "outdir=%~d0%~p0"
 set "srcdir=%~d0%~p0src\"
 set "main=%srcdir%aigui.au3"
 
-set app=AiGUI
+set app=AiGUIn
 set "icon=%srcdir%res\icon3.ico"
 set app64=%app%
 
@@ -29,5 +29,3 @@ del %outdir%%app64%u.exe
 %upxx% -9  -o "%outdir%%app64%u.exe" "%outdir%%app64%.exe"
 del %outdir%%app64%.exe
 timeout /t 2
-exit
-pause

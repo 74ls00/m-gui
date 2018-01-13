@@ -68,7 +68,7 @@ Global $strl4 , $iTab , $hImage ; элемент иконок кнопки
 Global Const $NameGUI = "AiGUI"
 Global Const $WWidth = 670 , $WHeight = 450 ; ширина и высота окна 450
 Global Const $StrTool = 35 ; сверху первая строка под вкладкой.
-Global Const $THeight = $WHeight-75 ; высота консоли
+Global Const $THeight = $WHeight-82 ; высота консоли
 
 
 _iniLoad() ; загрузить настройки из ini <aig-ini.au3>
@@ -224,7 +224,7 @@ GUICtrlSetOnEvent(-1, "btnCA")
 
 ;$hImage = _GUIImageList_Create(32, 32, 5, 3, 6)
 $hImage = _GUIImageList_Create(16 , 16,5, 3);,5 )
-$btnMC = GUICtrlCreateButton("msconfig", 25, $WHeight-50, 80, 24) ;157 40
+$btnMC = GUICtrlCreateButton("msconfig", 25, $WHeight-$THeight, 80, 24) ;157 40
 Select
    Case IsAdmin()
 _GUIImageList_AddIcon($hImage, "msconfig.exe", 0, True)
@@ -258,20 +258,24 @@ GUICtrlCreateTabItem($info[$t]) ; Вкладки программ
 $hImage = _GUIImageList_Create(24, 24, 5, 3);, 6)
 ;_GUIImageList_AddIcon($hImage, "gameux.dll", 2, True)
 _GUIImageList_AddIcon($hImage, "shell32.dll", 137, True)
-$iBtnStart[$t] = GUICtrlCreateButton("Старт", 14, $THeight+35 , 85, 30, $BS_DEFPUSHBUTTON)
+$iBtnStart[$t] = GUICtrlCreateButton("Старт", 14, $THeight+35 , 95, 32, $BS_DEFPUSHBUTTON)
 GUICtrlSetOnEvent(-1, "StartPressed")
 _GUICtrlButton_SetImageList(-1, $hImage)
 
-$hImage = _GUIImageList_Create(20, 20, 5, 3);, 6)
+$hImage = _GUIImageList_Create(24, 24, 5, 3);, 6)
 _GUIImageList_AddIcon($hImage, "SyncCenter.dll", 5, True)
-$iBtnStop[$t] = GUICtrlCreateButton("Стоп", 100+5, $THeight+35, 85, 26, 0x01) ; $BS_DEFPUSHBUTTON
+$iBtnStop[$t] = GUICtrlCreateButton("Стоп", 100+5+5+5, $THeight+35, 95, 32, 0x01) ; $BS_DEFPUSHBUTTON
 GUICtrlSetOnEvent(-1, "StopPressed")
 GUICtrlSetState(-1, $GUI_DISABLE)
 _GUICtrlButton_SetImageList(-1, $hImage)
 
-$iBtnClean = GUICtrlCreateButton("Очистить", 186+10, $THeight+35, 85, 26)
-GUICtrlSetOnEvent(-1, "CleanPressed")
 
+
+$hImage = _GUIImageList_Create(24, 24, 5, 3);, 6)
+_GUIImageList_AddIcon($hImage, "imageres.dll", 93, True)
+$iBtnClean = GUICtrlCreateButton("Очистить", 186+10+10+10, $THeight+35, 95, 32)
+GUICtrlSetOnEvent(-1, "CleanPressed")
+_GUICtrlButton_SetImageList(-1, $hImage)
 
 GUICtrlCreateIcon("mblctr.exe", 133, $WWidth-42, $THeight+31)
 ;GUICtrlSetImage ( -1, "winhlp32.exe", 0 ,0);154 215
