@@ -66,7 +66,7 @@ Global $strl4 , $iTab , $hImage ; элемент иконок кнопки
 
 ; размеры gui
 Global Const $NameGUI = "AiGUI"
-Global Const $WWidth = 670 , $WHeight = 450 ; ширина и высота окна 450
+Global Const $WWidth = 870 , $WHeight = 650 ; ширина и высота окна 450
 Global Const $StrTool = 35 ; сверху первая строка под вкладкой.
 Global Const $THeight = $WHeight-82 ; высота консоли
 
@@ -317,7 +317,7 @@ Local $guiCoord = WinGetPos ($hGUI)
 $hSETUP = GUICreate("Настройки", $guiCoord[2]-20, $guiCoord[3]-41, $guiCoord[0]+8, $guiCoord[1]+30, BitOR ($WS_BORDER, $WS_POPUP), -1, $hGUI)
 ;$hSETUP = GUICreate("Настройки", $guiCoord[2]-20, $guiCoord[3]-41, $guiCoord[0]+8, $guiCoord[1]+30, $WS_BORDER, -1, $hGUI)
 ;GUICtrlCreateGroup("Настройки", 9, 9 , $guiCoord[2]-38 , $guiCoord[3]-60)
-GUICtrlCreateGroup("Настройки", 9, 9 , $guiCoord[2]-38 , $guiCoord[3]-400)
+GUICtrlCreateGroup("Настройки", 9, 9 , $guiCoord[2]-38 , 70)
 
 
 
@@ -354,7 +354,9 @@ $stTabs = GUICtrlCreateInput($tmpStbs, $snTabs1, $snTabs2, 40, 20)
 GUICtrlCreateUpdown(-1,BitOR (0x40 , 0x01, 0x20) )
 GUICtrlSetLimit(-1, 10, 1)
 ;;..................................................................................................
-$st_trayexit = GUICtrlCreateCheckbox("Сворачивать в трей", $guiCoord[2]-160, $guiCoord[3]-455, 120, 20, $BS_RIGHTBUTTON)
+; ширина-отступ. высота-максимальная высота-отступ
+;(высота-отступ снизу не верно $guiCoord[3]-455)
+$st_trayexit = GUICtrlCreateCheckbox("Сворачивать в трей", $guiCoord[2]-160, $guiCoord[3]-$WHeight-5, 120, 20, $BS_RIGHTBUTTON)
 Switch $trayexit
    Case 1
 	  GUICtrlSetState ( $st_trayexit, 1 ) ;$GUI_CHECKED 1
