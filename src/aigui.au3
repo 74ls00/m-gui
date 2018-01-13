@@ -28,6 +28,7 @@
 #include <aig-ini.au3>
 #include <asciiArt.au3>
 #include <version.au3>
+#include <aig-log.au3>
 #include <debug-log.au3>
 
 
@@ -53,6 +54,11 @@ Select ; не запускать вторую копию программы ; @S
 	  EndSelect
 EndSelect
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Switch IniRead ($sysini,"LOG","CheckDllDissable", "")
+	Case 1
+	_dllCHK()
+EndSwitch
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Global Const $WA_ACTIVE = 1
 Global Const $WA_CLICKACTIVE = 2
 Global Const $WA_INACTIVE = 0
@@ -66,7 +72,7 @@ Global $strl4 , $iTab , $hImage ; элемент иконок кнопки
 
 ; размеры gui
 Global Const $NameGUI = "AiGUI"
-Global Const $WWidth = 870 , $WHeight = 650 ; ширина и высота окна 450
+Global Const $WWidth = 670 , $WHeight = 450 ; ширина и высота окна 450
 Global Const $StrTool = 35 ; сверху первая строка под вкладкой.
 Global Const $THeight = $WHeight-82 ; высота консоли
 
@@ -119,14 +125,19 @@ Sleep(10)
 WEnd
 ;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 Func _Main()
-
+;Opt ("GUIResizeMode", 768)
 Select ; определение прав запуска
    Case IsAdmin()
 	  $nGUI = " - Администратор"
    Case Else
 	  $nGUI = " - без прав администратора"
    EndSelect
-$hGUI = GUICreate($NameGUI & " " & $version & $nGUI,$WWidth,$WHeight)
+;$hGUI = GUICreate($NameGUI & " " & $version & $nGUI,$WWidth,$WHeight,-1 ,-1, BitOR( $WS_CAPTION, $WS_SYSMENU, $WS_SIZEBOX,$WS_POPUP, $WS_MINIMIZEBOX))
+;$hGUI = GUICreate($NameGUI & " " & $version & $nGUI,$WWidth,$WHeight,-1 ,-1, BitOR($WS_OVERLAPPEDWINDOW, $WS_POPUP ))
+$hGUI = GUICreate($NameGUI & " " & $version & $nGUI,$WWidth,$WHeight,-1,-1);,0x14C80000,0x00060100)
+;GUICtrlSetResizing ( $hGUI, BitOR($GUI_DOCKWIDTH,$GUI_DOCKHEIGHT) )
+
+
 IniWrite($sysini, "RUN", "RunPID", WinGetProcess ( $hGUI )); отметить что программа запущена
 IniWrite($sysini, "RUN", "RunGUI", '"' & $NameGUI & " " & $version & $nGUI & '"')
 

@@ -59,6 +59,7 @@ Select
    Case Not FileExists($myini)
    _iniDefLoad()   ; загрузить  дефолтные настройки
    _load_dev_ini() ; загрузить личные настройки разработчика
+
 EndSelect
 
    For $i=0 To $windowTabs
@@ -94,8 +95,21 @@ IniWrite($sysini, "GUI", "ListingLimit",$strLimit)
 EndFunc
 ;--------------------------------------------------------------------------------------------------
 Func _loadSysIni()
+	Select
+		Case Not FileExists($sysini)
+			IniWrite($sysini, "LOG", "CheckDllDissable", 1)
+		Case Else
+			Select
+				Case IniRead ($sysini,"LOG","CheckDllDissable", Null) = ""
+				IniWrite($sysini, "LOG", "CheckDllDissable", 1)
+			EndSelect
+	EndSelect
+
 $trayexit = IniRead ($sysini,"GUI","Tray1_Exit", $trayexit)
 $strLimit = IniRead ($sysini,"GUI","ListingLimit", $strLimit)
+
+
+
 EndFunc
 ;--------------------------------------------------------------------------------------------------
 Func _iniLoad()
