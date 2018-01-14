@@ -97,8 +97,8 @@ EndFunc
 Func _loadSysIni()
 	Select
 		Case Not FileExists($sysini); если нет файла настроек
-			IniWrite($sysini, "LOG", "CheckDll", 1);записать дефолтные
-			;IniWrite($sysini, "GUI", "GUI_Style", 0)
+			;IniWrite($sysini, "LOG", "CheckDll", 1);записать дефолтные
+			;IniWrite($sysini, "GUI", "Win7Style", 0)
 
 		Case Else ;если существует
 			Select ;но пустая строка
@@ -106,8 +106,8 @@ Func _loadSysIni()
 				IniWrite($sysini, "LOG", "CheckDll", 1) ; то записать дефолтные
 					EndSelect
 			Select
-				Case IniRead ($sysini,"GUI","GUI_Style", Null) = ""
-				IniWrite($sysini, "GUI", "GUI_Style", 0)
+				Case IniRead ($sysini,"GUI","Win7Style", Null) = ""
+				IniWrite($sysini, "GUI", "Win7Style", 0)
 					EndSelect
 	EndSelect
 

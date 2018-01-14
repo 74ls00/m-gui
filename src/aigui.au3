@@ -136,7 +136,7 @@ Select ; определение прав запуска
 	  $nGUI = " - без прав администратора"
 EndSelect
 
-Switch IniRead ($sysini,"GUI","GUI_Style", 0); стиль окна. 0=стандартная, 1=изменённая(стабильность не проверена)
+Switch IniRead ($sysini,"GUI","Win7Style", 0); стиль окна. 0=стандартная, 1=изменённая(стабильность не проверена)
 	Case 0
 		$hGUI = GUICreate($NameGUI & " " & $version & $nGUI,$WWidth,$WHeight,-1,-1);,0x14C80000,0x00060100)
 	Case 1
