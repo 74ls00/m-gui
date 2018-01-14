@@ -43,7 +43,7 @@ upxhide.tmp.vbs
 z.au3
 z.bat
 
-
+*.scr
 *.vbs
 *.dll
 *.exe
