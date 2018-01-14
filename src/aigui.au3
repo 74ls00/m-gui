@@ -2,14 +2,23 @@
 #AutoIt3Wrapper_UseX64=y
 #AutoIt3Wrapper_Res_FileVersion_AutoIncrement=y
 #AutoIt3Wrapper_Res_Description=Окно консоли
-#AutoIt3Wrapper_Res_Fileversion=0.1.0.12
-#AutoIt3Wrapper_Res_ProductVersion=0.1α 2018.1
+#AutoIt3Wrapper_Res_Fileversion=0.1.0.72
+#AutoIt3Wrapper_Res_Field=ProductName|Окно консоли
+#AutoIt3Wrapper_Res_Field=Build|%longdate% %time%
+;#AutoIt3Wrapper_Res_Field=OriginalFileName|gui.exe
+#AutoIt3Wrapper_Res_ProductVersion=0.1α
 #AutoIt3Wrapper_Res_LegalCopyright=anonimus
 #AutoIt3Wrapper_Res_Comment=Consoles GUI
 #AutoIt3Wrapper_Res_Language=1049
 #AutoIt3Wrapper_Icon=res\icon12.ico
 ;#AutoIt3Wrapper_Res_Icon_Add=res\icon13.ico
 ;#AutoIt3Wrapper_Res_Icon_Add=
+;#AutoIt3Wrapper_Run_Obfuscator=y
+;#Obfuscator_Parameters=/sf /sv /om /cs=0 /cn=0
+;#AutoIt3Wrapper_Run_After=del /f /q "%scriptdir%\%scriptfile%_Obfuscated.au3"
+;
+;#AutoIt3Wrapper_Run_AU3Check=y
+;
 #EndRegion
 
 #NoTrayIcon
