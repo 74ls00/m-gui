@@ -43,7 +43,7 @@
 #include <aig-log.au3>
 #include <debug-log.au3>
 
-;#include <GuiMenu.au3>
+#include <GuiMenu.au3>
 ;#include <WinAPIShellEx.au3>
 
 Opt("TrayAutoPause", 0)
@@ -136,14 +136,14 @@ Select ; определение прав запуска
 	  $nGUI = " - без прав администратора"
 EndSelect
 
-;Switch IniRead ($sysini,"GUI","GUI_Style", 0); стиль окна. 0=стандартная, 1=изменённая(стабильность не проверена)
-	;Case 0
+Switch IniRead ($sysini,"GUI","GUI_Style", 0); стиль окна. 0=стандартная, 1=изменённая(стабильность не проверена)
+	Case 0
 		$hGUI = GUICreate($NameGUI & " " & $version & $nGUI,$WWidth,$WHeight,-1,-1);,0x14C80000,0x00060100)
-	;Case 1
-		;$hGUI = GUICreate($NameGUI & " " & $version & $nGUI,$WWidth,$WHeight,-1,-1,BitXOR($WS_OVERLAPPEDWINDOW, $WS_MAXIMIZEBOX))
-		;_GUICtrlMenu_DeleteMenu(_GUICtrlMenu_GetSystemMenu($hGUI), 2)
-		;GUIRegisterMsg($WM_SETCURSOR, 'WM_SETCURSOR')
-;EndSwitch
+	Case 1
+		$hGUI = GUICreate($NameGUI & " " & $version & $nGUI,$WWidth,$WHeight,-1,-1,BitXOR($WS_OVERLAPPEDWINDOW, $WS_MAXIMIZEBOX))
+		_GUICtrlMenu_DeleteMenu(_GUICtrlMenu_GetSystemMenu($hGUI), 2)
+		GUIRegisterMsg($WM_SETCURSOR, 'WM_SETCURSOR')
+EndSwitch
 
 IniWrite($sysini, "RUN", "RunPID", WinGetProcess ( $hGUI )); отметить что программа запущена
 IniWrite($sysini, "RUN", "RunGUI", '"' & $NameGUI & " " & $version & $nGUI & '"')
@@ -516,8 +516,8 @@ Local $aSel = GUICtrlRecvMsg($iEdt[$i],0xB0 ); 0xB0 $EM_GETSEL$selectTime
 
 Select
    Case $vTemp <> $sOut[$i]
-		 ;$sOut[$i] = $vTemp & " >" & $strl4 & @CRLF ;+ отладочная метка
-		 $sOut[$i] = $vTemp;	 & @CRLF
+		 $sOut[$i] = $vTemp & " >" & $strl4 & @CRLF ;+ отладочная метка
+		 ;$sOut[$i] = $vTemp;	 & @CRLF
 
 Select ; очищать окно с сохранением в файл
 Case $strl4 > $strLimit ; если строка слишком длинная
@@ -525,7 +525,7 @@ Case $strl4 > $strLimit ; если строка слишком длинная
    $hFile = FileOpen($nFile, 1)
    FileWrite($hFile, $sOut[$i] & @CRLF & ">" & $strl4 & "<")
    FileClose($hFile)
- ;  _debug_send_file()
+   _debug_send_file()
    $sOut[$i] = "Превышено " & $strl4 & " знаков." & @CRLF & "Прошлый вывод сохранён в " & $nFile & @CRLF
    $strl4 = 0
 EndSelect
@@ -804,15 +804,15 @@ ShellExecute(@SystemDir & '\msconfig.exe', '', '', '', @SW_SHOW)
 EndFunc
 ;--------------------------------------------------------------------------------------------------
 
-;Func WM_SETCURSOR($hWnd, $Msg, $wParam, $lParam)
-;    If $wParam = $hGUI Then
-;        Switch BitAND($lParam, 0xFFFF) ; _WinAPI_LoWord
- ;           Case 10 To 18
- ;               GUISetCursor(2)
- ;       EndSwitch
- ;  EndIf
-;   Return $GUI_RUNDEFMSG
-;EndFunc ; ==> WM_SETCURSOR
+Func WM_SETCURSOR($hWnd, $Msg, $wParam, $lParam)
+    If $wParam = $hGUI Then
+        Switch BitAND($lParam, 0xFFFF) ; _WinAPI_LoWord
+            Case 10 To 18
+                GUISetCursor(2)
+        EndSwitch
+   EndIf
+   Return $GUI_RUNDEFMSG
+EndFunc ; ==> WM_SETCURSOR
 
 
 

@@ -3,7 +3,7 @@
 set "autoitdir=C:\Program Files (x86)\AutoIt3"
 set path=%path%;"%autoitdir%\Aut2Exe\"
 set "xUPX="%autoitdir%\Aut2Exe\"upx.exe"
-set app64=GUI_x64e
+set app64=aGUI_x64e
 set "srcdir=%~d0%~p0"
 set "src_main=aigui.au3"
 set "srctmp=~1251%src_main%"

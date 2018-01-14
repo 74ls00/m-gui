@@ -105,10 +105,10 @@ Func _loadSysIni()
 				Case IniRead ($sysini,"LOG","CheckDll", Null) = ""
 				IniWrite($sysini, "LOG", "CheckDll", 1) ; то записать дефолтные
 					EndSelect
-			;Select
-			;	Case IniRead ($sysini,"GUI","GUI_Style", Null) = ""
-			;	IniWrite($sysini, "GUI", "GUI_Style", 0)
-			;		EndSelect
+			Select
+				Case IniRead ($sysini,"GUI","GUI_Style", Null) = ""
+				IniWrite($sysini, "GUI", "GUI_Style", 0)
+					EndSelect
 	EndSelect
 
 $trayexit = IniRead ($sysini,"GUI","Tray1_Exit", $trayexit)
