@@ -1,0 +1,4 @@
+
+
+
+"C:\Program Files (x86)\AutoIt3\AutoIt3_x64.exe" "C:\Program Files (x86)\AutoIt3\SciTE\AutoIt3Wrapper\AutoIt3Wrapper.au3"  /NoStatus /prod /in "C:\Program Files (x86)\AutoIt3\SciTE\AutoIt3Wrapper\AutoIt3Wrapper.au3" /out "C:\Program Files (x86)\AutoIt3\SciTE\AutoIt3Wrapper\AutoIt3Wrapper.exe"

@@ -13,9 +13,9 @@
 #AutoIt3Wrapper_Icon=res\icon12.ico
 ;#AutoIt3Wrapper_Res_Icon_Add=res\icon13.ico
 ;#AutoIt3Wrapper_Res_Icon_Add=
-#AutoIt3Wrapper_Run_Obfuscator=y
-#Obfuscator_Parameters=/sf /sv /om /cs=0 /cn=0
-#AutoIt3Wrapper_Run_After=del /f /q "%scriptdir%\%scriptfile%_Obfuscated.au3"
+;#AutoIt3Wrapper_Run_Obfuscator=y
+;#Obfuscator_Parameters=/sf /sv /om /cs=0 /cn=0
+;#AutoIt3Wrapper_Run_After=del /f /q "%scriptdir%\%scriptfile%_Obfuscated.au3"
 #EndRegion
 
 #NoTrayIcon
@@ -43,7 +43,7 @@
 #include <aig-log.au3>
 #include <debug-log.au3>
 
-
+;#include <GuiMenu.au3>
 ;#include <WinAPIShellEx.au3>
 
 Opt("TrayAutoPause", 0)
@@ -128,18 +128,22 @@ Sleep(10)
 WEnd
 ;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 Func _Main()
-;Opt ("GUIResizeMode", 768)
+
 Select ; определение прав запуска
    Case IsAdmin()
 	  $nGUI = " - Администратор"
    Case Else
 	  $nGUI = " - без прав администратора"
-   EndSelect
-;$hGUI = GUICreate($NameGUI & " " & $version & $nGUI,$WWidth,$WHeight,-1 ,-1, BitOR( $WS_CAPTION, $WS_SYSMENU, $WS_SIZEBOX,$WS_POPUP, $WS_MINIMIZEBOX))
-;$hGUI = GUICreate($NameGUI & " " & $version & $nGUI,$WWidth,$WHeight,-1 ,-1, BitOR($WS_OVERLAPPEDWINDOW, $WS_POPUP ))
-$hGUI = GUICreate($NameGUI & " " & $version & $nGUI,$WWidth,$WHeight,-1,-1);,0x14C80000,0x00060100)
-;GUICtrlSetResizing ( $hGUI, BitOR($GUI_DOCKWIDTH,$GUI_DOCKHEIGHT) )
+EndSelect
 
+;Switch IniRead ($sysini,"GUI","GUI_Style", 0); стиль окна. 0=стандартная, 1=изменённая(стабильность не проверена)
+	;Case 0
+		$hGUI = GUICreate($NameGUI & " " & $version & $nGUI,$WWidth,$WHeight,-1,-1);,0x14C80000,0x00060100)
+	;Case 1
+		;$hGUI = GUICreate($NameGUI & " " & $version & $nGUI,$WWidth,$WHeight,-1,-1,BitXOR($WS_OVERLAPPEDWINDOW, $WS_MAXIMIZEBOX))
+		;_GUICtrlMenu_DeleteMenu(_GUICtrlMenu_GetSystemMenu($hGUI), 2)
+		;GUIRegisterMsg($WM_SETCURSOR, 'WM_SETCURSOR')
+;EndSwitch
 
 IniWrite($sysini, "RUN", "RunPID", WinGetProcess ( $hGUI )); отметить что программа запущена
 IniWrite($sysini, "RUN", "RunGUI", '"' & $NameGUI & " " & $version & $nGUI & '"')
@@ -150,7 +154,7 @@ GUISetOnEvent($GUI_EVENT_MINIMIZE, '_hideWin', $hGUI)
 
 GUISetFont(8.5, Null, Null, Null ,$hGUI , $txtQual);бесполезный код
 
-$iTab = GUICtrlCreateTab(5, 5, $WWidth-10, $WHeight-10) ;создать вкладки с отступом 5 по краям окна, и 5 внутри ;$TCS_HOTTRACK
+$iTab = GUICtrlCreateTab(6, 5, $WWidth-10, $WHeight-10) ;создать вкладки с отступом 5 по краям окна, и 5 внутри ;$TCS_HOTTRACK
 ;..................................................................................................
 GUICtrlCreateTabItem("  Панель  "); Вкладка для инструментов
 
@@ -323,7 +327,7 @@ Local $guiCoord = WinGetPos ($hGUI)
 
 ;Local $stTabs
 
-$hSETUP = GUICreate("Настройки", $guiCoord[2]-20, $guiCoord[3]-41, $guiCoord[0]+8, $guiCoord[1]+30, BitOR ($WS_BORDER, $WS_POPUP), -1, $hGUI)
+$hSETUP = GUICreate("Настройки", $guiCoord[2]-20+2, $guiCoord[3]-41+2, $guiCoord[0]+8, $guiCoord[1]+30, BitOR ($WS_BORDER, $WS_POPUP), -1, $hGUI)
 ;$hSETUP = GUICreate("Настройки", $guiCoord[2]-20, $guiCoord[3]-41, $guiCoord[0]+8, $guiCoord[1]+30, $WS_BORDER, -1, $hGUI)
 ;GUICtrlCreateGroup("Настройки", 9, 9 , $guiCoord[2]-38 , $guiCoord[3]-60)
 GUICtrlCreateGroup("Настройки", 9, 9 , $guiCoord[2]-38 , 70)
@@ -800,7 +804,15 @@ ShellExecute(@SystemDir & '\msconfig.exe', '', '', '', @SW_SHOW)
 EndFunc
 ;--------------------------------------------------------------------------------------------------
 
-
+;Func WM_SETCURSOR($hWnd, $Msg, $wParam, $lParam)
+;    If $wParam = $hGUI Then
+;        Switch BitAND($lParam, 0xFFFF) ; _WinAPI_LoWord
+ ;           Case 10 To 18
+ ;               GUISetCursor(2)
+ ;       EndSwitch
+ ;  EndIf
+;   Return $GUI_RUNDEFMSG
+;EndFunc ; ==> WM_SETCURSOR
 
 
 

@@ -10,7 +10,7 @@ set app=dcon2
 set app86=%app%(x86)
 set app64=%app%
 
-
+taskkill /im %app64%*
 
 start /d "%autoitdir%\Aut2Exe" Aut2exe_x64.exe /in %prodir%%app%.au3 /out %outdir%%app64%.exe /x64 /console
 

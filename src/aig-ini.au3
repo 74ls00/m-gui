@@ -96,13 +96,19 @@ EndFunc
 ;--------------------------------------------------------------------------------------------------
 Func _loadSysIni()
 	Select
-		Case Not FileExists($sysini)
-			IniWrite($sysini, "LOG", "CheckDll", 1)
-		Case Else
-			Select
+		Case Not FileExists($sysini); если нет файла настроек
+			IniWrite($sysini, "LOG", "CheckDll", 1);записать дефолтные
+			;IniWrite($sysini, "GUI", "GUI_Style", 0)
+
+		Case Else ;если существует
+			Select ;но пустая строка
 				Case IniRead ($sysini,"LOG","CheckDll", Null) = ""
-				IniWrite($sysini, "LOG", "CheckDll", 1)
-			EndSelect
+				IniWrite($sysini, "LOG", "CheckDll", 1) ; то записать дефолтные
+					EndSelect
+			;Select
+			;	Case IniRead ($sysini,"GUI","GUI_Style", Null) = ""
+			;	IniWrite($sysini, "GUI", "GUI_Style", 0)
+			;		EndSelect
 	EndSelect
 
 $trayexit = IniRead ($sysini,"GUI","Tray1_Exit", $trayexit)
