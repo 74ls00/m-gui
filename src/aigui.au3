@@ -326,13 +326,17 @@ Local $guiCoord = WinGetPos ($hGUI)
 ;local Const $snMain2 = $guiCoord[3]-60 ; выс.
 
 ;Local $stTabs
-
-$hSETUP = GUICreate("Настройки", $guiCoord[2]-20+2, $guiCoord[3]-41+2, $guiCoord[0]+8, $guiCoord[1]+30, BitOR ($WS_BORDER, $WS_POPUP), -1, $hGUI)
+;												+2					+2			+8
+$hSETUP = GUICreate("Настройки", $guiCoord[2]-20+4, $guiCoord[3]-41+2, $guiCoord[0]+7, $guiCoord[1]+30, BitOR ($WS_BORDER, $WS_POPUP), -1, $hGUI)
 ;$hSETUP = GUICreate("Настройки", $guiCoord[2]-20, $guiCoord[3]-41, $guiCoord[0]+8, $guiCoord[1]+30, $WS_BORDER, -1, $hGUI)
 ;GUICtrlCreateGroup("Настройки", 9, 9 , $guiCoord[2]-38 , $guiCoord[3]-60)
 GUICtrlCreateGroup("Настройки", 9, 9 , $guiCoord[2]-38 , 70)
 
-
+  ;"X=" & $guiCoord[0] & @LF & @TAB & _
+ ;"Y=" & $guiCoord[1] & @LF & @LF & _
+;"Размеры:" & @LF & @TAB & _
+;"ширина =  " & $guiCoord[2] & @LF & @TAB & _
+;"высота  =  " & $guiCoord[3])
 
 
 

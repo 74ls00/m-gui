@@ -12,6 +12,6 @@ set app64=%app%
 
 taskkill /im %app64%*
 
-start /d "%autoitdir%\Aut2Exe" Aut2exe_x64.exe /in %prodir%%app%.au3 /out %outdir%%app64%.exe /x64 /console
+start /d "%autoitdir%\Aut2Exe" Aut2exe_x64.exe /in %prodir%%app%.au3 /out %outdir%%app64%.exe /x64 /console /icon %prodir%..\res\bug.ico
 
 rem  %comspec% /c %outdir%%app64%.exe
