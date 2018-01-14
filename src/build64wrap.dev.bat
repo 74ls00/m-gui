@@ -26,7 +26,7 @@ call :Recode "%srcdir%%src_main%" "%srcdir%%srctmp%" utf-8 windows-1251
 :Recode in.[исходный файл] in.[результирующий файл] in.[кодировка исходного файла] in.[кодировка результирующего файла]
 cscript.exe //nologo //e:jscript "%~f0" "%~1" "%~2" "%~3" "%~4"
 
-rem собираем врапер если его нет, с вывлдом в консоль и иконкой которой, дефолтно нет.
+rem собираем врапер если его нет, с выводом в консоль и иконкой которой, дефолтно нет.
 if not exist "%autoitdir%\SciTE\AutoIt3Wrapper\AutoIt3Wrapper.exe" (
 echo Not Found "%autoitdir%\SciTE\AutoIt3Wrapper\AutoIt3Wrapper.exe" ...
 copy "%autoitdir%\Icons\au3.ico" "%autoitdir%\SciTE\AutoIt3Wrapper\AutoIt3Wrapper.ico"

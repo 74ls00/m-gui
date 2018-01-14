@@ -231,6 +231,8 @@ GUICtrlSetOnEvent(-1, "btnCM")
 
 $hImage = _GUIImageList_Create(32, 32, 5, 3);, 6)
 _GUIImageList_AddIcon($hImage, "shell32.dll", 21, True)
+;$hImage = _GUIImageList_Create(30, 30, 5, 3);, 6)
+;_GUIImageList_AddIcon($hImage, "mycomput.dll", 0, True)
 $btnST = GUICtrlCreateButton("Настройки", 494 , $WHeight-100, 150, 40);494 $WWidth-176
 _GUICtrlButton_SetImageList($btnST, $hImage)
 GUICtrlSetOnEvent(-1, "btnST")

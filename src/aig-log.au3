@@ -30,6 +30,16 @@ Switch FileExists(@SystemDir & "\mblctr.exe")
 		FileWrite($chklog, "[1] " & @SystemDir & "\mblctr.exe     - Not Found" & @CRLF)
 EndSwitch
 
+; кнопка настройки
+Switch FileExists(@SystemDir & "\mycomput.dll")
+	Case 1
+		FileWrite($chklog, "[1] " & @SystemDir & "\mycomput.dll   - OK" & @CRLF)
+	Case 0
+		FileWrite($chklog, "[1] " & @SystemDir & "\mycomput.dll   - Not Found" & @CRLF)
+EndSwitch
+
+
+
 Switch FileExists(@SystemDir & "\shell32.dll")
 	Case 1
 		FileWrite($chklog, "[1] " & @SystemDir & "\shell32.dll    - OK" & @CRLF)
