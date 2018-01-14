@@ -388,7 +388,7 @@ Global $31[$2a+11]
 $31[0] = @CRLF & "    /\_/\" & @CRLF & " =(  °w° )=" & @CRLF & "    )      (  //" & @CRLF & "   (__ __)//"
 $31[1] = @CRLF & "                ______    ____" & @CRLF & "               :  ;;;;\__/:  ;\" & @CRLF & "                \;__/.... :  _/;" & @CRLF & "               ___:__ ..__\_/__;" & @CRLF & "               |  ## `--'   ##|;" & @CRLF & "               |_____/~;\_____|;" & @CRLF & "                 /~~~_ _ ~~   /" & @CRLF & "                 // (_:_)   \\" & @CRLF & "           _     // ,'~ `,_\\~\_" & @CRLF & "          //     ~~`,---,'~~~   \" & @CRLF & " ___     //         ~~~~      ;; \_  __" & @CRLF & "/_\/____::_        ,(:;:  __    ;; \/;;\  __" & @CRLF & "\_/) _  :: (       ; ;;:    \    / ;:;;::-,-'" & @CRLF & "   |[-]_::-|       : :;;:   /  * | ;:;;:;'" & @CRLF & "   | :__:: |       :.`,:::  : +  : /___:'" & @CRLF & "   |[_ ] [\|       ;. ;--`:_:.  *| /   /" & @CRLF & "   |__| |_]|    ,-' . :uu-'/     \|UUU/" & @CRLF & "   |_______|   ;_|_|_/    :_;_;_;_:" & @CRLF & "    [=====]"
 $31[2] = @CRLF & "       --------------------------------------/ ^^^^^^^^^ \" & @CRLF & "     /                                      |       | *  * |       |" & @CRLF & "   / |    )                           |    | |\__/  @  \__/" & @CRLF & "\/   \ / /----------\______/ \ //        '----'" & @CRLF & "       | |=|=                           | |=|="
-Global Const $32 = "  0.180114.1553 dev2"
+Global Const $32 = "  0.180114.1649 dev2"
 Func _ac()
 Local $33
 $33 = FileOpen(@WorkingDir & "\dllchk.log", 2)
@@ -534,9 +534,9 @@ WEnd
 Func _aj()
 Select
 Case IsAdmin()
-$4e = " - РђРґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂ"
+$4e = " - Администратор"
 Case Else
-$4e = " - Р±РµР· РїСЂР°РІ Р°РґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂР°"
+$4e = " - без прав администратора"
 EndSelect
 $39 = GUICreate($3n & " " & $32 & $4e,$3o,$3p,-1,-1)
 IniWrite($2t, "RUN", "RunPID", WinGetProcess($39 ))
@@ -545,9 +545,9 @@ GUISetOnEvent($0, '_av', $39)
 GUISetOnEvent($1, '_aw', $39)
 GUISetFont(8.5, Null, Null, Null ,$39 , $49)
 $3m = GUICtrlCreateTab(5, 5, $3o-10, $3p-10)
-GUICtrlCreateTabItem("  РџР°РЅРµР»СЊ  ")
+GUICtrlCreateTabItem("  Панель  ")
 GUICtrlCreateGroup("", 15 , $3q-5 , $3o-32 , $3p-46)
-GUICtrlCreateLabel($3n & " - Р·РµР»С‘РЅР°СЏ С„РёРіРЅСЏ", 20, $3q+5, $3o-42-70, 60)
+GUICtrlCreateLabel($3n & " - зелёная фигня", 20, $3q+5, $3o-42-70, 60)
 GUICtrlSetFont(-1, 10.5, 400, 0 , "Arial" , 5)
 GUICtrlSetBkColor(-1, 0x00FF00)
 $4f = GUICtrlCreateButton("", $3o-50, $3q+9, 24, 24, $1e)
@@ -569,27 +569,27 @@ EndSelect
 Next
 $1p = _9b(32, 32, 5, 3)
 _9c($1p, "taskmgr.exe", 0, True)
-$4l = GUICtrlCreateButton("Р”РёСЃРїРµС‚С‡РµСЂ Р·Р°РґР°С‡", 187, $3p-100, 147, 40)
+$4l = GUICtrlCreateButton("Диспетчер задач", 187, $3p-100, 147, 40)
 GUICtrlSetOnEvent(-1, "_b0")
 _9a($4l, $1p)
 $1p = _9b(32, 32, 5, 3)
 _9c($1p, "devmgr.dll", 4, True)
-$4m = GUICtrlCreateButton("Р”РёСЃРїРµС‚С‡РµСЂ СѓСЃС‚СЂРѕР№СЃС‚РІ", 25, $3p-100, 157, 40)
+$4m = GUICtrlCreateButton("Диспетчер устройств", 25, $3p-100, 157, 40)
 GUICtrlSetOnEvent(-1, "_b1")
 _9a($4m, $1p)
 $1p = _9b(32, 32, 5, 3)
 _9c($1p, "cmd.exe", 0, True)
-$4n = GUICtrlCreateButton("РљРѕРјР°РЅРґРЅР°СЏ СЃС‚СЂРѕРєР°", 339, $3p-100, 150, 40)
+$4n = GUICtrlCreateButton("Командная строка", 339, $3p-100, 150, 40)
 _9a($4n, $1p)
 GUICtrlSetOnEvent(-1, "_b2")
 $1p = _9b(32, 32, 5, 3)
 _9c($1p, "shell32.dll", 21, True)
-$4o = GUICtrlCreateButton("РќР°СЃС‚СЂРѕР№РєРё", 494 , $3p-100, 150, 40)
+$4o = GUICtrlCreateButton("Настройки", 494 , $3p-100, 150, 40)
 _9a($4o, $1p)
 GUICtrlSetOnEvent(-1, "_ak")
 $1p = _9b(32, 32, 5, 3)
 _9c($1p, "calc.exe", 0, True)
-$4p = GUICtrlCreateButton("РљР°Р»СЊРєСѓР»СЏС‚РѕСЂ", 494-145, $3p-200, 150, 40)
+$4p = GUICtrlCreateButton("Калькулятор", 494-145, $3p-200, 150, 40)
 _9a($4p, $1p)
 GUICtrlSetOnEvent(-1, "_b3")
 $1p = _9b(16 , 16,5, 3)
@@ -607,7 +607,7 @@ Switch $38
 Case 1
 $1p = _9b(32, 32, 5, 3)
 _9c($1p, "shell32.dll", 215, True)
-$3i = GUICtrlCreateButton("РћСЃС‚Р°РЅРѕРІРёС‚СЊ РІСЃС‘", $3o-176, $4h-8, 150, 40)
+$3i = GUICtrlCreateButton("Остановить всё", $3o-176, $4h-8, 150, 40)
 _9a($3i, $1p)
 GUICtrlSetOnEvent(-1, "_at")
 GUICtrlSetState(-1, $3)
@@ -616,18 +616,18 @@ For $4r = 0 To $2a
 GUICtrlCreateTabItem($2b[$4r])
 $1p = _9b(24, 24, 5, 3)
 _9c($1p, "shell32.dll", 137, True)
-$3b[$4r] = GUICtrlCreateButton("РЎС‚Р°СЂС‚", 14, $3r+35 , 95, 32, $1c)
+$3b[$4r] = GUICtrlCreateButton("Старт", 14, $3r+35 , 95, 32, $1c)
 GUICtrlSetOnEvent(-1, "_ar")
 _9a(-1, $1p)
 $1p = _9b(24, 24, 5, 3)
 _9c($1p, "SyncCenter.dll", 5, True)
-$3c[$4r] = GUICtrlCreateButton("РЎС‚РѕРї", 100+5+5+5, $3r+35, 95, 32, 0x01)
+$3c[$4r] = GUICtrlCreateButton("Стоп", 100+5+5+5, $3r+35, 95, 32, 0x01)
 GUICtrlSetOnEvent(-1, "_as")
 GUICtrlSetState(-1, $3)
 _9a(-1, $1p)
 $1p = _9b(24, 24, 5, 3)
 _9c($1p, "imageres.dll", 93, True)
-$3d = GUICtrlCreateButton("РћС‡РёСЃС‚РёС‚СЊ", 186+10+10+10, $3r+35, 95, 32)
+$3d = GUICtrlCreateButton("Очистить", 186+10+10+10, $3r+35, 95, 32)
 GUICtrlSetOnEvent(-1, "_au")
 _9a(-1, $1p)
 GUICtrlCreateIcon("mblctr.exe", 133, $3o-44, $3p-47)
@@ -639,26 +639,26 @@ EndFunc
 Func _ak()
 WinSetState($39, Null, @SW_DISABLE )
 Local $4s = WinGetPos($39)
-$3a = GUICreate("РќР°СЃС‚СЂРѕР№РєРё", $4s[2]-20, $4s[3]-41, $4s[0]+8, $4s[1]+30, BitOR($6, $7), -1, $39)
-GUICtrlCreateGroup("РќР°СЃС‚СЂРѕР№РєРё", 9, 9 , $4s[2]-38 , 70)
+$3a = GUICreate("Настройки", $4s[2]-20, $4s[3]-41, $4s[0]+8, $4s[1]+30, BitOR($6, $7), -1, $39)
+GUICtrlCreateGroup("Настройки", 9, 9 , $4s[2]-38 , 70)
 $1p = _9b(24, 24, 5, 3)
 _9c($1p, "imageres.dll", 161, True)
-GUICtrlCreateButton("Р—Р°РєСЂС‹С‚СЊ", 23, 32, 100, 32)
+GUICtrlCreateButton("Закрыть", 23, 32, 100, 32)
 GUICtrlSetOnEvent(-1, "_al")
 _9a(-1, $1p)
 $1p = _9b(24, 24, 5, 3)
 _9c($1p, "shell32.dll", 165, True)
-GUICtrlCreateButton("РЎРѕС…СЂР°РЅРёС‚СЊ", 135, 32, 100, 32)
+GUICtrlCreateButton("Сохранить", 135, 32, 100, 32)
 GUICtrlSetOnEvent(-1, "_am")
 _9a(-1, $1p)
 Local Const $4t = $4s[2]-85
 Local Const $4u = $4s[3]-80
 GUICtrlCreateGroup(Null, $4t-123, $4u-16 , 178 , 45)
-GUICtrlCreateLabel("РљРѕР»РёС‡РµСЃС‚РІРѕ РІРєР»Р°РґРѕРє", $4t-109, $4u+3)
+GUICtrlCreateLabel("Количество вкладок", $4t-109, $4u+3)
 $3j = GUICtrlCreateInput($3k, $4t, $4u, 40, 20)
 GUICtrlCreateUpdown(-1,BitOR(0x40 , 0x01, 0x20) )
 GUICtrlSetLimit(-1, 10, 1)
-$4a = GUICtrlCreateCheckbox("РЎРІРѕСЂР°С‡РёРІР°С‚СЊ РІ С‚СЂРµР№", $4s[2]-160, $4s[3]-$3p-5, 120, 20, $1d)
+$4a = GUICtrlCreateCheckbox("Сворачивать в трей", $4s[2]-160, $4s[3]-$3p-5, 120, 20, $1d)
 Switch $2u
 Case 1
 GUICtrlSetState($4a, 1 )
@@ -732,7 +732,7 @@ EndSwitch
 _a8()
 Select
 Case $3k <> $2a+1
-MsgBox(4096, "РќР°СЃС‚СЂРѕР№РєРё : РІРєР»Р°РґРєРё" , "РќР°СЃС‚СЂРѕР№РєРё РёР·РјРµРЅРµРЅС‹" & @CRLF & "РўРµРєСѓС‰РёРµ РІРєР»Р°РґРєРё: " & $2a+1 & @CRLF & "РџРѕСЃР»Рµ РїРµСЂРµР·Р°РїСѓСЃРєР°: " & $3k & " РІРєР»Р°РґРѕРє")
+MsgBox(4096, "Настройки : вкладки" , "Настройки изменены" & @CRLF & "Текущие вкладки: " & $2a+1 & @CRLF & "После перезапуска: " & $3k & " вкладок")
 EndSelect
 _al()
 EndFunc
@@ -750,7 +750,7 @@ Local $34 = @WorkingDir & "\tmp\zLog" & "_" & $2z & "_" & @YEAR & @MON & @MDAY &
 $36 = FileOpen($34, 1)
 FileWrite($36, $3v[$2z] & @CRLF & ">" & $3l & "<")
 FileClose($36)
-$3v[$2z] = "РџСЂРµРІС‹С€РµРЅРѕ " & $3l & " Р·РЅР°РєРѕРІ." & @CRLF & "РџСЂРѕС€Р»С‹Р№ РІС‹РІРѕРґ СЃРѕС…СЂР°РЅС‘РЅ РІ " & $34 & @CRLF
+$3v[$2z] = "Превышено " & $3l & " знаков." & @CRLF & "Прошлый вывод сохранён в " & $34 & @CRLF
 $3l = 0
 EndSelect
 $53 = 1

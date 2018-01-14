@@ -13,9 +13,9 @@
 #AutoIt3Wrapper_Icon=res\icon12.ico
 ;#AutoIt3Wrapper_Res_Icon_Add=res\icon13.ico
 ;#AutoIt3Wrapper_Res_Icon_Add=
-;#AutoIt3Wrapper_Run_Obfuscator=y
-;#Obfuscator_Parameters=/sf /sv /om /cs=0 /cn=0
-;#AutoIt3Wrapper_Run_After=del /f /q "%scriptdir%\%scriptfile%_Obfuscated.au3"
+#AutoIt3Wrapper_Run_Obfuscator=y
+#Obfuscator_Parameters=/sf /sv /om /cs=0 /cn=0
+#AutoIt3Wrapper_Run_After=del /f /q "%scriptdir%\%scriptfile%_Obfuscated.au3"
 ;
 ;#AutoIt3Wrapper_Run_AU3Check=y
 ;
