@@ -4,7 +4,7 @@ Global $myini = @WorkingDir & "\myconf.ini"
 Global $sysini = @WorkingDir & "\system.ini"
 Global $windowTabs=4
 Global $trayexit=0 ;1=tray. 0=exit
-Global $strLimit=600000 ;! добавить  в ini
+Global $strLimit=600000
 
 Global $streadmode = 0 ;0 _Update(), 1 _Update()
 Global $selectTime = 5000 ;ms

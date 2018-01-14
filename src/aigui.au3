@@ -11,7 +11,7 @@
 #AutoIt3Wrapper_Res_Comment=Consoles GUI
 #AutoIt3Wrapper_Res_Language=1049
 #AutoIt3Wrapper_Icon=res\icon12.ico
-;#AutoIt3Wrapper_Res_Icon_Add=res\icon13.ico
+;#AutoIt3Wrapper_Res_Icon_Add=res\icon3.ico ;3 13
 ;#AutoIt3Wrapper_Res_Icon_Add=
 ;#AutoIt3Wrapper_Run_Obfuscator=y
 ;#Obfuscator_Parameters=/sf /sv /om /cs=0 /cn=0
@@ -138,19 +138,21 @@ EndSelect
 
 Switch IniRead ($sysini,"GUI","Win7Style", 0); стиль окна. 0=стандартная, 1=изменённая(стабильность не проверена)
 	Case 0
-		$hGUI = GUICreate($NameGUI & " " & $version & $nGUI,$WWidth,$WHeight,-1,-1);,0x14C80000,0x00060100)
+		$hGUI = GUICreate($NameGUI & " " & $version & $nGUI,$WWidth,$WHeight,-1,-1)
 	Case 1
-		$hGUI = GUICreate($NameGUI & " " & $version & $nGUI,$WWidth,$WHeight,-1,-1,BitXOR($WS_OVERLAPPEDWINDOW, $WS_MAXIMIZEBOX))
+		$hGUI = GUICreate($NameGUI & " " & $version & $nGUI,$WWidth,$WHeight,-1,-1,13500416);BitXOR($WS_OVERLAPPEDWINDOW, $WS_MAXIMIZEBOX)
 		_GUICtrlMenu_DeleteMenu(_GUICtrlMenu_GetSystemMenu($hGUI), 2)
-		GUIRegisterMsg($WM_SETCURSOR, 'WM_SETCURSOR')
+		GUIRegisterMsg(0x0020, 'WM_SETCURSOR');$WM_SETCURSOR=0x0020
 EndSwitch
+
+;MsgBox(4096, "" , BitXOR($WS_OVERLAPPEDWINDOW, $WS_MAXIMIZEBOX));13500416
 
 IniWrite($sysini, "RUN", "RunPID", WinGetProcess ( $hGUI )); отметить что программа запущена
 IniWrite($sysini, "RUN", "RunGUI", '"' & $NameGUI & " " & $version & $nGUI & '"')
 
 ;GUISetIcon(@SystemDir & "\cmd.exe", 0)
-GUISetOnEvent($GUI_EVENT_CLOSE, '_closeWin', $hGUI)
-GUISetOnEvent($GUI_EVENT_MINIMIZE, '_hideWin', $hGUI)
+GUISetOnEvent(-3, '_closeWin', $hGUI);$GUI_EVENT_CLOSE
+GUISetOnEvent(-4, '_hideWin', $hGUI);$GUI_EVENT_MINIMIZE
 
 GUISetFont(8.5, Null, Null, Null ,$hGUI , $txtQual);бесполезный код
 
@@ -815,7 +817,7 @@ Func WM_SETCURSOR($hWnd, $Msg, $wParam, $lParam)
                 GUISetCursor(2)
         EndSwitch
    EndIf
-   Return $GUI_RUNDEFMSG
+   Return 'GUI_RUNDEFMSG';$GUI_RUNDEFMSG
 EndFunc ; ==> WM_SETCURSOR
 
 
