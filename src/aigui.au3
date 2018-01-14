@@ -16,9 +16,6 @@
 #AutoIt3Wrapper_Run_Obfuscator=y
 #Obfuscator_Parameters=/sf /sv /om /cs=0 /cn=0
 #AutoIt3Wrapper_Run_After=del /f /q "%scriptdir%\%scriptfile%_Obfuscated.au3"
-;
-;#AutoIt3Wrapper_Run_AU3Check=y
-;
 #EndRegion
 
 #NoTrayIcon
