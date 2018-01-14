@@ -1,5 +1,5 @@
 #include <dev-ini.au3>
-#include <Encoding.au3> ; http://autoit-script.ru/index.php?topic=510.0
+#include <include\Encoding.au3> ; http://autoit-script.ru/index.php?topic=510.0
 Global $myini = @WorkingDir & "\myconf.ini"
 Global $sysini = @WorkingDir & "\system.ini"
 Global $windowTabs=4

@@ -13,40 +13,15 @@
 #AutoIt3Wrapper_Icon=res\icon12.ico
 ;#AutoIt3Wrapper_Res_Icon_Add=res\icon3.ico ;3 13
 ;#AutoIt3Wrapper_Res_Icon_Add=
-;#AutoIt3Wrapper_Run_Obfuscator=y
-;#Obfuscator_Parameters=/sf /sv /om /cs=0 /cn=0
-;#AutoIt3Wrapper_Run_After=del /f /q "%scriptdir%\%scriptfile%_Obfuscated.au3"
+#AutoIt3Wrapper_Run_Obfuscator=y
+#Obfuscator_Parameters=/sf /sv /om /cs=0 /cn=0
+#AutoIt3Wrapper_Run_After=del /f /q "%scriptdir%\%scriptfile%_Obfuscated.au3"
+;#AutoIt3Wrapper_Run_After=del /f /q "%scriptdir%\aigui_stripped.au3"
+;#AutoIt3Wrapper_Run_After=del /f /q "%scriptdir%\~1251aigui_stripped.au3.au3"
 #EndRegion
 
 #NoTrayIcon
-#include <GuiConstantsEx.au3> ;EditConstants.au3
-;#include <ScrollBarConstants.au3>;#include <ScrollBarsConstants.au3>
-#include <WindowsConstants.au3>
-#include <GuiEdit.au3> ; EditConstants.au3 http://autoit-script.ru/index.php?topic=1076.0
-;#include <EditConstants.au3> ;GuiConstantsEx.au3
-;#include <ButtonConstants.au3>
-;#include <WinAPIProc.au3>
-#include <WinAPI.au3>
-;#include <WinAPIMisc.au3> ;_WinAPI_OemToChar
-;#include <TabConstants.au3> ;?
-
-#include <aig-func.au3>
-;#include <GuiButton.au3> ;>aig-func.au3
-;#include <GuiImageList.au3>;>aig-func.au3
-
-;#include <Constants.au3> ;TrayConstants.au3
-
-#include <aig-ini.au3>
-;#include <aig-funkbtn.au3>
-#include <asciiArt.au3>
-#include <version.au3>
-#include <aig-log.au3>
-#include <debug-log.au3>
-
-#include <aig-func2.au3>
-;#include <GuiMenu.au3>
-
-;#include <WinAPIShellEx.au3>
+#include <includes.au3>
 
 Opt("TrayAutoPause", 0)
 Opt('TrayMenuMode', 3)	;	http://autoit-script.ru/autoit3_docs/functions/AutoItSetOption.htm
@@ -530,8 +505,8 @@ Local $aSel = GUICtrlRecvMsg($iEdt[$i],0xB0 ); 0xB0 $EM_GETSEL$selectTime
 
 Select
    Case $vTemp <> $sOut[$i]
-		 $sOut[$i] = $vTemp & " >" & $strl4 & @CRLF ;+ отладочная метка
-		 ;$sOut[$i] = $vTemp;	 & @CRLF
+		 ;$sOut[$i] = $vTemp & " >" & $strl4 & @CRLF ;+ отладочная метка
+		 $sOut[$i] = $vTemp;	 & @CRLF
 
 Select ; очищать окно с сохранением в файл
 Case $strl4 > $strLimit ; если строка слишком длинная

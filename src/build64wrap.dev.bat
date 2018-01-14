@@ -5,7 +5,7 @@ set path=%path%;"%autoitdir%\Aut2Exe\"
 set "xUPX="%autoitdir%\Aut2Exe\"upx.exe"
 set app64=aGUI_x64e
 set "srcdir=%~d0%~p0"
-set "src_main=aigui.au3"
+set "src_main=aigui"
 set "srctmp=~1251%src_main%"
 set "outdir=%~d0%~p0"
 
@@ -22,7 +22,7 @@ set "now=%now:~-11%"
 
 rem перекодируем файл.
 rem http://www.cyberforum.ru/post7145805.html
-call :Recode "%srcdir%%src_main%" "%srcdir%%srctmp%" utf-8 windows-1251
+call :Recode "%srcdir%%src_main%.au3" "%srcdir%%srctmp%.au3" utf-8 windows-1251
 :Recode in.[исходный файл] in.[результирующий файл] in.[кодировка исходного файла] in.[кодировка результирующего файла]
 cscript.exe //nologo //e:jscript "%~f0" "%~1" "%~2" "%~3" "%~4"
 
@@ -36,9 +36,12 @@ copy "%autoitdir%\Icons\au3.ico" "%autoitdir%\SciTE\AutoIt3Wrapper\AutoIt3Wrappe
 
 rem переходим в папку чтоб добавились ресурсы
 cd /d "%srcdir%"
-"%autoitdir%\SciTE\AutoIt3Wrapper\AutoIt3Wrapper.exe" /in "%srcdir%%srctmp%" /out %outdir%%app64%w.exe /nopack /Gui 
+"%autoitdir%\SciTE\AutoIt3Wrapper\AutoIt3Wrapper.exe" /in "%srcdir%%srctmp%.au3" /out %outdir%%app64%w.exe /nopack /Gui 
+
 rem удаляем временный перекодированый файл
-del "%srcdir%%srctmp%"
+del "%srcdir%%srctmp%.au3"
+del "%srcdir%%srctmp%_stripped.au3"
+
 rem удаляев старый финальных бинарник, upx это не умеет
 del "%outdir%%app64%wu.exe"
 %xUPX% -9  -o "%outdir%%app64%wu.exe" "%outdir%%app64%w.exe" -k
