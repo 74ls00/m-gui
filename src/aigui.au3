@@ -23,18 +23,18 @@
 ;#include <ScrollBarConstants.au3>;#include <ScrollBarsConstants.au3>
 #include <WindowsConstants.au3>
 #include <GuiEdit.au3> ; EditConstants.au3 http://autoit-script.ru/index.php?topic=1076.0
-#include <EditConstants.au3> ;GuiConstantsEx.au3
-#include <ButtonConstants.au3>
+;#include <EditConstants.au3> ;GuiConstantsEx.au3
+;#include <ButtonConstants.au3>
 ;#include <WinAPIProc.au3>
 #include <WinAPI.au3>
 ;#include <WinAPIMisc.au3> ;_WinAPI_OemToChar
-#include <TabConstants.au3>
+;#include <TabConstants.au3> ;?
 
 #include <aig-func.au3>
 ;#include <GuiButton.au3> ;>aig-func.au3
 ;#include <GuiImageList.au3>;>aig-func.au3
 
-#include <Constants.au3>
+;#include <Constants.au3> ;TrayConstants.au3
 
 #include <aig-ini.au3>
 ;#include <aig-funkbtn.au3>
@@ -43,7 +43,9 @@
 #include <aig-log.au3>
 #include <debug-log.au3>
 
-#include <GuiMenu.au3>
+#include <aig-func2.au3>
+;#include <GuiMenu.au3>
+
 ;#include <WinAPIShellEx.au3>
 
 Opt("TrayAutoPause", 0)
@@ -111,7 +113,7 @@ _Main()
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 While 1
    Switch TrayGetMsg()
-	  Case $TRAY_EVENT_PRIMARYUP
+	  Case -8;$TRAY_EVENT_PRIMARYUP
 		 WinSetState ( $hGUI, Null, @SW_SHOW )
 		 WinActivate ( $hGUI, Null )
 	  EndSwitch
@@ -377,7 +379,7 @@ GUICtrlSetLimit(-1, 10, 1)
 ;;..................................................................................................
 ; ширина-отступ. высота-максимальная высота-отступ
 ;(высота-отступ снизу не верно $guiCoord[3]-455)
-$st_trayexit = GUICtrlCreateCheckbox("Сворачивать в трей", $guiCoord[2]-160, $guiCoord[3]-$WHeight-5, 120, 20, $BS_RIGHTBUTTON)
+$st_trayexit = GUICtrlCreateCheckbox("Сворачивать в трей", $guiCoord[2]-160, $guiCoord[3]-$WHeight-5, 120, 20,0x0020); $BS_RIGHTBUTTON)
 Switch $trayexit
    Case 1
 	  GUICtrlSetState ( $st_trayexit, 1 ) ;$GUI_CHECKED 1
@@ -518,6 +520,10 @@ Func _Update()
 For $i = 0 to $windowTabs
 
 ; Local $vTemp = $sOut & _WinAPI_OemToChar(StdoutRead($iPID)), $aSel = GUICtrlRecvMsg($iEdt, $EM_GETSEL)
+
+
+;Local $stdTmp = DllCall('user32.dll', 'bool', 'OemToChar', 'str', StdoutRead($iPIDx[$i]), 'str', StdoutRead($iPIDx[$i]))[2]
+;Local $vTemp = $sOut[$i] & _Encoding_UTF8ToANSI_API( $stdTmp )
 Local $vTemp = $sOut[$i] & DllCall('user32.dll', 'bool', 'OemToChar', 'str', StdoutRead($iPIDx[$i]), 'str', StdoutRead($iPIDx[$i]))[2]
 Local $strl4 =  StringLen ( $vTemp )
 Local $aSel = GUICtrlRecvMsg($iEdt[$i],0xB0 ); 0xB0 $EM_GETSEL$selectTime
@@ -661,7 +667,7 @@ EndFunc   ;==>_UnSel
 ;--------------------------------------------------------------------------------------------------
 Func StartPressed()
 Local $getTab = GUICtrlRead($iTab)-1
-   $iPIDx[$getTab] = Run(@ComSpec, Null, @SW_HIDE, $STDIN_CHILD + $STDERR_MERGED)
+   $iPIDx[$getTab] = Run(@ComSpec , Null, @SW_HIDE, $STDIN_CHILD + $STDERR_MERGED)
    If ProcessExists ( $iPIDx[$getTab] ) Then GUICtrlSetBkColor($lbT[$getTab], $lbTAct)
    ;OnAutoItExitRegister("_OnExit")
    $exlpid[$getTab] = $iPIDx[$getTab]
@@ -778,23 +784,11 @@ ShellExecute(@SystemDir & '\taskmgr.exe', '', '', '', @SW_SHOW)
 ;Run(@ComSpec & ' /c ' & @SystemDir & "\taskmgr.exe", @SystemDir, @SW_HIDE)
 EndFunc
 ;--------------------------------------------------------------------------------------------------
-;Func btnTMu()
-;btnTM()
-;Run(@ComSpec & ' /c ' & @SystemDir & "\taskmgr.exe", @SystemDir, @SW_HIDE)
-;Run (@SystemDir & "\taskmgr.exe", @SystemDir ,@SW_SHOW)
-;EndFunc
-;--------------------------------------------------------------------------------------------------
 Func btnDM()
 ShellExecute(@SystemDir & '\mmc.exe', @SystemDir & "\devmgmt.msc", '', '', @SW_SHOW)
 ;Run (@SystemDir & "\mmc.exe " & @SystemDir & "\devmgmt.msc" , @SystemDir ,@SW_SHOW)
 ;;Run(@ComSpec & ' /c ' & @SystemDir & "\mmc.exe " & @SystemDir & "\devmgmt.msc", @SystemDir, @SW_HIDE)
 EndFunc
-;--------------------------------------------------------------------------------------------------
-;Func btnDMu()
-;btnDM()
-;;Run (@SystemDir & "\mmc.exe " & @SystemDir & "\devmgmt.msc" , @SystemDir ,@SW_SHOW)
-;Run(@ComSpec & ' /c ' & @SystemDir & "\mmc.exe " & @SystemDir & "\devmgmt.msc", @SystemDir, @SW_HIDE)
-;EndFunc
 ;--------------------------------------------------------------------------------------------------
 Func btnCM()
 ShellExecute(@SystemDir & '\cmd.exe', '', '', '', @SW_SHOW)
@@ -811,7 +805,6 @@ ShellExecute(@SystemDir & '\msconfig.exe', '', '', '', @SW_SHOW)
 ;Run (@SystemDir & "\msconfig.exe", @WorkingDir ,@SW_SHOW)
 EndFunc
 ;--------------------------------------------------------------------------------------------------
-
 Func WM_SETCURSOR($hWnd, $Msg, $wParam, $lParam)
     If $wParam = $hGUI Then
         Switch BitAND($lParam, 0xFFFF) ; _WinAPI_LoWord
@@ -821,7 +814,7 @@ Func WM_SETCURSOR($hWnd, $Msg, $wParam, $lParam)
    EndIf
    Return 'GUI_RUNDEFMSG';$GUI_RUNDEFMSG
 EndFunc ; ==> WM_SETCURSOR
-
+;--------------------------------------------------------------------------------------------------
 
 
 

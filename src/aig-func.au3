@@ -148,7 +148,7 @@ Func _GUICtrlButton_SetImageList($hWnd, $hImage, $nAlign = 0, $iLeft = 1, $iTop 
 	DllStructSetData($tBUTTON_IMAGELIST, "Align", $nAlign)
 
 	Local $bEnabled = _GUICtrlButton_Enable($hWnd, False)
-	Local $iRet = _SendMessage($hWnd, $BCM_SETIMAGELIST, 0, $tBUTTON_IMAGELIST, 0, "wparam", "struct*") <> 0
+	Local $iRet = _SendMessage($hWnd, (0x1600 + 0x0002), 0, $tBUTTON_IMAGELIST, 0, "wparam", "struct*") <> 0
 	_GUICtrlButton_Enable($hWnd)
 	If Not $bEnabled Then _GUICtrlButton_Enable($hWnd, False)
 	Return $iRet
