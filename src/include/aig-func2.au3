@@ -24,9 +24,9 @@ Global Const $GUI_DISABLE = 128
 ;end GuiConstantsEx.au3
 
 ;WindowsConstants.au3
-Global Const $WS_VSCROLL = 0x00200000
-Global Const $WS_POPUP = 0x80000000
-Global Const $WS_BORDER = 0x00800000
+;Global Const $WS_VSCROLL = 0x00200000
+;Global Const $WS_POPUP = 0x80000000
+;Global Const $WS_BORDER = 0x00800000
 
 ;end WindowsConstants.au3
 

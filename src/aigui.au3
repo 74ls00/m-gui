@@ -1,23 +1,23 @@
 #Region
 #AutoIt3Wrapper_UseX64=y
 #AutoIt3Wrapper_Res_FileVersion_AutoIncrement=y
-#AutoIt3Wrapper_Res_Fileversion=0.1.0
+#AutoIt3Wrapper_Res_Fileversion=0.1.0.90
 #AutoIt3Wrapper_Res_Description=Окно консоли
 #AutoIt3Wrapper_Res_Field=ProductName|Окно консоли
 #AutoIt3Wrapper_Res_Field=Build|%longdate% %time%
 ;#AutoIt3Wrapper_Res_Field=OriginalFileName|exe;gui.exe
-#AutoIt3Wrapper_Res_ProductVersion=0.1;a;α¤
+#AutoIt3Wrapper_Res_ProductVersion=0.1¤;a;α¤
 #AutoIt3Wrapper_Res_LegalCopyright=©
 #AutoIt3Wrapper_Res_Comment=Consoles GUI
 #AutoIt3Wrapper_Res_Language=1049
-#AutoIt3Wrapper_Icon=res\icon3.ico
+#AutoIt3Wrapper_Icon=res\icon14.ico
 ;#AutoIt3Wrapper_Res_Icon_Add=bin\PING1.EXE
 ;#AutoIt3Wrapper_Res_Icon_Add=res\icon3.ico ;3 13
-;#AutoIt3Wrapper_Run_Au3Stripper=y
+#AutoIt3Wrapper_Run_Au3Stripper=y
 ;#Au3Stripper_Parameters
-;#AutoIt3Wrapper_Run_Obfuscator=y
-;#Obfuscator_Parameters=/sf /sv /om /cs=0 /cn=0
-;#AutoIt3Wrapper_Run_After=del /f /q "%scriptdir%\%scriptfile%_Obfuscated.au3"
+#AutoIt3Wrapper_Run_Obfuscator=y
+#Obfuscator_Parameters=/sf /sv /om /cs=0 /cn=0
+#AutoIt3Wrapper_Run_After=del /f /q "%scriptdir%\%scriptfile%_Obfuscated.au3"
 #EndRegion
 
 #NoTrayIcon
@@ -118,13 +118,20 @@ Switch IniRead ($sysini,"GUI","Win7Style", 0); стиль окна. 0=станд
 		;$hGUI = GUICreate($NameGUI & "  " & FileGetVersion(@AutoItExe) & $version & $nGUI,$WWidth,$WHeight,-1,-1)
 		$hGUI = GUICreate($NameGUI & "  " & $version & $nGUI,$WWidth,$WHeight,-1,-1)
 	Case 1
-		;$hGUI = GUICreate($NameGUI & "  " & FileGetVersion(@AutoItExe) & $version & $nGUI,$WWidth,$WHeight,-1,-1,13500416);BitXOR($WS_OVERLAPPEDWINDOW, $WS_MAXIMIZEBOX)
-		$hGUI = GUICreate($NameGUI & "  " & $version & $nGUI,$WWidth,$WHeight,-1,-1,13500416);BitXOR($WS_OVERLAPPEDWINDOW, $WS_MAXIMIZEBOX)
+		;$hGUI = GUICreate($NameGUI & "  " & FileGetVersion(@AutoItExe) & $version & $nGUI,$WWidth,$WHeight,-1,-1,13500416);BitXOR($WS_OVERLAPPEDWINDOW, $WS_MAXIMIZEBOX) ;0x00010000
+		$hGUI = GUICreate($NameGUI & "  " & $version & $nGUI,$WWidth,$WHeight,-1,-1,13500416);BitXOR($WS_OVERLAPPEDWINDOW, $WS_MAXIMIZEBOX)=13500416; $WS_EX_CONTROLPARENT=65536
 		_GUICtrlMenu_DeleteMenu(_GUICtrlMenu_GetSystemMenu($hGUI), 2)
 		GUIRegisterMsg(0x0020, 'WM_SETCURSOR');$WM_SETCURSOR=0x0020
+	Case 2
+$hGUI = GUICreate($NameGUI & "  " & $version & $nGUI,$WWidth,$WHeight+20,-1,-1,0x80800000,65536);BitXOR($WS_OVERLAPPEDWINDOW, $WS_MAXIMIZEBOX)
+GUISetBkColor(0xE0FFFF) ; устанавливает цвет фона
+;								0x80000000+0x00800000 = 0x80800000
+		;_GUICtrlMenu_DeleteMenu(_GUICtrlMenu_GetSystemMenu($hGUI), 2)
+		;GUIRegisterMsg(0x0020, 'WM_SETCURSOR');$WM_SETCURSOR=0x0020
 EndSwitch
 
-;MsgBox(4096, "" , BitXOR($WS_OVERLAPPEDWINDOW, $WS_MAXIMIZEBOX));13500416
+;MsgBox(4096, "" , BitXOR($WS_OVERLAPPEDWINDOW, $WS_MAXIMIZEBOX,$WS_EX_CONTROLPARENT));13500416
+;MsgBox(4096, "" , $WS_EX_CONTROLPARENT   ); 13565952;
 
 IniWrite($sysini, "RUN", "RunPID", WinGetProcess ( $hGUI )); отметить что программа запущена
 IniWrite($sysini, "RUN", "RunGUI", '"' & $NameGUI & " " & $version & $nGUI & '"')
@@ -287,10 +294,12 @@ GUICtrlCreateIcon("mblctr.exe", 133, $WWidth-44, $WHeight-47)
 ;GUICtrlSetOnEvent(-1, "ButtonCont");ButtonCont
 
 ;MsgBox(4096, "lll" , $windowTabs)
-
-$iEdt[$t] = GUICtrlCreateEdit("==>[" & $t & "]" & @CRLF & _Encoding_OEM2ANSI($sLine[$t]) & $itmHello[$t] , 14, $StrTool, $WWidth-30, $THeight-8, BitOR($ES_READONLY, $ES_AUTOVSCROLL, $WS_VSCROLL))
+;
+$iEdt[$t] = GUICtrlCreateEdit("==>[" & $t & "]" & @CRLF & _Encoding_OEM2ANSI($sLine[$t]) & $itmHello[$t] , 14, $StrTool, $WWidth-30, $THeight-8, 2099264);BitOR($ES_READONLY, $ES_AUTOVSCROLL, $WS_VSCROLL))
 GUICtrlSendMsg(-1, $EM_LIMITTEXT, -1, 0)
 ;GUIRegisterMsg($WM_ACTIVATE, "WM_ACTIVATE")
+;MsgBox(4096, "lll" , BitOR($ES_READONLY, $ES_AUTOVSCROLL, $WS_VSCROLL))2099264
+
 
 Next
 
@@ -736,10 +745,14 @@ WinSetState ( $hGUI, Null, @SW_HIDE )
 EndFunc
 ;--------------------------------------------------------------------------------------------------
 Func _ProExit()
-    _OnExit()
-	IniDelete ( $sysini, "RUN" );IniWrite($sysini, "RUN", "RunPID", "");IniWrite($sysini, "RUN", "RunGUI", "")
-	_debug_stop()
-    Exit
+Switch MsgBox(4+32+8192, 'Выход из программы', 'Выйти из программы' & @CRLF & 'завершив все процессы ?')
+	Case 6
+		_OnExit()
+		IniDelete ( $sysini, "RUN" );IniWrite($sysini, "RUN", "RunPID", "");IniWrite($sysini, "RUN", "RunGUI", "")
+		_debug_stop()
+		Exit
+EndSwitch
+
  EndFunc
 ;--------------------------------------------------------------------------------------------------
 Func _OnExit()
