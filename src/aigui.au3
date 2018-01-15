@@ -1,13 +1,13 @@
 #Region
 #AutoIt3Wrapper_UseX64=y
 #AutoIt3Wrapper_Res_FileVersion_AutoIncrement=y
-#AutoIt3Wrapper_Res_Fileversion=0.1.0.76
+#AutoIt3Wrapper_Res_Fileversion=0.1.0
 #AutoIt3Wrapper_Res_Description=Окно консоли
 #AutoIt3Wrapper_Res_Field=ProductName|Окно консоли
 #AutoIt3Wrapper_Res_Field=Build|%longdate% %time%
-#AutoIt3Wrapper_Res_Field=OriginalFileName|gui.exe
-#AutoIt3Wrapper_Res_ProductVersion=0.1aα¤
-#AutoIt3Wrapper_Res_LegalCopyright=anonimus
+;#AutoIt3Wrapper_Res_Field=OriginalFileName|exe;gui.exe
+#AutoIt3Wrapper_Res_ProductVersion=0.1;a;α¤
+#AutoIt3Wrapper_Res_LegalCopyright=©
 #AutoIt3Wrapper_Res_Comment=Consoles GUI
 #AutoIt3Wrapper_Res_Language=1049
 #AutoIt3Wrapper_Icon=res\icon3.ico
@@ -15,8 +15,8 @@
 ;#AutoIt3Wrapper_Res_Icon_Add=res\icon3.ico ;3 13
 ;#AutoIt3Wrapper_Run_Au3Stripper=y
 ;#Au3Stripper_Parameters
-#AutoIt3Wrapper_Run_Obfuscator=y
-#Obfuscator_Parameters=/sf /sv /om /cs=0 /cn=0
+;#AutoIt3Wrapper_Run_Obfuscator=y
+;#Obfuscator_Parameters=/sf /sv /om /cs=0 /cn=0
 ;#AutoIt3Wrapper_Run_After=del /f /q "%scriptdir%\%scriptfile%_Obfuscated.au3"
 #EndRegion
 
@@ -115,9 +115,11 @@ EndSelect
 
 Switch IniRead ($sysini,"GUI","Win7Style", 0); стиль окна. 0=стандартная, 1=изменённая(стабильность не проверена)
 	Case 0
-		$hGUI = GUICreate($NameGUI & "  " & FileGetVersion(@AutoItExe) & $version & $nGUI,$WWidth,$WHeight,-1,-1)
+		;$hGUI = GUICreate($NameGUI & "  " & FileGetVersion(@AutoItExe) & $version & $nGUI,$WWidth,$WHeight,-1,-1)
+		$hGUI = GUICreate($NameGUI & "  " & $version & $nGUI,$WWidth,$WHeight,-1,-1)
 	Case 1
-		$hGUI = GUICreate($NameGUI & "  " & FileGetVersion(@AutoItExe) & $version & $nGUI,$WWidth,$WHeight,-1,-1,13500416);BitXOR($WS_OVERLAPPEDWINDOW, $WS_MAXIMIZEBOX)
+		;$hGUI = GUICreate($NameGUI & "  " & FileGetVersion(@AutoItExe) & $version & $nGUI,$WWidth,$WHeight,-1,-1,13500416);BitXOR($WS_OVERLAPPEDWINDOW, $WS_MAXIMIZEBOX)
+		$hGUI = GUICreate($NameGUI & "  " & $version & $nGUI,$WWidth,$WHeight,-1,-1,13500416);BitXOR($WS_OVERLAPPEDWINDOW, $WS_MAXIMIZEBOX)
 		_GUICtrlMenu_DeleteMenu(_GUICtrlMenu_GetSystemMenu($hGUI), 2)
 		GUIRegisterMsg(0x0020, 'WM_SETCURSOR');$WM_SETCURSOR=0x0020
 EndSwitch
