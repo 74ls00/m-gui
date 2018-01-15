@@ -1,3 +1,6 @@
+#include <include\Encoding.au3> ; http://autoit-script.ru/index.php?topic=510.0
+
+
 ;#include <GuiEdit.au3> ;дофига жрёт; EditConstants.au3 http://autoit-script.ru/index.php?topic=1076.0
 ;#include <GuiConstantsEx.au3> ;EditConstants.au3
 ;#include <ScrollBarConstants.au3>;#include <ScrollBarsConstants.au3>
