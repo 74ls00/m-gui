@@ -10,7 +10,7 @@
 #AutoIt3Wrapper_Res_LegalCopyright=anonimus
 #AutoIt3Wrapper_Res_Comment=Consoles GUI
 #AutoIt3Wrapper_Res_Language=1049
-#AutoIt3Wrapper_Icon=res\icon12.ico
+#AutoIt3Wrapper_Icon=res\icon3.ico
 ;#AutoIt3Wrapper_Res_Icon_Add=res\icon3.ico ;3 13
 ;#AutoIt3Wrapper_Res_Icon_Add=
 #AutoIt3Wrapper_Run_Obfuscator=y
@@ -115,9 +115,9 @@ EndSelect
 
 Switch IniRead ($sysini,"GUI","Win7Style", 0); стиль окна. 0=стандартная, 1=изменённая(стабильность не проверена)
 	Case 0
-		$hGUI = GUICreate($NameGUI & " " & $version & $nGUI,$WWidth,$WHeight,-1,-1)
+		$hGUI = GUICreate($NameGUI & "  " & FileGetVersion(@AutoItExe) & $version & $nGUI,$WWidth,$WHeight,-1,-1)
 	Case 1
-		$hGUI = GUICreate($NameGUI & " " & $version & $nGUI,$WWidth,$WHeight,-1,-1,13500416);BitXOR($WS_OVERLAPPEDWINDOW, $WS_MAXIMIZEBOX)
+		$hGUI = GUICreate($NameGUI & "  " & FileGetVersion(@AutoItExe) & $version & $nGUI,$WWidth,$WHeight,-1,-1,13500416);BitXOR($WS_OVERLAPPEDWINDOW, $WS_MAXIMIZEBOX)
 		_GUICtrlMenu_DeleteMenu(_GUICtrlMenu_GetSystemMenu($hGUI), 2)
 		GUIRegisterMsg(0x0020, 'WM_SETCURSOR');$WM_SETCURSOR=0x0020
 EndSwitch
@@ -216,7 +216,7 @@ GUICtrlSetOnEvent(-1, "btnST")
 
 $hImage = _GUIImageList_Create(32, 32, 5, 3);, 6)
 _GUIImageList_AddIcon($hImage, "calc.exe", 0, True)
-$btnCA = GUICtrlCreateButton("Калькулятор", 494-145, $WHeight-200, 150, 40)
+$btnCA = GUICtrlCreateButton("Калькулятор", 339, $WHeight-148, 150, 40);494-145
 _GUICtrlButton_SetImageList($btnCA, $hImage)
 GUICtrlSetOnEvent(-1, "btnCA")
 
