@@ -1,4 +1,5 @@
 git.txt
+dev-ini.au3
 
 0
 1
@@ -22,40 +23,30 @@ clone
 cyglite
 test
 AutoIt3Wrapper
-z1.ini
-~1251aigui_stripped.au3
-aigui_stripped.au3
 
 
 
-
-aig-funkbtn.au3
-aigui - копия.ini
-aigui.ini
-_RegRead.au3
-adm.au3
 off.au3
 
-dev-ini.au3
-myconf.ini
-debug.ini
-system.ini
-upxhide.tmp.vbs
+
+
+
 z.au3
 z.bat
 
-*.scr
-*.vbs
+*_stripped.au3
+
+*.7z
+*.bak
 *.dll
 *.exe
-*.xml
-*.zip
-*.7z
 *.ini
-
-*.bak
 *.lnk
 *.log
+*.scr
+*.vbs
+*.xml
+*.zip
 *.b#1
 *.b#2
 *.b#3

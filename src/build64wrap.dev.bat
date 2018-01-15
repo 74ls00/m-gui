@@ -21,7 +21,7 @@ set "now=%now:~-11%"
 >"%srcdir%version.au3" echo Global Const $version = "  0.%now% dev2"
 
 rem перекодируем файл.
-rem http://www.cyberforum.ru/post7145805.html
+rem http://www.cyberforum.ru/cmd-bat/thread1361276.html
 call :Recode "%srcdir%%src_main%.au3" "%srcdir%%srctmp%.au3" utf-8 windows-1251
 :Recode in.[исходный файл] in.[результирующий файл] in.[кодировка исходного файла] in.[кодировка результирующего файла]
 cscript.exe //nologo //e:jscript "%~f0" "%~1" "%~2" "%~3" "%~4"

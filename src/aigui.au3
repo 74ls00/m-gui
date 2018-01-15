@@ -1,23 +1,23 @@
 #Region
 #AutoIt3Wrapper_UseX64=y
 #AutoIt3Wrapper_Res_FileVersion_AutoIncrement=y
+#AutoIt3Wrapper_Res_Fileversion=0.1.0.76
 #AutoIt3Wrapper_Res_Description=Окно консоли
-#AutoIt3Wrapper_Res_Fileversion=0.1.0.72
 #AutoIt3Wrapper_Res_Field=ProductName|Окно консоли
 #AutoIt3Wrapper_Res_Field=Build|%longdate% %time%
-;#AutoIt3Wrapper_Res_Field=OriginalFileName|gui.exe
-#AutoIt3Wrapper_Res_ProductVersion=0.1α
+#AutoIt3Wrapper_Res_Field=OriginalFileName|gui.exe
+#AutoIt3Wrapper_Res_ProductVersion=0.1aα¤
 #AutoIt3Wrapper_Res_LegalCopyright=anonimus
 #AutoIt3Wrapper_Res_Comment=Consoles GUI
 #AutoIt3Wrapper_Res_Language=1049
 #AutoIt3Wrapper_Icon=res\icon3.ico
+;#AutoIt3Wrapper_Res_Icon_Add=bin\PING1.EXE
 ;#AutoIt3Wrapper_Res_Icon_Add=res\icon3.ico ;3 13
-;#AutoIt3Wrapper_Res_Icon_Add=
+;#AutoIt3Wrapper_Run_Au3Stripper=y
+;#Au3Stripper_Parameters
 #AutoIt3Wrapper_Run_Obfuscator=y
 #Obfuscator_Parameters=/sf /sv /om /cs=0 /cn=0
-#AutoIt3Wrapper_Run_After=del /f /q "%scriptdir%\%scriptfile%_Obfuscated.au3"
-;#AutoIt3Wrapper_Run_After=del /f /q "%scriptdir%\aigui_stripped.au3"
-;#AutoIt3Wrapper_Run_After=del /f /q "%scriptdir%\~1251aigui_stripped.au3.au3"
+;#AutoIt3Wrapper_Run_After=del /f /q "%scriptdir%\%scriptfile%_Obfuscated.au3"
 #EndRegion
 
 #NoTrayIcon
@@ -51,7 +51,7 @@ Global Const $WA_INACTIVE = 0
 
 Global Const $VIP = 1
 
-Global $hGUI, $hSETUP, $iBtnStart, $iBtnStop, $iBtnClean, $iBtnPause, $iBtnUnPause, $aPIDs, $iUnSel = 1 , $btnAllStop
+Global $hGUI, $iBtnStart, $iBtnStop, $iBtnClean, $iBtnPause, $iBtnUnPause, $aPIDs, $iUnSel = 1 , $btnAllStop;$hSETUP
 Global $stTabs , $tmpStbs ;= $windowTabs; временное количество вкладок
 $tmpStbs = $windowTabs+1
 Global $strl4 , $iTab , $hImage ; элемент иконок кнопки
@@ -307,11 +307,14 @@ Local $guiCoord = WinGetPos ($hGUI)
 ;local Const $snMain2 = $guiCoord[3]-60 ; выс.
 
 ;Local $stTabs
-;												+2					+2			+8
-$hSETUP = GUICreate("Настройки", $guiCoord[2]-20+4, $guiCoord[3]-41+2, $guiCoord[0]+7, $guiCoord[1]+30, BitOR ($WS_BORDER, $WS_POPUP), -1, $hGUI)
+;												20+4ж+2		41+2			+2			+8
+;$hSETUP = GUICreate("Настройки", $guiCoord[2]-16, $guiCoord[3]-39, $guiCoord[0]+7, $guiCoord[1]+30, -2139095040, -1, $hGUI);BitOR ($WS_BORDER, $WS_POPUP)
+GUICreate("Настройки", $guiCoord[2]-16, $guiCoord[3]-39, $guiCoord[0]+7, $guiCoord[1]+30, -2139095040, -1, $hGUI);BitOR ($WS_BORDER, $WS_POPUP)
+
+;MsgBox(4096, "lll" ,  BitOR ($WS_BORDER, $WS_POPUP))
 ;$hSETUP = GUICreate("Настройки", $guiCoord[2]-20, $guiCoord[3]-41, $guiCoord[0]+8, $guiCoord[1]+30, $WS_BORDER, -1, $hGUI)
 ;GUICtrlCreateGroup("Настройки", 9, 9 , $guiCoord[2]-38 , $guiCoord[3]-60)
-GUICtrlCreateGroup("Настройки", 9, 9 , $guiCoord[2]-38 , 70)
+GUICtrlCreateGroup("Настройки", 11, 9 , $guiCoord[2]-38 , 70)
 
   ;"X=" & $guiCoord[0] & @LF & @TAB & _
  ;"Y=" & $guiCoord[1] & @LF & @LF & _
@@ -326,7 +329,7 @@ GUICtrlCreateGroup("Настройки", 9, 9 , $guiCoord[2]-38 , 70)
 $hImage = _GUIImageList_Create(24, 24, 5, 3);, 6)
 ;_GUIImageList_AddIcon($hImage, "shell32.dll", 146, True)
 _GUIImageList_AddIcon($hImage, "imageres.dll", 161, True) ;161 ;218 not win10
-GUICtrlCreateButton("Закрыть", 23, 32, 100, 32)
+GUICtrlCreateButton("Закрыть", 25, 32, 100, 32)
 GUICtrlSetOnEvent(-1, "SetsClose")
 _GUICtrlButton_SetImageList(-1, $hImage)
 
@@ -335,7 +338,7 @@ $hImage = _GUIImageList_Create(24, 24, 5, 3);, 6)
 ;_GUIImageList_AddIcon($hImage, "DeviceCenter.dll", 3, True)
 _GUIImageList_AddIcon($hImage, "shell32.dll", 165, True)
 ;_GUIImageList_AddIcon($hImage, "imageres.dll", 111, True)
-GUICtrlCreateButton("Сохранить", 135, 32, 100, 32)
+GUICtrlCreateButton("Сохранить", 137, 32, 100, 32)
 GUICtrlSetOnEvent(-1, "SetsSave")
 _GUICtrlButton_SetImageList(-1, $hImage)
 
@@ -344,7 +347,7 @@ _GUICtrlButton_SetImageList(-1, $hImage)
 
 
 ;;..................................................................................................
-Local Const $snTabs1 = $guiCoord[2]-85 ; позиция_ ;276
+Local Const $snTabs1 = $guiCoord[2]-82 ; позиция_ ;276
 Local Const $snTabs2 = $guiCoord[3]-80	; вкладок. ;438
 GUICtrlCreateGroup(Null, $snTabs1-123, $snTabs2-16 , 178 , 45)
 GUICtrlCreateLabel("Количество вкладок", $snTabs1-109, $snTabs2+3)
@@ -353,8 +356,8 @@ GUICtrlCreateUpdown(-1,BitOR (0x40 , 0x01, 0x20) )
 GUICtrlSetLimit(-1, 10, 1)
 ;;..................................................................................................
 ; ширина-отступ. высота-максимальная высота-отступ
-;(высота-отступ снизу не верно $guiCoord[3]-455)
-$st_trayexit = GUICtrlCreateCheckbox("Сворачивать в трей", $guiCoord[2]-160, $guiCoord[3]-$WHeight-5, 120, 20,0x0020); $BS_RIGHTBUTTON)
+;(высота-отступ снизу не верно $guiCoord[3]-455). не верно  $guiCoord[3]-$WHeight-13
+$st_trayexit = GUICtrlCreateCheckbox("Сворачивать в трей", $guiCoord[2]-160, 25, 120, 20,0x0020); $BS_RIGHTBUTTON)
 Switch $trayexit
    Case 1
 	  GUICtrlSetState ( $st_trayexit, 1 ) ;$GUI_CHECKED 1
@@ -372,50 +375,49 @@ Local Const $snRLen = 70 ; префикс
 Local Const $snPSLen = 150
 ;Local Const $snLLen = $guiCoord[2]-96
 
-GUICtrlCreateTab(9, $snTUD, $guiCoord[2]-38, 250)
+GUICtrlCreateTab(12, $snTUD, $guiCoord[2]-38, 250)
 
 For $i=0 To $windowTabs
 GUICtrlCreateTabItem($i)
 
-GUICtrlCreateLabel("Mode:", 20, $snTUD+30, 28, 20, 0x0200)
 ;GUICtrlCreateLabel("Mode", 40, $snTUD+30, 32)
 ;GUICtrlSetBkColor(-1,0x00FF09)
 ;$snInfo[$i] = GUICtrlCreateInput($info[$i], 63, $snTUD+30, $snMLen-2,20)
 ;GUICtrlCreateInput($info[$i], 63, $snTUD+30, $snMLen-2,20)
 ;MsgBox(0, "WinGetPos активного окна", $i)
 
+$sn_info[$i] = GUICtrlCreateInput($info[$i], 66, $snTUD+30, $snMLen-2,20)
 
-$sn_info[$i] = GUICtrlCreateInput($info[$i], 63, $snTUD+30, $snMLen-2,20)
+If $exlpid[$i] Then GUICtrlCreateLabel("Last PID " & $exlpid[$i], $snMLen+72+3, $snTUD+30, 100,20)
 
-If $exlpid[$i] Then GUICtrlCreateLabel("Last PID " & $exlpid[$i], $snMLen+72, $snTUD+30, 100,20)
-
-$st_typecmd[$i] = GUICtrlCreateCombo($typecmd[$i], 20, $snTUD+60, 32, 100)
+GUICtrlCreateLabel("Mode:", 24, $snTUD+30, 28, 20, 0x0200)
+$st_typecmd[$i] = GUICtrlCreateCombo($typecmd[$i], 24, $snTUD+60, 32, 100)
 GUICtrlSetData(-1, "0|1|2",$typecmd[$i])
 
-$st_expath[$i] = GUICtrlCreateInput($expath[$i], 62, $snTUD+60,  $snMLen, 20)
-$st_exname[$i] = GUICtrlCreateInput($exname[$i], $snMLen+72, $snTUD+60,  $snXLen, 20)
+$st_expath[$i] = GUICtrlCreateInput($expath[$i], 62+3, $snTUD+60,  $snMLen, 20)
+$st_exname[$i] = GUICtrlCreateInput($exname[$i], $snMLen+72+3, $snTUD+60,  $snXLen, 20)
 
-GUICtrlCreateLabel("Server:", 20, $snTUD+90, 35, 20, 0x0200)
-$st_server[$i] = GUICtrlCreateInput($server[$i], 57, $snTUD+90, $snSWLen,20)
-$st_port[$i] = GUICtrlCreateInput($port[$i], $snSWLen+30+39, $snTUD+90, $snPLen,20) ;$snSWLen+40+$snPLen
+GUICtrlCreateLabel("Server:", 20+3, $snTUD+90, 35, 20, 0x0200)
+$st_server[$i] = GUICtrlCreateInput($server[$i], 57+3, $snTUD+90, $snSWLen,20)
+$st_port[$i] = GUICtrlCreateInput($port[$i], $snSWLen+30+39+3, $snTUD+90, $snPLen,20) ;$snSWLen+40+$snPLen
 
-GUICtrlCreateLabel("User:", 20, $snTUD+120, 28, 20, 0x0200)
-$st_user[$i] = GUICtrlCreateInput($user[$i], 50, $snTUD+120, $snULen,20)
-GUICtrlCreateLabel("&&", $snULen+51, $snTUD+120, 10, 20, 0x0200)
+GUICtrlCreateLabel("User:", 20+3, $snTUD+120, 28, 20, 0x0200)
+$st_user[$i] = GUICtrlCreateInput($user[$i], 50+3, $snTUD+120, $snULen,20)
+GUICtrlCreateLabel("&&", $snULen+51+3, $snTUD+120, 10, 20, 0x0200)
 ;GUICtrlSetBkColor(-1,0x00FF09)
-$st_devr[$i] = GUICtrlCreateInput($devr[$i], $snULen+30+2+26, $snTUD+120, $snRLen,20)
-GUICtrlCreateLabel("Pass:", $snULen+$snRLen+60, $snTUD+120, 30, 20, 0x0200)
+$st_devr[$i] = GUICtrlCreateInput($devr[$i], $snULen+30+2+26+3, $snTUD+120, $snRLen,20)
+GUICtrlCreateLabel("Pass:", $snULen+$snRLen+60+3, $snTUD+120, 30, 20, 0x0200)
 ;GUICtrlSetBkColor(-1,0x00FF09)
-$st_pass[$i] = GUICtrlCreateInput($pass[$i], $snULen+$snRLen+91, $snTUD+120, $snPSLen,20)
+$st_pass[$i] = GUICtrlCreateInput($pass[$i], $snULen+$snRLen+91+3, $snTUD+120, $snPSLen,20)
 
-GUICtrlCreateLabel("Log:", 20, $snTUD+150, 28, 20, 0x0200)
+GUICtrlCreateLabel("Log:", 20+3, $snTUD+150, 28, 20, 0x0200)
 ;GUICtrlSetBkColor(-1,0x00FF09)
-$st_exlog[$i] = GUICtrlCreateInput($exlog[$i], 53, $snTUD+150, $guiCoord[2]-96,20)
+$st_exlog[$i] = GUICtrlCreateInput($exlog[$i], 53+3, $snTUD+150, $guiCoord[2]-96,20)
 
-$st_params[$i] = GUICtrlCreateInput($params[$i], 20, $snTUD+180, $guiCoord[2]-63,20)
+$st_params[$i] = GUICtrlCreateInput($params[$i], 20+4, $snTUD+180, $guiCoord[2]-63,20)
 
-GUICtrlCreateLabel("Url:", 20, $snTUD+210, 28, 20, 0x0200)
-$st_urlprofile[$i] = GUICtrlCreateInput($urlprofile[$i], 53, $snTUD+210, $guiCoord[2]-96,20)
+GUICtrlCreateLabel("Url:", 20+3, $snTUD+210, 28, 20, 0x0200)
+$st_urlprofile[$i] = GUICtrlCreateInput($urlprofile[$i], 53+3, $snTUD+210, $guiCoord[2]-96,20)
 
 Next
 
@@ -790,12 +792,3 @@ Func WM_SETCURSOR($hWnd, $Msg, $wParam, $lParam)
    Return 'GUI_RUNDEFMSG';$GUI_RUNDEFMSG
 EndFunc ; ==> WM_SETCURSOR
 ;--------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-

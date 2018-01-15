@@ -2,3 +2,13 @@
 
 
 "C:\Program Files (x86)\AutoIt3\AutoIt3_x64.exe" "C:\Program Files (x86)\AutoIt3\SciTE\AutoIt3Wrapper\AutoIt3Wrapper.au3"  /NoStatus /prod /in "C:\Program Files (x86)\AutoIt3\SciTE\AutoIt3Wrapper\AutoIt3Wrapper.au3" /out "C:\Program Files (x86)\AutoIt3\SciTE\AutoIt3Wrapper\AutoIt3Wrapper.exe"
+
+AutoIt3.exe AutoIt3Wrapper.au3 /NoStatus /prod /in исходник.au3 /out бинарник.exe
+
+AutoIt3.exe тут для запуска скрипта AutoIt3Wrapper.au3 и понимает он только юникод.
+С такимже успехом его можно было скомпилировать в AutoIt3Wrapper.exe и сборка будет проще и в теолрии быстрее.
+
+AutoIt3Wrapper уже создаёт временный файл который всегда ansi, а уж какие он туда вгонит данные не важно, сам файл будь он даже пустой останется ansi. 
+И вот тут самое интересное что этот AutoIt3Wrapper открывая этот ansi файл пытается понять в каком он юникоде.
+Как именно он его понимает непонятно, но работает он с ним как с юникодом.
+
