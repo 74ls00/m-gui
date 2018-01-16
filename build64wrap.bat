@@ -18,7 +18,7 @@ for /f "tokens=1-7 delims=/-:., " %%a in ( "%now%" ) do (
 set now=%%a%%b%%c.%%d%%e
 )
 set "now=%now:~-11%"
->"%srcdir%version.au3" echo Global Const $version = "  0.%now% dev2"
+>"%srcdir%version.au3" echo Global Const $version = "  0.%now%"
 
 rem перекодируем файл.
 rem http://www.cyberforum.ru/cmd-bat/thread1361276.html

@@ -10,9 +10,9 @@
 #AutoIt3Wrapper_Res_LegalCopyright=©
 #AutoIt3Wrapper_Res_Comment=Consoles GUI
 #AutoIt3Wrapper_Res_Language=1049
-#AutoIt3Wrapper_Icon=res\icon14.ico
+#AutoIt3Wrapper_Icon=res\icon3.ico
 ;#AutoIt3Wrapper_Res_Icon_Add=bin\PING1.EXE
-;#AutoIt3Wrapper_Res_Icon_Add=res\icon3.ico ;3 13
+;#AutoIt3Wrapper_Res_Icon_Add=res\icon3.ico ;3 14
 #AutoIt3Wrapper_Run_Au3Stripper=y
 ;#Au3Stripper_Parameters
 #AutoIt3Wrapper_Run_Obfuscator=y
