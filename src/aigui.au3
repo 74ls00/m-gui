@@ -183,25 +183,13 @@ Next
 $hImage = _GUIImageList_Create(32, 32, 5, 3);, 6)
 _GUIImageList_AddIcon($hImage, "taskmgr.exe", 0, True)
 $btnTM = GUICtrlCreateButton("Диспетчер задач", 187, $WHeight-100, 147, 40)
-;Select
-;   Case IsAdmin()
 GUICtrlSetOnEvent(-1, "btnTM")
-;Case Else
-;_GUIImageList_AddIcon($hImage, "shell32.dll", 109, True)
-;GUICtrlSetOnEvent(-1, "btnTMu")
-;EndSelect
 _GUICtrlButton_SetImageList($btnTM, $hImage)
 
 $hImage = _GUIImageList_Create(32, 32, 5, 3)
 _GUIImageList_AddIcon($hImage, "devmgr.dll", 4, True)
 $btnDM = GUICtrlCreateButton("Диспетчер устройств", 25, $WHeight-100, 157, 40)
-;Select
-;   Case IsAdmin()
 GUICtrlSetOnEvent(-1, "btnDM")
-;Case Else
-;_GUIImageList_AddIcon($hImage, "shell32.dll", 109, True)
-;GUICtrlSetOnEvent(-1, "btnDMu")
-;EndSelect
 _GUICtrlButton_SetImageList($btnDM, $hImage)
 
 
@@ -232,14 +220,8 @@ GUICtrlSetOnEvent(-1, "btnCA")
 
 ;$hImage = _GUIImageList_Create(32, 32, 5, 3, 6)
 $hImage = _GUIImageList_Create(17 , 17,5, 3);,5 )
-$btnMC = GUICtrlCreateButton("msconfig", 25, $WHeight-51, 80, 24) ;157 40
-;Select
-;   Case IsAdmin()
 _GUIImageList_AddIcon($hImage, "msconfig.exe", 0, True)
-;Case Else
-;;_GUIImageList_AddIcon($hImage, "shell32.dll", 109, True)
-;GUICtrlSetState(-1, $GUI_DISABLE)
-;   EndSelect
+$btnMC = GUICtrlCreateButton("msconfig", 25, $WHeight-51, 80, 24) ;157 40
 _GUICtrlButton_SetImageList($btnMC, $hImage)
 GUICtrlSetOnEvent(-1, "btnMC")
 
@@ -248,12 +230,6 @@ GUICtrlSetOnEvent(-1, "btnMC")
 $hImage = _GUIImageList_Create(17 , 17,5, "");,5 )
 _GUIImageList_AddIcon($hImage, "miguiresource.dll", 1, True)
 $btnTC = GUICtrlCreateButton("taskschd", 25+87, $WHeight-51, 80, 24) ;157 40
-;Select
- ;  Case IsAdmin()
-
-;_GUIImageList_AddIcon($hImage, "shell32.dll", 109, True)
-;GUICtrlSetState(-1, $GUI_DISABLE)
-;   EndSelect
 _GUICtrlButton_SetImageList($btnTC, $hImage)
 GUICtrlSetOnEvent(-1, "btnTC")
 
