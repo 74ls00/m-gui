@@ -4,7 +4,7 @@
 #AutoIt3Wrapper_Res_Language=1049
 #AutoIt3Wrapper_Icon=res\icon00.ico ;00 14
 #AutoIt3Wrapper_Res_FileVersion_AutoIncrement=y
-#AutoIt3Wrapper_Res_Fileversion=0.1.0.162
+#AutoIt3Wrapper_Res_Fileversion=0.1.0.166
 #AutoIt3Wrapper_Res_Description=Окно консоли
 #AutoIt3Wrapper_Res_Field=ProductName|Окно консоли
 #AutoIt3Wrapper_Res_Field=Build|%longdate% %time%
@@ -272,7 +272,7 @@ _GUICtrlButton_SetImageList(-1, $hImage)
 
 $hImage = _GUIImageList_Create(24, 24, 5, 3);, 6)
 _GUIImageList_AddIcon($hImage, "SyncCenter.dll", 5, True)
-$iBtnStop[$t] = GUICtrlCreateButton("Стоп", 100+5+5+5, $THeight+35, 95, 32, 0x01) ; $BS_DEFPUSHBUTTON
+$iBtnStop[$t] = GUICtrlCreateButton("Стоп", 115, $THeight+35, 95, 32, 0x01) ; $BS_DEFPUSHBUTTON
 GUICtrlSetOnEvent(-1, "StopPressed")
 GUICtrlSetState(-1, $GUI_DISABLE)
 _GUICtrlButton_SetImageList(-1, $hImage)
@@ -281,9 +281,13 @@ _GUICtrlButton_SetImageList(-1, $hImage)
 
 $hImage = _GUIImageList_Create(24, 24, 5, 3);, 6)
 _GUIImageList_AddIcon($hImage, "imageres.dll", 93, True)
-$iBtnClean = GUICtrlCreateButton("Очистить", 186+10+10+10, $THeight+35, 95, 32)
+$iBtnClean = GUICtrlCreateButton("Очистить", 216, $THeight+35, 95, 32)
 GUICtrlSetOnEvent(-1, "CleanPressed")
 _GUICtrlButton_SetImageList(-1, $hImage)
+
+
+_GUICtrlHyperLink_Create("Профиль", 320, $THeight+49, 50, 15, 0x0000FF, 0x0000FF, -1, $urlprofile[$t], 'Перейти: ' & $urlprofile[$t], $hGUI);colors 0x0000FF 0x551A8B
+;GUICtrlSetBkColor(-1, 0x23F009)
 
 GUICtrlCreateIcon("mblctr.exe", 133, $WWidth-44, $WHeight-47)
 ;GUICtrlSetImage ( -1, "winhlp32.exe", 0 ,0);154 215
@@ -468,6 +472,7 @@ $devr[$i] = GUICtrlRead($st_devr[$i])
 $pass[$i] = GUICtrlRead($st_pass[$i])
 $exlog[$i] = GUICtrlRead($st_exlog[$i])
 $params[$i] = GUICtrlRead($st_params[$i])
+$urlprofile[$i] = GUICtrlRead($st_urlprofile[$i])
 Next
 
 _iniSave()
