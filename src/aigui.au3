@@ -231,17 +231,33 @@ GUICtrlSetOnEvent(-1, "btnCA")
 
 
 ;$hImage = _GUIImageList_Create(32, 32, 5, 3, 6)
-$hImage = _GUIImageList_Create(16 , 16,5, 3);,5 )
+$hImage = _GUIImageList_Create(17 , 17,5, 3);,5 )
 $btnMC = GUICtrlCreateButton("msconfig", 25, $WHeight-51, 80, 24) ;157 40
-Select
-   Case IsAdmin()
+;Select
+;   Case IsAdmin()
 _GUIImageList_AddIcon($hImage, "msconfig.exe", 0, True)
-Case Else
-_GUIImageList_AddIcon($hImage, "shell32.dll", 109, True)
-GUICtrlSetState(-1, $GUI_DISABLE)
-   EndSelect
+;Case Else
+;;_GUIImageList_AddIcon($hImage, "shell32.dll", 109, True)
+;GUICtrlSetState(-1, $GUI_DISABLE)
+;   EndSelect
 _GUICtrlButton_SetImageList($btnMC, $hImage)
 GUICtrlSetOnEvent(-1, "btnMC")
+
+
+
+$hImage = _GUIImageList_Create(17 , 17,5, "");,5 )
+_GUIImageList_AddIcon($hImage, "miguiresource.dll", 1, True)
+$btnTC = GUICtrlCreateButton("taskschd", 25+87, $WHeight-51, 80, 24) ;157 40
+;Select
+ ;  Case IsAdmin()
+
+;_GUIImageList_AddIcon($hImage, "shell32.dll", 109, True)
+;GUICtrlSetState(-1, $GUI_DISABLE)
+;   EndSelect
+_GUICtrlButton_SetImageList($btnTC, $hImage)
+GUICtrlSetOnEvent(-1, "btnTC")
+
+
 
 
 
@@ -745,7 +761,8 @@ WinSetState ( $hGUI, Null, @SW_HIDE )
 EndFunc
 ;--------------------------------------------------------------------------------------------------
 Func _ProExit()
-Switch MsgBox(4+32+8192, 'Выход из программы', 'Выйти из программы' & @CRLF & 'завершив все процессы ?')
+	; нажата кнопка выход на окне
+Switch MsgBox(4+32+8192, 'Выход из программы', 'Выйти из программы' & @CRLF & 'завершив все процессы ?',10)
 	Case 6
 		_OnExit()
 		IniDelete ( $sysini, "RUN" );IniWrite($sysini, "RUN", "RunPID", "");IniWrite($sysini, "RUN", "RunGUI", "")
@@ -796,6 +813,13 @@ Func btnMC()
 ShellExecute(@SystemDir & '\msconfig.exe', '', '', '', @SW_SHOW)
 ;Run (@SystemDir & "\msconfig.exe", @WorkingDir ,@SW_SHOW)
 EndFunc
+
+
+Func btnTC()
+ShellExecute(@SystemDir & '\mmc.exe', @SystemDir & "\taskschd.msc /s", '', '', @SW_SHOW)
+EndFunc
+
+
 ;--------------------------------------------------------------------------------------------------
 Func WM_SETCURSOR($hWnd, $Msg, $wParam, $lParam)
     If $wParam = $hGUI Then
