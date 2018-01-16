@@ -1,4 +1,4 @@
-
+ï»¿
 
 
 Global $itmHello[$windowTabs+11]
@@ -7,7 +7,7 @@ Global $itmHello[$windowTabs+11]
 
 
 $itmHello[0] = @CRLF & "    /\_/\" & @CRLF & _
-" =(  °w° )=" & @CRLF & _
+" =(  Â°wÂ° )=" & @CRLF & _
 "    )      (  //" & @CRLF & _
 "   (__ __)//"
 

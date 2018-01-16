@@ -1,4 +1,4 @@
-Global $iPID
+﻿Global $iPID
 global const $debuglogfile = @WorkingDir & "\log\" & StringStripWS ($version,1) & "debugLog.txt"
 
 Func _debug_start()
