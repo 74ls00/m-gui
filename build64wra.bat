@@ -3,10 +3,10 @@
 set "autoitdir=C:\Program Files (x86)\AutoIt3"
 set path=%path%;"%autoitdir%\Aut2Exe\"
 set "xUPX="%autoitdir%\Aut2Exe\"upx.exe"
-set app64=aGUI_x64d
-rem set app64=GUI_x64
-set "srcdir=%~d0%~p0"
-rem set "srcdir=%~d0%~p0src\"
+rem set app64=aGUI_x64d
+set app64=GUI_x64
+rem set "srcdir=%~d0%~p0"
+set "srcdir=%~d0%~p0src\"
 set "src_main=aigui"
 set "outdir=%~d0%~p0"
 
@@ -19,8 +19,8 @@ for /f "tokens=1-7 delims=/-:., " %%a in ( "%now%" ) do (
 set now=%%a%%b%%c.%%d%%e
 )
 set "now=%now:~-11%"
->"%srcdir%version.au3" echo Global Const $version = "  0.%now% dev3"
-rem >"%srcdir%version.au3" echo Global Const $version = "  0.%now%"
+rem >"%srcdir%version.au3" echo Global Const $version = "  0.%now% dev3"
+>"%srcdir%version.au3" echo Global Const $version = "  0.%now%"
 
 rem собираем врапер если его нет, с выводом в консоль и иконкой которой, дефолтно нет.
 if not exist "%autoitdir%\SciTE\AutoIt3Wrapper\AutoIt3Wrapper.exe" (
