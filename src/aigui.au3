@@ -1,7 +1,7 @@
 #Region
 #AutoIt3Wrapper_UseX64=y
 #AutoIt3Wrapper_Res_FileVersion_AutoIncrement=y
-#AutoIt3Wrapper_Res_Fileversion=0.1.0.90
+#AutoIt3Wrapper_Res_Fileversion=0.1.0.91
 #AutoIt3Wrapper_Res_Description=Окно консоли
 #AutoIt3Wrapper_Res_Field=ProductName|Окно консоли
 #AutoIt3Wrapper_Res_Field=Build|%longdate% %time%
@@ -789,13 +789,10 @@ Func btnMC()
 ShellExecute(@SystemDir & '\msconfig.exe', '', '', '', @SW_SHOW)
 ;Run (@SystemDir & "\msconfig.exe", @WorkingDir ,@SW_SHOW)
 EndFunc
-
-
+;--------------------------------------------------------------------------------------------------
 Func btnTC()
 ShellExecute(@SystemDir & '\mmc.exe', @SystemDir & "\taskschd.msc /s", '', '', @SW_SHOW)
 EndFunc
-
-
 ;--------------------------------------------------------------------------------------------------
 Func WM_SETCURSOR($hWnd, $Msg, $wParam, $lParam)
     If $wParam = $hGUI Then
