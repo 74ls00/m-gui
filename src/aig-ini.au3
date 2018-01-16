@@ -6,6 +6,7 @@ Global $sysini = @WorkingDir & "\system.ini"
 Global $windowTabs=4
 Global $trayexit=0 ;1=tray. 0=exit
 Global $strLimit=600000
+Global $webbrowser = "G:\home\Documents\Projects\0-MyFirefox\FirefoxPortable_x64\FirefoxPortable.exe"
 
 Global $streadmode = 0 ;0 _Update(), 1 _Update()
 Global $selectTime = 5000 ;ms
@@ -109,6 +110,11 @@ Func _loadSysIni()
 			Select
 				Case IniRead ($sysini,"GUI","Win7Style", Null) = ""
 				IniWrite($sysini, "GUI", "Win7Style", 0)
+					EndSelect
+
+			Select ;$webbrowser = IniRead ($sysini,"GUI","WebBrowser", $webbrowser)
+				Case IniRead ($sysini,"GUI","WebBrowser", Null) = ""
+				IniWrite($sysini, "GUI", "WebBrowser", '"' & $webbrowser & '"')
 					EndSelect
 	EndSelect
 

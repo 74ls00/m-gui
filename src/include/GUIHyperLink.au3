@@ -32,6 +32,9 @@
 Global $aGCHL_Ctrls[1][1]
 Global $iGCHL_MouseHeldDown = 0
 
+Global $sysini , $webbrowser
+
+
 #EndRegion Global Variables
 
 #Region Example
@@ -312,7 +315,19 @@ Select
 			Case 1
 				Execute($sActionURL)
 			Case -1
-				ShellExecute($sActionURL)
+				;Global $webbrowser
+				$webbrowser = IniRead ($sysini,"GUI","WebBrowser", $webbrowser)
+				;MsgBox(262144, 'Debug line ~' & @ScriptLineNumber, 'Selection:' & @CRLF & '$webbrowser' & @CRLF & @CRLF & 'Return:' & @CRLF & $webbrowser) ;### Debug MSGBOX
+				Switch $webbrowser
+					Case "0"
+						ShellExecute($sActionURL)
+					Case Else
+						ShellExecute('"' & $webbrowser & '"', $sActionURL,'','', @SW_SHOW)
+				EndSwitch
+				;
+
+
+
 		EndSwitch
 	Case Else
 		;$sActionURL = GUICtrlRead($iCtrlID) ;это экономим
