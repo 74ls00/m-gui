@@ -1,22 +1,22 @@
-#Region
+﻿#Region
 #AutoIt3Wrapper_UseX64=y
 #AutoIt3Wrapper_UseUpx=n
 #AutoIt3Wrapper_Res_Language=1049
 #AutoIt3Wrapper_Icon=res\icon00.ico ;00 14
 #AutoIt3Wrapper_Res_FileVersion_AutoIncrement=y
-#AutoIt3Wrapper_Res_Fileversion=0.1.0.115
+#AutoIt3Wrapper_Res_Fileversion=0.1.0.132
 #AutoIt3Wrapper_Res_Description=Окно консоли
 #AutoIt3Wrapper_Res_Field=ProductName|Окно консоли
 #AutoIt3Wrapper_Res_Field=Build|%longdate% %time%
 ;#AutoIt3Wrapper_Res_Field=OriginalFileName|exe;gui.exe
-#AutoIt3Wrapper_Res_ProductVersion=0.1;¤;a;α¤
+#AutoIt3Wrapper_Res_ProductVersion=0.1¤aα¤
 #AutoIt3Wrapper_Res_LegalCopyright=©
 #AutoIt3Wrapper_Res_Comment=Consoles GUI
 #AutoIt3Wrapper_Res_Icon_Add=res\icon02.ico;gui icon
 #AutoIt3Wrapper_Res_Icon_Add=res\icon01.ico;gui icon admin
 #AutoIt3Wrapper_Res_Icon_Add=res\icon03.ico;tray
 #AutoIt3Wrapper_Run_Au3Stripper=y
-#Au3Stripper_Parameters=/pe /debug /sf /sv /om /rm /SCI=1
+#Au3Stripper_Parameters=/pe /debug /sf /sv /om /rm; /SCI=1
 #AutoIt3Wrapper_Run_After=del /f /q "%scriptdir%\%scriptfile%_stripped.au3"
 #AutoIt3Wrapper_Run_After=Utilities\ResourceHacker.exe -delete %out%, %out%, Icon, 169,
 #AutoIt3Wrapper_Run_After="%autoitdir%\Aut2Exe\Upx.exe" %out% --best --no-backup --overlay=copy --compress-exports=1 --compress-resources=1 --strip-relocs=1
