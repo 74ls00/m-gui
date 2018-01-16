@@ -3,7 +3,7 @@
 set "autoitdir=C:\Program Files (x86)\AutoIt3"
 set path=%path%;"%autoitdir%\Aut2Exe\"
 set "xUPX="%autoitdir%\Aut2Exe\"upx.exe"
-set app64=aGUI_x64e
+set app64=aGUI_x64d
 set "srcdir=%~d0%~p0"
 set "src_main=aigui"
 set "srctmp=~1251%src_main%"
@@ -43,8 +43,9 @@ del "%srcdir%%srctmp%.au3"
 del "%srcdir%%srctmp%_stripped.au3"
 
 rem удаляев старый финальных бинарник, upx это не умеет
-del "%outdir%%app64%wu.exe"
-%xUPX% -9  -o "%outdir%%app64%wu.exe" "%outdir%%app64%w.exe" -k
+rem del "%outdir%%app64%wu.exe"
+rem %xUPX% -9  -o "%outdir%%app64%wu.exe" "%outdir%%app64%w.exe" -k
+
 rem удаляем неупакованый бинарник если нужно
 rem del "%outdir%%app64%w.exe"
 

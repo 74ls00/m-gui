@@ -1,7 +1,8 @@
 #Region
 #AutoIt3Wrapper_UseX64=y
+#AutoIt3Wrapper_UseUpx=n
 #AutoIt3Wrapper_Res_FileVersion_AutoIncrement=y
-#AutoIt3Wrapper_Res_Fileversion=0.1.0.91
+#AutoIt3Wrapper_Res_Fileversion=0.1.0.103
 #AutoIt3Wrapper_Res_Description=Окно консоли
 #AutoIt3Wrapper_Res_Field=ProductName|Окно консоли
 #AutoIt3Wrapper_Res_Field=Build|%longdate% %time%
@@ -10,14 +11,17 @@
 #AutoIt3Wrapper_Res_LegalCopyright=©
 #AutoIt3Wrapper_Res_Comment=Consoles GUI
 #AutoIt3Wrapper_Res_Language=1049
-#AutoIt3Wrapper_Icon=res\icon3.ico
-;#AutoIt3Wrapper_Res_Icon_Add=bin\PING1.EXE
-;#AutoIt3Wrapper_Res_Icon_Add=res\icon3.ico ;3 14
-#AutoIt3Wrapper_Run_Au3Stripper=y
+#AutoIt3Wrapper_Icon=res\icon00.ico ;00 14
+#AutoIt3Wrapper_Res_Icon_Add=res\icon02.ico;gui icon
+#AutoIt3Wrapper_Res_Icon_Add=res\icon01.ico;gui icon admin
+#AutoIt3Wrapper_Res_Icon_Add=res\icon03.ico;tray
+;#AutoIt3Wrapper_Run_Au3Stripper=y
 ;#Au3Stripper_Parameters
 #AutoIt3Wrapper_Run_Obfuscator=y
 #Obfuscator_Parameters=/sf /sv /om /cs=0 /cn=0
 #AutoIt3Wrapper_Run_After=del /f /q "%scriptdir%\%scriptfile%_Obfuscated.au3"
+#AutoIt3Wrapper_Run_After=Utilities\ResourceHacker.exe -delete %out%, %out%, Icon, 169,
+#AutoIt3Wrapper_Run_After="%autoitdir%\Aut2Exe\Upx.exe" %out% --best --no-backup --overlay=copy --compress-exports=1 --compress-resources=0 --strip-relocs=1
 #EndRegion
 
 #NoTrayIcon
@@ -81,6 +85,7 @@ Global Const $lbTAct = 0x00FF09 ;цвет активного индикатор�
 Global Const $lbTdeact = 0xFBD7F4 ;цвет НЕактивного индикатора
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 TraySetState(1) ; Показывает меню трея
+TraySetIcon ( @ScriptFullPath, 203 )
 ;OnAutoItExitRegister("_OnExit")
 
 _Main()
@@ -137,6 +142,8 @@ IniWrite($sysini, "RUN", "RunPID", WinGetProcess ( $hGUI )); отметить ч
 IniWrite($sysini, "RUN", "RunGUI", '"' & $NameGUI & " " & $version & $nGUI & '"')
 
 ;GUISetIcon(@SystemDir & "\cmd.exe", 0)
+GUISetIcon(@ScriptFullPath, 201)
+
 GUISetOnEvent(-3, '_closeWin', $hGUI);$GUI_EVENT_CLOSE
 GUISetOnEvent(-4, '_hideWin', $hGUI);$GUI_EVENT_MINIMIZE
 
