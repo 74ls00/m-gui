@@ -4,7 +4,7 @@
 #AutoIt3Wrapper_Res_Language=1049
 #AutoIt3Wrapper_Icon=res\icon00.ico ;00 14
 #AutoIt3Wrapper_Res_FileVersion_AutoIncrement=y
-#AutoIt3Wrapper_Res_Fileversion=0.1.0.166
+#AutoIt3Wrapper_Res_Fileversion=0.1.0.167
 #AutoIt3Wrapper_Res_Description=Окно консоли
 #AutoIt3Wrapper_Res_Field=ProductName|Окно консоли
 #AutoIt3Wrapper_Res_Field=Build|%longdate% %time%
@@ -299,7 +299,13 @@ GUICtrlCreateIcon("mblctr.exe", 133, $WWidth-44, $WHeight-47)
 
 ;MsgBox(4096, "lll" , $windowTabs)
 ;
-$iEdt[$t] = GUICtrlCreateEdit("==>[" & $t & "]" & @CRLF & _Encoding_OEM2ANSI($sLine[$t]) & $itmHello[$t] , 14, $StrTool, $WWidth-30, $THeight-8, 2099264);BitOR($ES_READONLY, $ES_AUTOVSCROLL, $WS_VSCROLL))
+Local $arttmp = " "& $t & " "
+If $t > 9 Then $arttmp = $t
+;$iEdt[$t] = GUICtrlCreateEdit("╔═════╗"&"==>[" & $t & "]" & @CRLF & _Encoding_OEM2ANSI($sLine[$t]) & $itmHello[$t] , 14, $StrTool, $WWidth-30, $THeight-8, 2099264);BitOR($ES_READONLY, $ES_AUTOVSCROLL, $WS_VSCROLL))
+$iEdt[$t] = GUICtrlCreateEdit _
+ (@CRLF & "   ╔═══╗"& @CRLF &"   ║  " & $arttmp &"  ║"& @CRLF &"   ╚═══╝"& @CRLF &"┌─┬┬┐"& @CRLF &"└─┴┴┘"& @CRLF& _
+ $itmHello[$t] & @CRLF & @CRLF & _Encoding_OEM2ANSI($sLine[$t])  , 15, $StrTool, $WWidth-31, $THeight-8, 2099264);BitOR($ES_READONLY, $ES_AUTOVSCROLL, $WS_VSCROLL))
+
 GUICtrlSendMsg(-1, $EM_LIMITTEXT, -1, 0)
 ;GUIRegisterMsg($WM_ACTIVATE, "WM_ACTIVATE")
 ;MsgBox(4096, "lll" , BitOR($ES_READONLY, $ES_AUTOVSCROLL, $WS_VSCROLL))2099264

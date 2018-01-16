@@ -6,10 +6,10 @@ Global $itmHello[$windowTabs+11]
 
 
 
-$itmHello[0] = @CRLF & "    /\_/\" & @CRLF & _
-" =(  °w° )=" & @CRLF & _
-"    )      (  //" & @CRLF & _
-"   (__ __)//"
+$itmHello[0] = @CRLF & "      /\_/\" & @CRLF & _
+"   =(  °w° )=" & @CRLF & _
+"      )      (  //" & @CRLF & _
+"     (__ __)//"
 
 #cs
 $itmHello[1] = @CRLF &  "                ______    ____" & @CRLF & _
