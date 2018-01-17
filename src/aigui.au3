@@ -198,7 +198,7 @@ Switch $VIP
 	Case 1
 
 $hImage = _GUIImageList_Create(32, 32, 5, 3)
-_GUIImageList_AddIcon($hImage, "shell32.dll", 215, True)
+_GUIImageList_AddIcon($hImage, "shell32.dll", 137, True);112
 $btnAllStart = GUICtrlCreateButton("Пуск", $WWidth-315-1, $tCordLbtT-8, 141-1, 40)
 _GUICtrlButton_SetImageList($btnAllStart, $hImage)
 GUICtrlSetOnEvent(-1, "btnAllStart")
@@ -909,10 +909,10 @@ Select
 
 	$exlpid[$i] = $iPIDx[$i]
 	_iniSave()
-	  GUICtrlSetState($iBtnStart[$i], $GUI_DISABLE)
-	  GUICtrlSetState($iBtnStop[$i], $GUI_ENABLE)
-	  GUICtrlSetState($btnAllStop, $GUI_ENABLE)
-	  StdinWrite($iPIDx[$i], $sLine[$i])
+	GUICtrlSetState($iBtnStart[$i], $GUI_DISABLE)
+	GUICtrlSetState($iBtnStop[$i], $GUI_ENABLE)
+	GUICtrlSetState($btnAllStop, $GUI_ENABLE)
+	StdinWrite($iPIDx[$i], $sLine[$i])
 
 EndSelect
 
