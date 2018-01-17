@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Res_Language=1049
 #AutoIt3Wrapper_Icon=res\icon00.ico
 #AutoIt3Wrapper_Res_FileVersion_AutoIncrement=y
-#AutoIt3Wrapper_Res_Fileversion=0.1.0.219
+#AutoIt3Wrapper_Res_Fileversion=0.1.0.220
 #AutoIt3Wrapper_Res_Description=Окно консоли
 #AutoIt3Wrapper_Res_Field=ProductName|Окно консоли
 #AutoIt3Wrapper_Res_Field=Build|%longdate% %time%
@@ -430,14 +430,20 @@ _GUIImageList_AddIcon($hImage, "shell32.dll", 165, True)
 GUICtrlCreateButton("Сохранить", 137, 32, 100, 32)
 GUICtrlSetOnEvent(-1, "SetsSave")
 _GUICtrlButton_SetImageList(-1, $hImage)
+;;..................................................................................................
 
-GUICtrlCreateButton("Запилить батник", 237, 32, 100, 32)
+Local Const $snTabs2 = $guiCoord[3]-80	; вкладок. ;438
+
+$hImage = _GUIImageList_Create(32, 32, 5, 3)
+_GUIImageList_AddIcon($hImage, "shell32.dll", 71, True)
+GUICtrlCreateButton("Запилить батник", 11, $snTabs2-7, 100, 36, 0x2000 )
+_GUICtrlButton_SetImageList(-1, $hImage)
 GUICtrlSetOnEvent(-1, "createBAT")
 
 
 ;;..................................................................................................
 Local Const $snTabs1 = $guiCoord[2]-82 ; позиция_ ;276
-Local Const $snTabs2 = $guiCoord[3]-80	; вкладок. ;438
+
 GUICtrlCreateGroup(Null, $snTabs1-123, $snTabs2-16 , 178 , 45)
 GUICtrlCreateLabel("Количество вкладок", $snTabs1-109, $snTabs2+3)
 $stTabs = GUICtrlCreateInput($tmpStbs, $snTabs1, $snTabs2, 40, 20)
