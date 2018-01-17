@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Res_Language=1049
 #AutoIt3Wrapper_Icon=res\icon00.ico
 #AutoIt3Wrapper_Res_FileVersion_AutoIncrement=y
-#AutoIt3Wrapper_Res_Fileversion=0.1.0.206
+#AutoIt3Wrapper_Res_Fileversion=0.1.0.208
 #AutoIt3Wrapper_Res_Description=Окно консоли
 #AutoIt3Wrapper_Res_Field=ProductName|Окно консоли
 #AutoIt3Wrapper_Res_Field=Build|%longdate% %time%
@@ -35,21 +35,9 @@ _debug_start()
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Select ; не запускать вторую копию программы ; @ScriptName
 Case IniRead ($sysini,"RUN","RunPID", Null) <> "" And ProcessExists ( IniRead ($sysini,"RUN","RunPID", Null) )
-			;WinSetState ( IniRead ($sysini,"RUN","RunGUI", Null), Null, @SW_SHOW )
-			;WinActivate ( IniRead ($sysini,"RUN","RunGUI", Null), Null )
-			;$num = "0x" & Hex(IniRead ($sysini,"RUN","RunGUIh", Null),16)
-
-			;$num = HWnd(IniRead ($sysini,"RUN","RunGUIh", Null))
-
-			WinSetState ( HWnd(IniRead ($sysini,"RUN","RunGUIh", Null)), Null, @SW_SHOW )
-			WinActivate ( HWnd(IniRead ($sysini,"RUN","RunGUIh", Null)) )
-
-
-
-
-;MsgBox(262144, 'Debug line ~' & @ScriptLineNumber,  "0x" & Hex(IniRead ($sysini,"RUN","RunGUIh", Null),16))
-
-			Exit
+	WinSetState ( HWnd(IniRead ($sysini,"RUN","RunGUIh", Null)), Null, @SW_SHOW )
+	WinActivate ( HWnd(IniRead ($sysini,"RUN","RunGUIh", Null)) )
+	Exit
 EndSelect
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Switch IniRead ($sysini,"LOG","CheckDll", "")
@@ -98,7 +86,6 @@ TraySetIcon ( @ScriptFullPath, 203 )
 ;OnAutoItExitRegister("_OnExit")
 
 _Main()
-
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 While 1
    Switch TrayGetMsg()
@@ -120,24 +107,17 @@ WEnd
 ;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 Func _Main()
 
-Select ; определение прав запуска
-   Case IsAdmin()
-	  $nGUI = " - Администратор"
-   Case Else
-	  $nGUI = " - без прав администратора"
-EndSelect
-
 Switch IniRead ($sysini,"GUI","Win7Style", 0); стиль окна. 0=стандартная, 1=изменённая(стабильность не проверена)
 	Case 0
 		;$hGUI = GUICreate($NameGUI & "  " & FileGetVersion(@AutoItExe) & $version & $nGUI,$WWidth,$WHeight,-1,-1)
-		$hGUI = GUICreate($NameGUI & "  " & $version & $nGUI,$WWidth,$WHeight,-1,-1)
+		$hGUI = GUICreate($NameGUI,$WWidth,$WHeight,-1,-1)
 	Case 1
 		;$hGUI = GUICreate($NameGUI & "  " & FileGetVersion(@AutoItExe) & $version & $nGUI,$WWidth,$WHeight,-1,-1,13500416);BitXOR($WS_OVERLAPPEDWINDOW, $WS_MAXIMIZEBOX) ;0x00010000
-		$hGUI = GUICreate($NameGUI & "  " & $version & $nGUI,$WWidth,$WHeight,-1,-1,13500416);BitXOR($WS_OVERLAPPEDWINDOW, $WS_MAXIMIZEBOX)=13500416; $WS_EX_CONTROLPARENT=65536
+		$hGUI = GUICreate($NameGUI,$WWidth,$WHeight,-1,-1,13500416);BitXOR($WS_OVERLAPPEDWINDOW, $WS_MAXIMIZEBOX)=13500416; $WS_EX_CONTROLPARENT=65536
 		_GUICtrlMenu_DeleteMenu(_GUICtrlMenu_GetSystemMenu($hGUI), 2)
 		GUIRegisterMsg(0x0020, 'WM_SETCURSOR');$WM_SETCURSOR=0x0020
 	Case 2
-$hGUI = GUICreate($NameGUI & "  " & $version & $nGUI,$WWidth,$WHeight+20,-1,-1,0x80800000,65536);BitXOR($WS_OVERLAPPEDWINDOW, $WS_MAXIMIZEBOX)
+$hGUI = GUICreate($NameGUI,$WWidth,$WHeight+20,-1,-1,0x80800000,65536);BitXOR($WS_OVERLAPPEDWINDOW, $WS_MAXIMIZEBOX)
 GUISetBkColor(0xE0FFFF) ; устанавливает цвет фона
 ;								0x80000000+0x00800000 = 0x80800000
 		;_GUICtrlMenu_DeleteMenu(_GUICtrlMenu_GetSystemMenu($hGUI), 2)
@@ -147,19 +127,13 @@ EndSwitch
 ;MsgBox(4096, "" , BitXOR($WS_OVERLAPPEDWINDOW, $WS_MAXIMIZEBOX,$WS_EX_CONTROLPARENT));13500416
 ;MsgBox(4096, "" , $WS_EX_CONTROLPARENT   ); 13565952;
 
-IniWrite($sysini, "RUN", "RunPID", WinGetProcess ( $hGUI )); отметить что программа запущена
-IniWrite($sysini, "RUN", "RunGUIh", Dec(StringMid($hGUI,3,16)))
+
+;setTitleGUI()
 
 
-;IniWrite($sysini, "RUN", "RunGUI", '"' & $NameGUI & " " & $version & $nGUI & '"')
-
-
-
-;GUISetIcon(@SystemDir & "\cmd.exe", 0)
-
-
-
-mainIconSet()
+addRUN()
+;mainIconSet()
+_GUIisAdmin()
 
 
 GUISetOnEvent(-3, '_closeWin', $hGUI);$GUI_EVENT_CLOSE
@@ -712,6 +686,30 @@ Func _UnSel()
     $iUnSel = 1
 EndFunc   ;==>_UnSel
 ;--------------------------------------------------------------------------------------------------
+Func addRUN()
+IniWrite($sysini, "RUN", "RunPID", WinGetProcess ( $hGUI )); отметить что программа запущена
+IniWrite($sysini, "RUN", "RunGUIh", Dec(StringMid($hGUI,3,16)))
+EndFunc
+;--------------------------------------------------------------------------------------------------
+Func _GUIisAdmin()
+Select
+	Case IsAdmin()
+		GUISetIcon(@ScriptFullPath, 202)
+		WinSetTitle ( $hGUI, "", $NameGUI & "  " & $version & " - Администратор" )
+	Case Else
+		GUISetIcon(@ScriptFullPath, 201)
+		WinSetTitle ( $hGUI, "", $NameGUI & "  " & $version & " - без прав администратора" )
+EndSelect
+EndFunc
+;--------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+;--------------------------------------------------------------------------------------------------
 Func StartPressed()
 Local $getTab = GUICtrlRead($iTab)-1
    $iPIDx[$getTab] = Run(@ComSpec , Null, @SW_HIDE, $STDIN_CHILD + $STDERR_MERGED)
@@ -724,7 +722,6 @@ Local $getTab = GUICtrlRead($iTab)-1
 	  GUICtrlSetState($btnAllStop, $GUI_ENABLE)
 	  StdinWrite($iPIDx[$getTab], $sLine[$getTab])
 EndFunc
-
 ;--------------------------------------------------------------------------------------------------
 Func StopPressed()
    ;GUICtrlSetBkColor($lbT[$getTab], 0xEBA794)
@@ -871,13 +868,6 @@ Func WM_SETCURSOR($hWnd, $Msg, $wParam, $lParam)
    EndIf
    Return 'GUI_RUNDEFMSG';$GUI_RUNDEFMSG
 EndFunc ; ==> WM_SETCURSOR
-;--------------------------------------------------------------------------------------------------
-Func mainIconSet()
-Select
-	Case IsAdmin()
-		GUISetIcon(@ScriptFullPath, 202)
-	Case Else
-		GUISetIcon(@ScriptFullPath, 201)
-EndSelect
-EndFunc
-;--------------------------------------------------------------------------------------------------
+
+
+
