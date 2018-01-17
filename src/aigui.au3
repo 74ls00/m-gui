@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Res_Language=1049
 #AutoIt3Wrapper_Icon=res\icon00.ico
 #AutoIt3Wrapper_Res_FileVersion_AutoIncrement=y
-#AutoIt3Wrapper_Res_Fileversion=0.1.0.208
+#AutoIt3Wrapper_Res_Fileversion=0.1.0.213
 #AutoIt3Wrapper_Res_Description=Окно консоли
 #AutoIt3Wrapper_Res_Field=ProductName|Окно консоли
 #AutoIt3Wrapper_Res_Field=Build|%longdate% %time%
@@ -51,7 +51,7 @@ Global Const $WA_INACTIVE = 0
 
 Global Const $VIP = 1
 
-Global $hGUI, $iBtnStart, $iBtnStop, $iBtnClean, $iBtnPause, $iBtnUnPause, $aPIDs, $iUnSel = 1 , $btnAllStop;$hSETUP
+Global $hGUI, $iBtnStart, $iBtnStop, $iBtnClean, $aPIDs, $iUnSel = 1 , $btnAllStop, $btnAllStart;$hSETUP ;$iBtnPause, $iBtnUnPause,
 Global $stTabs , $tmpStbs ;= $windowTabs; временное количество вкладок
 $tmpStbs = $windowTabs+1
 Global $strl4 , $iTab , $hImage ; элемент иконок кнопки
@@ -127,17 +127,16 @@ EndSwitch
 ;MsgBox(4096, "" , BitXOR($WS_OVERLAPPEDWINDOW, $WS_MAXIMIZEBOX,$WS_EX_CONTROLPARENT));13500416
 ;MsgBox(4096, "" , $WS_EX_CONTROLPARENT   ); 13565952;
 
+GUISetOnEvent(-3, '_closeWin', $hGUI);$GUI_EVENT_CLOSE
+GUISetOnEvent(-4, '_hideWin', $hGUI);$GUI_EVENT_MINIMIZE
 
-;setTitleGUI()
 
 
 addRUN()
-;mainIconSet()
 _GUIisAdmin()
 
 
-GUISetOnEvent(-3, '_closeWin', $hGUI);$GUI_EVENT_CLOSE
-GUISetOnEvent(-4, '_hideWin', $hGUI);$GUI_EVENT_MINIMIZE
+
 
 GUISetFont(8.5, Null, Null, Null ,$hGUI , $txtQual);бесполезный код
 
@@ -192,6 +191,39 @@ GUICtrlSetBkColor(-1, 0xB2D47D)
 #ce
 
 
+
+
+;VIP buttons
+Switch $VIP
+	Case 1
+
+$hImage = _GUIImageList_Create(32, 32, 5, 3)
+_GUIImageList_AddIcon($hImage, "shell32.dll", 215, True)
+$btnAllStart = GUICtrlCreateButton("Пуск", $WWidth-315-1, $tCordLbtT-8, 141-1, 40)
+_GUICtrlButton_SetImageList($btnAllStart, $hImage)
+GUICtrlSetOnEvent(-1, "btnAllStart")
+;GUICtrlSetState(-1, $GUI_DISABLE)
+
+
+$hImage = _GUIImageList_Create(32, 32, 5, 3);, 6)
+_GUIImageList_AddIcon($hImage, "shell32.dll", 215, True)
+$btnAllStop = GUICtrlCreateButton("Остановить всё", $WWidth-176+8, $tCordLbtT-8, 141, 40);   150 ;$WWidth-176 ;;494-145
+_GUICtrlButton_SetImageList($btnAllStop, $hImage)
+GUICtrlSetOnEvent(-1, "btnAllStop")
+GUICtrlSetState(-1, $GUI_DISABLE)
+
+
+
+
+
+
+
+
+
+
+
+EndSwitch
+;End VIP buttons
 
 
 $hImage = _GUIImageList_Create(32, 32, 5, 3);, 6)
@@ -251,18 +283,7 @@ GUICtrlSetOnEvent(-1, "btnTC")
 
 
 
-;VIP buttons
-Switch $VIP
-   Case 1
-$hImage = _GUIImageList_Create(32, 32, 5, 3);, 6)
-_GUIImageList_AddIcon($hImage, "shell32.dll", 215, True)
-$btnAllStop = GUICtrlCreateButton("Остановить всё", $WWidth-176, $tCordLbtT-8, 150, 40) ;$WWidth-176 ;;494-145
-_GUICtrlButton_SetImageList($btnAllStop, $hImage)
-GUICtrlSetOnEvent(-1, "btnAllStop")
-GUICtrlSetState(-1, $GUI_DISABLE)
 
-EndSwitch
-;End VIP buttons
 
 ;..................................................................................................
 For $t = 0 To $windowTabs
@@ -870,4 +891,60 @@ Func WM_SETCURSOR($hWnd, $Msg, $wParam, $lParam)
 EndFunc ; ==> WM_SETCURSOR
 
 
+Func btnAllStart()
 
+;MsgBox(262144, "", 'Selection:' & @CRLF & '$iBtnStart' & @CRLF & @CRLF & 'Return:' & @CRLF & GUICtrlGetState ($iBtnStart[0] )) ;### Debug MSGBOX
+
+
+
+
+;$btnAllStart
+For $i=0 To $windowTabs
+
+Select
+	Case GUICtrlRead($ckbxBigRun[$i]) = 1 And GUICtrlGetState ($iBtnStart[$i] ) = 80 ; $GUI_DISABLE
+
+	$iPIDx[$i] = Run(@ComSpec , Null, @SW_HIDE, $STDIN_CHILD + $STDERR_MERGED)
+	If ProcessExists ( $iPIDx[$i] ) Then GUICtrlSetBkColor($lbT[$i], $lbTAct)
+
+	$exlpid[$i] = $iPIDx[$i]
+	_iniSave()
+	  GUICtrlSetState($iBtnStart[$i], $GUI_DISABLE)
+	  GUICtrlSetState($iBtnStop[$i], $GUI_ENABLE)
+	  GUICtrlSetState($btnAllStop, $GUI_ENABLE)
+	  StdinWrite($iPIDx[$i], $sLine[$i])
+
+EndSelect
+
+
+Next
+
+
+Local $n = 0
+For $i=0 To $windowTabs
+
+Select
+	Case GUICtrlRead($ckbxBigRun[$i]) = 1 And GUICtrlGetState ($iBtnStart[$i] ) = 144
+		$n=$n+1
+	Case Else
+
+
+
+EndSelect
+
+
+
+
+
+Next
+
+
+;MsgBox(262144, "", 'Selection:' & @CRLF & '$iBtnStart' & @CRLF & @CRLF & 'Return:' & @CRLF & GUICtrlGetState ($iBtnStart[0] )) ;### Debug MSGBOX
+		;MsgBox(262144, "", 'Selection:' & @CRLF & '$iBtnStart' & @CRLF & @CRLF & 'Return:' & @CRLF & GUICtrlGetState ($iBtnStart[$i] )) ;### Debug MSGBOX
+
+
+
+; если кнопка не нажата и стоит флаг
+; нажать
+
+EndFunc
