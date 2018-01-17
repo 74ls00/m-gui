@@ -91,6 +91,18 @@ IniWrite($myini, $process & $i, "urlprofile",'"' & $urlprofile[$i] & '"')
 
 
 
+
+
+   Next
+;MsgBox(262144, 'Debug line ~' & @ScriptLineNumber, 'Selection:' & @CRLF & '$BigRun' & @CRLF & @CRLF & 'Return:' & @CRLF & $BigRun[0])
+
+IniWrite($myini, "system", "tabs", $windowTabs)
+EndFunc
+
+Func _exitIniSave()
+	For $i=0 To $windowTabs
+Local $process = "miner"
+
 Switch GUICtrlRead($ckbxBigRun[$i])
 	Case 1
 		$BigRun[$i] = 1
@@ -99,11 +111,8 @@ Switch GUICtrlRead($ckbxBigRun[$i])
 EndSwitch
 
 IniWrite($myini, $process & $i, "bigrun",$BigRun[$i])
+Next
 
-   Next
-;MsgBox(262144, 'Debug line ~' & @ScriptLineNumber, 'Selection:' & @CRLF & '$BigRun' & @CRLF & @CRLF & 'Return:' & @CRLF & $BigRun[0])
-
-IniWrite($myini, "system", "tabs", $windowTabs)
 EndFunc
 ;--------------------------------------------------------------------------------------------------
 Func _saveSysIni()

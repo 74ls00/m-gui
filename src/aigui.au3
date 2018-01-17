@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Res_Language=1049
 #AutoIt3Wrapper_Icon=res\icon00.ico
 #AutoIt3Wrapper_Res_FileVersion_AutoIncrement=y
-#AutoIt3Wrapper_Res_Fileversion=0.1.0.193
+#AutoIt3Wrapper_Res_Fileversion=0.1.0.206
 #AutoIt3Wrapper_Res_Description=Окно консоли
 #AutoIt3Wrapper_Res_Field=ProductName|Окно консоли
 #AutoIt3Wrapper_Res_Field=Build|%longdate% %time%
@@ -35,8 +35,20 @@ _debug_start()
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Select ; не запускать вторую копию программы ; @ScriptName
 Case IniRead ($sysini,"RUN","RunPID", Null) <> "" And ProcessExists ( IniRead ($sysini,"RUN","RunPID", Null) )
-			WinSetState ( IniRead ($sysini,"RUN","RunGUI", Null), Null, @SW_SHOW )
-			WinActivate ( IniRead ($sysini,"RUN","RunGUI", Null), Null )
+			;WinSetState ( IniRead ($sysini,"RUN","RunGUI", Null), Null, @SW_SHOW )
+			;WinActivate ( IniRead ($sysini,"RUN","RunGUI", Null), Null )
+			;$num = "0x" & Hex(IniRead ($sysini,"RUN","RunGUIh", Null),16)
+
+			;$num = HWnd(IniRead ($sysini,"RUN","RunGUIh", Null))
+
+			WinSetState ( HWnd(IniRead ($sysini,"RUN","RunGUIh", Null)), Null, @SW_SHOW )
+			WinActivate ( HWnd(IniRead ($sysini,"RUN","RunGUIh", Null)) )
+
+
+
+
+;MsgBox(262144, 'Debug line ~' & @ScriptLineNumber,  "0x" & Hex(IniRead ($sysini,"RUN","RunGUIh", Null),16))
+
 			Exit
 EndSelect
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -136,7 +148,12 @@ EndSwitch
 ;MsgBox(4096, "" , $WS_EX_CONTROLPARENT   ); 13565952;
 
 IniWrite($sysini, "RUN", "RunPID", WinGetProcess ( $hGUI )); отметить что программа запущена
-IniWrite($sysini, "RUN", "RunGUI", '"' & $NameGUI & " " & $version & $nGUI & '"')
+IniWrite($sysini, "RUN", "RunGUIh", Dec(StringMid($hGUI,3,16)))
+
+
+;IniWrite($sysini, "RUN", "RunGUI", '"' & $NameGUI & " " & $version & $nGUI & '"')
+
+
 
 ;GUISetIcon(@SystemDir & "\cmd.exe", 0)
 
@@ -791,7 +808,7 @@ Func _ProExit()
 Switch MsgBox(4+32+8192, 'Выход из программы', 'Выйти из программы' & @CRLF & 'завершив все процессы ?',10)
 	Case 6 ; если нажата да
 		_OnExit()
-		_iniSave()
+		_exitIniSave();_iniSave()
 		IniDelete ( $sysini, "RUN" );IniWrite($sysini, "RUN", "RunPID", "");IniWrite($sysini, "RUN", "RunGUI", "")
 		_debug_stop()
 		Exit
