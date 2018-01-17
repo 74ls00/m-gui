@@ -1,10 +1,11 @@
 ﻿#Region
 #AutoIt3Wrapper_UseX64=y
 #AutoIt3Wrapper_UseUpx=n
+;#AutoIt3Wrapper_Compression=3
 #AutoIt3Wrapper_Res_Language=1049
 #AutoIt3Wrapper_Icon=res\icon00.ico
 #AutoIt3Wrapper_Res_FileVersion_AutoIncrement=y
-#AutoIt3Wrapper_Res_Fileversion=0.1.0.173
+#AutoIt3Wrapper_Res_Fileversion=0.1.0.177
 #AutoIt3Wrapper_Res_Description=Окно консоли
 #AutoIt3Wrapper_Res_Field=ProductName|Окно консоли
 #AutoIt3Wrapper_Res_Field=Build|%longdate% %time%
@@ -149,6 +150,16 @@ GUISetOnEvent(-3, '_closeWin', $hGUI);$GUI_EVENT_CLOSE
 GUISetOnEvent(-4, '_hideWin', $hGUI);$GUI_EVENT_MINIMIZE
 
 GUISetFont(8.5, Null, Null, Null ,$hGUI , $txtQual);бесполезный код
+
+GUICtrlCreateLabel(FileGetVersion(@AutoItExe), $WWidth-70, $WHeight-40, 50, 20, 0x0201)
+GUICtrlSetBkColor(-1, 0xFFFFFF)
+
+;FileGetVersion(@AutoItExe)
+;GUICtrlCreateLabel("Green" & @CRLF & "Label", $WWidth-100, $WHeight-40, 240, 20)
+
+;GUICtrlCreateLabel(FileGetVersion(@AutoItExe), $WWidth-100, $WHeight-40, 60, 20)
+;GUICtrlSetTip(-1, '#Region LABEL')
+;#FFFFFF
 
 $iTab = GUICtrlCreateTab(6, 5, $WWidth-10, $WHeight-10) ;создать вкладки с отступом 5 по краям окна, и 5 внутри ;$TCS_HOTTRACK
 ;..................................................................................................
