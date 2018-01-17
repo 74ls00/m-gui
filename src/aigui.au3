@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Res_Language=1049
 #AutoIt3Wrapper_Icon=res\icon00.ico
 #AutoIt3Wrapper_Res_FileVersion_AutoIncrement=y
-#AutoIt3Wrapper_Res_Fileversion=0.1.0.213
+#AutoIt3Wrapper_Res_Fileversion=0.1.0.219
 #AutoIt3Wrapper_Res_Description=Окно консоли
 #AutoIt3Wrapper_Res_Field=ProductName|Окно консоли
 #AutoIt3Wrapper_Res_Field=Build|%longdate% %time%
@@ -57,7 +57,7 @@ $tmpStbs = $windowTabs+1
 Global $strl4 , $iTab , $hImage ; элемент иконок кнопки
 
 ; размеры gui
-Global Const $NameGUI = "AiGUI"
+Global $NameGUI = "AiGUI"
 Global Const $WWidth = 670 , $WHeight = 450 ; ширина и высота окна 450
 Global Const $StrTool = 35 ; сверху первая строка под вкладкой.
 Global Const $THeight = $WHeight-82 ; высота консоли
@@ -100,6 +100,32 @@ Switch $streadmode; = 0 ;0 _Update(), 1 _Update()
 	Case Else
 	  _Update2()
 EndSwitch
+
+
+#cs
+Local $n = 0 ,$m=0
+For $i=0 To $windowTabs
+
+Select
+	Case GUICtrlRead($ckbxBigRun[$i]) =1
+$n = $n+1
+EndSelect
+
+Select
+	Case GUICtrlGetState ($iBtnStart[$i] ) = 144
+$m=$m+1
+EndSelect
+Next
+
+Select
+	Case $m=$n
+GUICtrlSetState($btnAllStart, $GUI_DISABLE)
+EndSelect
+#ce
+
+
+
+
 
 Sleep(10)
 ;GUISetState($hSETUP)
@@ -397,7 +423,6 @@ GUICtrlCreateButton("Закрыть", 25, 32, 100, 32)
 GUICtrlSetOnEvent(-1, "SetsClose")
 _GUICtrlButton_SetImageList(-1, $hImage)
 
-
 $hImage = _GUIImageList_Create(24, 24, 5, 3);, 6)
 ;_GUIImageList_AddIcon($hImage, "DeviceCenter.dll", 3, True)
 _GUIImageList_AddIcon($hImage, "shell32.dll", 165, True)
@@ -406,8 +431,8 @@ GUICtrlCreateButton("Сохранить", 137, 32, 100, 32)
 GUICtrlSetOnEvent(-1, "SetsSave")
 _GUICtrlButton_SetImageList(-1, $hImage)
 
-
-
+GUICtrlCreateButton("Запилить батник", 237, 32, 100, 32)
+GUICtrlSetOnEvent(-1, "createBAT")
 
 
 ;;..................................................................................................
@@ -748,8 +773,9 @@ Func StopPressed()
    ;GUICtrlSetBkColor($lbT[$getTab], 0xEBA794)
 
 Local $getTab = GUICtrlRead($iTab)-1
-   GUICtrlSetState($iBtnStop[$getTab], $GUI_DISABLE)
-   GUICtrlSetState($iBtnStart[$getTab], $GUI_ENABLE)
+	GUICtrlSetState($btnAllStart, $GUI_ENABLE)
+	GUICtrlSetState($iBtnStop[$getTab], $GUI_DISABLE)
+	GUICtrlSetState($iBtnStart[$getTab], $GUI_ENABLE)
 	  Local $iPIDs = $iPIDx[$getTab]
 	  Local $aPIDs = _WinAPI_EnumChildProcess($iPIDs)
            If Not @error Then ; завершить дочерний процес
@@ -768,6 +794,7 @@ Select
    Case ControlCommand($hGUI, '', $iBtnStop[$i], 'IsEnabled')
 
 ;If ControlCommand($hGUI, '', $iBtnStop[$i], 'IsEnabled') Then
+GUICtrlSetState($btnAllStart, $GUI_ENABLE)
 GUICtrlSetState($iBtnStart[$i], $GUI_ENABLE)
 GUICtrlSetState($iBtnStop[$i], $GUI_DISABLE)
 
@@ -918,26 +945,11 @@ EndSelect
 
 
 Next
-
-
-Local $n = 0
-For $i=0 To $windowTabs
-
-Select
-	Case GUICtrlRead($ckbxBigRun[$i]) = 1 And GUICtrlGetState ($iBtnStart[$i] ) = 144
-		$n=$n+1
-	Case Else
+;func_refrash()
 
 
 
-EndSelect
-
-
-
-
-
-Next
-
+;MsgBox(262144, $m, $n)
 
 ;MsgBox(262144, "", 'Selection:' & @CRLF & '$iBtnStart' & @CRLF & @CRLF & 'Return:' & @CRLF & GUICtrlGetState ($iBtnStart[0] )) ;### Debug MSGBOX
 		;MsgBox(262144, "", 'Selection:' & @CRLF & '$iBtnStart' & @CRLF & @CRLF & 'Return:' & @CRLF & GUICtrlGetState ($iBtnStart[$i] )) ;### Debug MSGBOX
@@ -948,3 +960,49 @@ Next
 ; нажать
 
 EndFunc
+
+
+Func func_refrash()
+	#cs
+	Select
+	Case GUICtrlRead($ckbxBigRun[$i]) = 1 And GUICtrlGetState ($iBtnStart[$i] ) = 144
+
+
+
+
+	EndSelect
+For $i=0 To $windowTabs
+
+
+
+Next
+
+
+#ce
+
+
+#cs
+
+Local $n = 0 ,$m=0
+For $i=0 To $windowTabs
+
+Select
+	Case GUICtrlRead($ckbxBigRun[$i]) =1
+$n = $n+1
+EndSelect
+
+Select
+	Case GUICtrlGetState ($iBtnStart[$i] ) = 144
+$m=$m+1
+EndSelect
+Next
+
+Select
+	Case $m=$n
+GUICtrlSetState($btnAllStart, $GUI_DISABLE)
+EndSelect
+
+#ce
+EndFunc
+
+

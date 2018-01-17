@@ -3,6 +3,7 @@
 ;#include <ex-dev-ini.au3>
 Global $myini = @WorkingDir & "\myconf.ini"
 Global $sysini = @WorkingDir & "\system.ini"
+Global Const $process = "miner"
 Global $windowTabs=4
 Global $trayexit=0 ;1=tray. 0=exit
 Global $strLimit=600000
@@ -33,6 +34,7 @@ Global $info[$windowTabs+1],$server[$windowTabs+1],$port[$windowTabs+1],$user[$w
 Global $devr[$windowTabs+1],$expath[$windowTabs+1],$exname[$windowTabs+1],$exlog[$windowTabs+1],$params[$windowTabs+1]
 Global $debug[$windowTabs+1],$exlpid[$windowTabs+1],$useregflg[$windowTabs+1],$urlprofile[$windowTabs+1]
 Global $ckbxBigRun[$windowTabs+1], $BigRun[$windowTabs+1]
+Global $NameGUI
 
 ;--------------------------------------------------------------------------------------------------
 Func _iniDefLoad()
@@ -53,6 +55,7 @@ $exlpid[$i] = Null	; pid запущеного процесса
 $useregflg[$i] = 0	; 1 = пользователь зарегестрирован на пуле , 0 = предупредить
 $urlprofile[$i] = "http:/www#"
 $ckbxBigRun[$i] = ""
+;IniWrite($myini, $process & $i, "separator","----------------------------------------------------------------------")
 Next
  ;MsgBox(4096,"_iniDefLoad",$info[0])
 EndFunc
@@ -67,7 +70,7 @@ Select
 EndSelect
 
    For $i=0 To $windowTabs
-Local $process = "miner"
+;Local Const $process = "miner"
 IniWrite($myini, $process & $i, "info", '"' & $info[$i] & '"')
 IniWrite($myini, $process & $i, "dev", $devr[$i])
 ;IniWrite($myini, $process & $i, "dev",  '"' & $devr[$i] & '"')
@@ -90,7 +93,7 @@ IniWrite($myini, $process & $i, "useregflg", $useregflg[$i])
 IniWrite($myini, $process & $i, "urlprofile",'"' & $urlprofile[$i] & '"')
 
 
-
+;IniWrite($myini, $process & $i, "______separator","----------------------------------------------------------------------")
 
 
    Next
@@ -111,6 +114,9 @@ Switch GUICtrlRead($ckbxBigRun[$i])
 EndSwitch
 
 IniWrite($myini, $process & $i, "bigrun",$BigRun[$i])
+
+IniDelete ( $myini, $process & $i, "__________________________________________" )
+IniWrite($myini, $process & $i, "__________________________________________","__________________________________________")
 Next
 
 EndFunc
@@ -154,7 +160,7 @@ Select
 _readTab()
 
    For $i = 0 To $windowTabs
-Local $process = "miner"
+;Local $process = "miner"
 $info[$i] = IniRead ($myini,$process & $i,"info", $i)
 If $info[$i] = "" Then $info[$i] = $i ; защита  от слёта гуя при пустом названии вкладки
 $devr[$i] = IniRead ($myini,$process & $i,"dev", Null)
@@ -171,7 +177,6 @@ $debug[$i] = IniRead ($myini,$process & $i,"debug", Null)
 $exlpid[$i] = IniRead ($myini,$process & $i,"exlpid", Null)
 $useregflg[$i] = IniRead ($myini,$process & $i,"useregflg", Null)
 $urlprofile[$i] = IniRead ($myini,$process & $i,"urlprofile", Null)
-
 $BigRun[$i] = IniRead ($myini,$process & $i,"bigrun", 0)
 ;MsgBox(262144, 'Debug line ~' & @ScriptLineNumber, 'Selection:' & @CRLF & '$ckbxBigRun' & @CRLF & @CRLF & 'Return:' & @CRLF & $ckbxBigRun) ;### Debug MSGBOX
    Next
@@ -192,10 +197,10 @@ $sLine[$i] = _Encoding_ANSIToOEM(@WorkingDir & '\' & $expath[$i] & '\' & $exname
    Case $typecmd[$i] = 5
 $sLine[$i] = _Encoding_ANSIToOEM(@WorkingDir & '\' & $expath[$i] & '\' & $exname[$i] & $server[$i] & $port[$i] & $user[$i] & $devr[$i] & $pass[$i] & $exlog[$i] & $params[$i]) & @CRLF
 
-Case $typecmd[$i] = 3
+	Case $typecmd[$i] = 3
 $sLine[$i] = _Encoding_ANSIToOEM('"' & @WorkingDir & '\' & $expath[$i] & '\' & $exname[$i] & '" ' & $server[$i] & $port[$i] & $user[$i] & $devr[$i] & $pass[$i] & $exlog[$i] & $params[$i]) & @CRLF
 
-Case $typecmd[$i] = 6
+	Case $typecmd[$i] = 6
 ;$sLine[$i] =  @WorkingDir & "\" & $expath[$i] & "\" & $exname[$i] & " " & $server[$i] & " " & $port[$i] & " " & $user[$i] & $devr[$i] & " " & $pass[$i] & " " & $exlog[$i] & " " & $params[$i] & @CRLF
 $sLine[$i] =  @WorkingDir & '\' & $expath[$i] & '\' & $exname[$i] & ' ' & $server[$i] & ' ' & $port[$i] & ' ' & $user[$i] & $devr[$i] & ' ' & $pass[$i] & ' ' & $exlog[$i] & ' ' & $params[$i] & @CRLF
 
@@ -208,13 +213,19 @@ $sLine[$i] = '"' & _Encoding_ANSIToOEM(@WorkingDir & '\' & $expath[$i] & '\' & $
 
 
 ; в папке программы. "(путь1251>866)" сервер порт пользовательУстройство пароль лог параметры(перевод строки)
-Case $typecmd[$i] = 2
+	Case $typecmd[$i] = 2
 ;$sLine[$i] = '"' & _Encoding_ANSIToOEM(@WorkingDir & '\' & $expath[$i] & '\' & $exname[$i]) & '" ' & $server[$i] & " " & $port[$i] & " " & $user[$i] & $devr[$i] & " " & $pass[$i] & " " & $exlog[$i] & " " & $params[$i] & @CRLF
 $sLine[$i] = '"' & _Encoding_ANSIToOEM(@WorkingDir & '\' & $expath[$i] & '\' & $exname[$i]) & '" ' & $server[$i] & " " & $port[$i] & " " & $user[$i] & $devr[$i] & " " & $pass[$i] & " " & _Encoding_ANSIToOEM($exlog[$i]) & " " & $params[$i] & @CRLF
-
 
 EndSelect
    Next
 EndFunc
 
-
+Func createBAT()
+DirCreate ( @WorkingDir & "\запилки" )
+For $i=0 To $windowTabs
+FileDelete ( @WorkingDir & "\запилки\" & $process & $i & "_" & $info[$i] & ".bat" )
+FileWrite ( @WorkingDir & "\запилки\" & $process & $i & "_" & $info[$i] & ".bat", "@echo off" & @CRLF & _
+"title " & $info[$i] & " - Created " & $NameGUI & @CRLF & @CRLF & $sLine[$i] )
+Next
+EndFunc
