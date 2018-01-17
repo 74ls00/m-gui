@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Res_Language=1049
 #AutoIt3Wrapper_Icon=res\icon00.ico
 #AutoIt3Wrapper_Res_FileVersion_AutoIncrement=y
-#AutoIt3Wrapper_Res_Fileversion=0.1.0.183
+#AutoIt3Wrapper_Res_Fileversion=0.1.0.193
 #AutoIt3Wrapper_Res_Description=Окно консоли
 #AutoIt3Wrapper_Res_Field=ProductName|Окно консоли
 #AutoIt3Wrapper_Res_Field=Build|%longdate% %time%
@@ -62,14 +62,12 @@ Global Const $WWidth = 670 , $WHeight = 450 ; ширина и высота ок�
 Global Const $StrTool = 35 ; сверху первая строка под вкладкой.
 Global Const $THeight = $WHeight-82 ; высота консоли
 
-
-_iniLoad() ; загрузить настройки из ini <aig-ini.au3>
-_sLine()  ; загрузить строки
 Global $iBtnStart[$windowTabs+1],$iBtnStop[$windowTabs+1],$iBtnClean[$windowTabs+1],$iEdt[$windowTabs+1]
 Global $iBtnUnPause[$windowTabs+1],$iBtnPause[$windowTabs+1] , $iBtnCont[$windowTabs+1]
 Global $iPIDx[$windowTabs+1] , $aPIDs[$windowTabs+1] , $sOut[$windowTabs+1] , $getTab ;=GUICtrlRead($iTab)-1
 Global $sn_info[$windowTabs+1],$st_typecmd[$windowTabs+1],$st_expath[$windowTabs+1],$st_exname[$windowTabs+1],$st_server[$windowTabs+1],$st_urlprofile[$windowTabs+1]
 Global $st_port[$windowTabs+1],$st_user[$windowTabs+1],$st_devr[$windowTabs+1],$st_pass[$windowTabs+1],$st_exlog[$windowTabs+1],$st_params[$windowTabs+1]
+Global $ckbxBigRun[$windowTabs+1], $BigRun[$windowTabs+1]
 Global $conOut[$windowTabs+1] = [0]; временная переменная вываода
 ;Global $aSel[2]
 
@@ -79,6 +77,9 @@ Global $st_trayexit
 Global $lbT[$windowTabs+1]; активность
 Global Const $lbTAct = 0x00FF09 ;цвет активного индикатора
 Global Const $lbTdeact = 0xFBD7F4 ;цвет НЕактивного индикатора
+
+_iniLoad() ; загрузить настройки из ini <aig-ini.au3>
+_sLine()  ; загрузить строки
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 TraySetState(1) ; Показывает меню трея
 TraySetIcon ( @ScriptFullPath, 203 )
@@ -139,12 +140,10 @@ IniWrite($sysini, "RUN", "RunGUI", '"' & $NameGUI & " " & $version & $nGUI & '"'
 
 ;GUISetIcon(@SystemDir & "\cmd.exe", 0)
 
-Select
-	Case IsAdmin()
-		GUISetIcon(@ScriptFullPath, 202)
-	Case Else
-		GUISetIcon(@ScriptFullPath, 201)
-EndSelect
+
+
+mainIconSet()
+
 
 GUISetOnEvent(-3, '_closeWin', $hGUI);$GUI_EVENT_CLOSE
 GUISetOnEvent(-4, '_hideWin', $hGUI);$GUI_EVENT_MINIMIZE
@@ -152,11 +151,6 @@ GUISetOnEvent(-4, '_hideWin', $hGUI);$GUI_EVENT_MINIMIZE
 GUISetFont(8.5, Null, Null, Null ,$hGUI , $txtQual);бесполезный код
 
 
-
-;FileGetVersion(@AutoItExe)
-;GUICtrlCreateLabel("Green" & @CRLF & "Label", $WWidth-100, $WHeight-40, 240, 20)
-
-;GUICtrlCreateLabel(FileGetVersion(@AutoItExe), $WWidth-100, $WHeight-40, 60, 20)
 ;GUICtrlSetTip(-1, '#Region LABEL')
 ;#FFFFFF
 
@@ -195,6 +189,16 @@ Next
 
 GUICtrlCreateLabel(FileGetVersion(@AutoItExe), $WWidth-70, $WHeight-40, 50, 20, 0x0201)
 GUICtrlSetBkColor(-1, 0xFFFFFF)
+
+#cs
+GUICtrlCreateLabel(FileGetVersion(@AutoItExe), $WWidth-170, $WHeight-40, 50, 20, 0x0201)
+GUICtrlSetFont(-1, -1, -1, 4)
+GUICtrlSetColor(-1, 0x0000FF)
+GUICtrlSetCursor(-1, 0)
+GUICtrlSetTip(-1, "Перейти: " & $urlprofile[1])
+
+GUICtrlSetBkColor(-1, 0xB2D47D)
+#ce
 
 
 
@@ -300,6 +304,21 @@ _GUICtrlButton_SetImageList(-1, $hImage)
 _GUICtrlHyperLink_Create("Профиль", 320, $THeight+49, 50, 15, 0x0000FF, 0x0000FF, -1, $urlprofile[$t], 'Перейти: ' & $urlprofile[$t], $hGUI);colors 0x0000FF 0x551A8B
 ;GUICtrlSetBkColor(-1, 0x23F009)
 
+;GUICtrlCreateCheckbox("Пуск БОЛЬШОЙ кнопкой", 320, $THeight+30, 150, 16); ,0x0020)
+$ckbxBigRun[$t] = GUICtrlCreateCheckbox("Пуск БОЛЬШОЙ кнопкой", 400, $THeight+30+12, 150, 16); ,0x0020)
+;GUICtrlSetBkColor(-1, 0x23F009)
+
+
+Switch $BigRun[$t]
+   Case 1
+	  GUICtrlSetState ( -1, 1 ) ;$GUI_CHECKED 1
+   Case Else
+	  GUICtrlSetState ( -1, 4 ) ; $GUI_UNCHECKED 4
+EndSwitch
+
+
+
+
 GUICtrlCreateIcon("mblctr.exe", 133, $WWidth-44, $WHeight-47)
 ;GUICtrlSetImage ( -1, "winhlp32.exe", 0 ,0);154 215
 
@@ -326,6 +345,7 @@ Next
 
 GUISetState(@SW_SHOW, $hGUI)
 EndFunc ;==>_Main
+;--------------------------------------------------------------------------------------------------
 ;--------------------------------------------------------------------------------------------------
 Func btnST() ; окно настроек
 ;$setEXIT = 0
@@ -769,8 +789,9 @@ EndFunc
 Func _ProExit()
 	; нажата кнопка выход на окне
 Switch MsgBox(4+32+8192, 'Выход из программы', 'Выйти из программы' & @CRLF & 'завершив все процессы ?',10)
-	Case 6
+	Case 6 ; если нажата да
 		_OnExit()
+		_iniSave()
 		IniDelete ( $sysini, "RUN" );IniWrite($sysini, "RUN", "RunPID", "");IniWrite($sysini, "RUN", "RunGUI", "")
 		_debug_stop()
 		Exit
@@ -833,4 +854,13 @@ Func WM_SETCURSOR($hWnd, $Msg, $wParam, $lParam)
    EndIf
    Return 'GUI_RUNDEFMSG';$GUI_RUNDEFMSG
 EndFunc ; ==> WM_SETCURSOR
+;--------------------------------------------------------------------------------------------------
+Func mainIconSet()
+Select
+	Case IsAdmin()
+		GUISetIcon(@ScriptFullPath, 202)
+	Case Else
+		GUISetIcon(@ScriptFullPath, 201)
+EndSelect
+EndFunc
 ;--------------------------------------------------------------------------------------------------

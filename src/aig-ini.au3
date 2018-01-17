@@ -32,6 +32,7 @@ Global $sLine[$windowTabs+1],$typecmd[$windowTabs+1]
 Global $info[$windowTabs+1],$server[$windowTabs+1],$port[$windowTabs+1],$user[$windowTabs+1],$pass[$windowTabs+1]
 Global $devr[$windowTabs+1],$expath[$windowTabs+1],$exname[$windowTabs+1],$exlog[$windowTabs+1],$params[$windowTabs+1]
 Global $debug[$windowTabs+1],$exlpid[$windowTabs+1],$useregflg[$windowTabs+1],$urlprofile[$windowTabs+1]
+Global $ckbxBigRun[$windowTabs+1], $BigRun[$windowTabs+1]
 
 ;--------------------------------------------------------------------------------------------------
 Func _iniDefLoad()
@@ -51,6 +52,7 @@ $debug[$i] = @WorkingDir & $expath[$i] & "\" & $exname[$i] & $server[$i] & $port
 $exlpid[$i] = Null	; pid запущеного процесса
 $useregflg[$i] = 0	; 1 = пользователь зарегестрирован на пуле , 0 = предупредить
 $urlprofile[$i] = "http:/www#"
+$ckbxBigRun[$i] = ""
 Next
  ;MsgBox(4096,"_iniDefLoad",$info[0])
 EndFunc
@@ -86,7 +88,21 @@ IniWrite($myini, $process & $i, "debug",'"' & $debug[$i] & '"')
 IniWrite($myini, $process & $i, "exlpid", $exlpid[$i])
 IniWrite($myini, $process & $i, "useregflg", $useregflg[$i])
 IniWrite($myini, $process & $i, "urlprofile",'"' & $urlprofile[$i] & '"')
+
+
+
+Switch GUICtrlRead($ckbxBigRun[$i])
+	Case 1
+		$BigRun[$i] = 1
+	Case Else
+		$BigRun[$i] = 0
+EndSwitch
+
+IniWrite($myini, $process & $i, "bigrun",$BigRun[$i])
+
    Next
+;MsgBox(262144, 'Debug line ~' & @ScriptLineNumber, 'Selection:' & @CRLF & '$BigRun' & @CRLF & @CRLF & 'Return:' & @CRLF & $BigRun[0])
+
 IniWrite($myini, "system", "tabs", $windowTabs)
 EndFunc
 ;--------------------------------------------------------------------------------------------------
@@ -146,11 +162,16 @@ $debug[$i] = IniRead ($myini,$process & $i,"debug", Null)
 $exlpid[$i] = IniRead ($myini,$process & $i,"exlpid", Null)
 $useregflg[$i] = IniRead ($myini,$process & $i,"useregflg", Null)
 $urlprofile[$i] = IniRead ($myini,$process & $i,"urlprofile", Null)
+
+$BigRun[$i] = IniRead ($myini,$process & $i,"bigrun", 0)
+;MsgBox(262144, 'Debug line ~' & @ScriptLineNumber, 'Selection:' & @CRLF & '$ckbxBigRun' & @CRLF & @CRLF & 'Return:' & @CRLF & $ckbxBigRun) ;### Debug MSGBOX
    Next
 
 Case Else
    _iniSave()
 EndSelect
+
+
 EndFunc
 ;--------------------------------------------------------------------------------------------------
 Func _sLine()
