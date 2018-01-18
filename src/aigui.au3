@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Res_Language=1049
 #AutoIt3Wrapper_Icon=res\icon00.ico
 #AutoIt3Wrapper_Res_FileVersion_AutoIncrement=y
-#AutoIt3Wrapper_Res_Fileversion=0.1.1.237
+#AutoIt3Wrapper_Res_Fileversion=0.1.1.238
 #AutoIt3Wrapper_Res_Description=Окно консоли
 #AutoIt3Wrapper_Res_Field=ProductName|Окно консоли
 #AutoIt3Wrapper_Res_Field=Build|%longdate% %time%
@@ -25,17 +25,9 @@
 
 #NoTrayIcon
 #include <includes.au3>
-
-Opt("TrayAutoPause", 0)
-Opt('TrayMenuMode', 3)	;	http://autoit-script.ru/autoit3_docs/functions/AutoItSetOption.htm
-Opt("GUIOnEventMode", 1)
-Opt("TrayOnEventMode", 1)
-
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 _debug_start()
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-
 $hGUI = IniRead ($sysini,"RUN","RunGUIh", Null)
 Select ; не запускать вторую копию программы ; @ScriptName
 Case $hGUI <> "" And ProcessExists ( IniRead ($sysini,"RUN","RunPID", Null) )
@@ -43,7 +35,6 @@ $hGUI = HWnd($hGUI)
 _showWin()
 Exit
 EndSelect
-
 
 #cs
 Select ; не запускать вторую копию программы ; @ScriptName
@@ -54,6 +45,11 @@ Case IniRead ($sysini,"RUN","RunPID", Null) <> "" And ProcessExists ( IniRead ($
 EndSelect
 ;_showWin
 #ce
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Opt("TrayAutoPause", 0)
+Opt('TrayMenuMode', 3)	;	http://autoit-script.ru/autoit3_docs/functions/AutoItSetOption.htm
+Opt("GUIOnEventMode", 1)
+Opt("TrayOnEventMode", 1)
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Switch IniRead ($sysini,"LOG","CheckDll", "")
 	Case 1 ; 1=проверять системные ресурсы
@@ -106,15 +102,7 @@ _Main()
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #Region While
 While 1
-#cs
 
-
-   Switch TrayGetMsg()
-	  Case -8;$TRAY_EVENT_PRIMARYUP
-		 WinSetState ( $hGUI, Null, @SW_SHOW )
-		 WinActivate ( $hGUI, Null )
-	  EndSwitch
-#ce
 Switch $streadmode; = 0 ;0 _Update(), 1 _Update()
 	Case 0
 		_Update()
@@ -313,7 +301,6 @@ GUICtrlSetOnEvent(-1, "btnTC")
 For $t = 0 To $windowTabs
 GUICtrlCreateTabItem($info[$t]) ; Вкладки программ
 
-;gameux.dll
 $hImage = _GUIImageList_Create(24, 24, 5, 3);, 6)
 ;_GUIImageList_AddIcon($hImage, "gameux.dll", 2, True)
 _GUIImageList_AddIcon($hImage, "shell32.dll", 137, True)
@@ -342,6 +329,7 @@ _GUICtrlHyperLink_Create("Профиль", 320, $THeight+49, 50, 15, 0x0000FF, 0
 $ckbxBigRun[$t] = GUICtrlCreateCheckbox("Пуск БОЛЬШОЙ кнопкой", 400, $THeight+30+12, 150, 16); ,0x0020)
 ;GUICtrlSetBkColor(-1, 0x23F009)
 
+GUICtrlCreateCheckbox("Пуск БОЛЬШОЙ кнопкой", 400, $THeight+30+12, 150, 16); ,0x0020)
 
 Switch $BigRun[$t]
    Case 1
