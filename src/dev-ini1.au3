@@ -52,7 +52,7 @@ $devr[2] = ".gpu"
 $pass[2] = "--pass devGpuPass"
 $expath[2] = "zm_0.5.7_win"
 $exname[2] = "zm.exe"
-$exlog[2] = '--logfile="' & @WorkingDir & '\tmp\log.txt"'
+$exlog[2] = '--logfile="' & @WorkingDir & '\log\log%date_%time.txt"'
 $urlprofile[2] = "https://zec.suprnova.cc/index.php?page=dashboard"
 $debug[2] =  '"' & _Encoding_ANSIToOEM(@WorkingDir & '\' & $expath[2] & '\' & $exname[2]) & '" ' & $server[2] & " " & $port[2] & " " & $user[2] & $devr[2] & " " & $pass[2] & " " & _Encoding_ANSIToOEM($exlog[2]) & " " & $params[2] & @CRLF
 $typecmd[2] = 2
