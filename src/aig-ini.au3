@@ -190,6 +190,12 @@ EndFunc
 ;--------------------------------------------------------------------------------------------------
 Func _sLine()
    For $i = 0 To $windowTabs
+;                 >------------------------------------------------------------------------------------------------------------------------------------------------<
+;                                       >------------------------------------------------------------------------------------------------------------------------<
+;                                                            >---------------------------------------------------------------------<
+;                                                                                >-------<
+Local $exlogTmp = _Encoding_ANSIToOEM ( StringRegExpReplace( StringRegExpReplace($exlog[$i], "%date", @YEAR & "." & @MON &"."& @MDAY) , "%time" , @MIN &"."& @SEC ) )
+
 Select ; тип пути. 0=без пути. 1=кирилица с пробелами в пути. 2=как 1, с пробелом между параметрами
       Case $typecmd[$i] = 4
 $sLine[$i] = _Encoding_ANSIToOEM(@WorkingDir & '\' & $expath[$i] & '\' & $exname[$i]) & $server[$i] & $port[$i] & $user[$i] & $devr[$i] & $pass[$i] & $exlog[$i] & $params[$i] & @CRLF
@@ -205,21 +211,26 @@ $sLine[$i] = _Encoding_ANSIToOEM('"' & @WorkingDir & '\' & $expath[$i] & '\' & $
 $sLine[$i] =  @WorkingDir & '\' & $expath[$i] & '\' & $exname[$i] & ' ' & $server[$i] & ' ' & $port[$i] & ' ' & $user[$i] & $devr[$i] & ' ' & $pass[$i] & ' ' & $exlog[$i] & ' ' & $params[$i] & @CRLF
 
 Case $typecmd[$i] = 0 ; без папки. программа.exe сервер порт пользовательУстройство Пароль лог параметры(перевод строки)
-$sLine[$i] = $exname[$i] & " " & $server[$i] & " " & $port[$i] & " " & $user[$i] & $devr[$i] & " " & $pass[$i] & " " & _
-_Encoding_ANSIToOEM( StringRegExpReplace($exlog[$i], "%date", @YEAR & "." & @MON &"."& @MDAY &"-"& @MIN &"."& @SEC) ) & " " & $params[$i] & @CRLF
+;$sLine[$i] = $exname[$i] & " " & $server[$i] & " " & $port[$i] & " " & $user[$i] & $devr[$i] & " " & $pass[$i] & " " & _
+;_Encoding_ANSIToOEM( StringRegExpReplace($exlog[$i], "%date", @YEAR & "." & @MON &"."& @MDAY &"-"& @MIN &"."& @SEC) ) & " " & $params[$i] & @CRLF
+
+$sLine[$i] = $exname[$i] & " " & $server[$i] & " " & $port[$i] & " " & $user[$i] & $devr[$i] & " " & $pass[$i] & " " & $exlogTmp & " " & $params[$i] & @CRLF
 
 Case $typecmd[$i] = 1 ; в папке программы. "(путь1251>866)" параметр1параметр2параметр3(...)(перевод строки)
 ;$sLine[$i] = '"' & _Encoding_ANSIToOEM(@WorkingDir & '\' & $expath[$i] & '\' & $exname[$i]) & '" ' & $server[$i] & $port[$i] & $user[$i] & $devr[$i] & $pass[$i] & _Encoding_ANSIToOEM($exlog[$i]) & $params[$i] & @CRLF
-$sLine[$i] = '"' & _Encoding_ANSIToOEM(@WorkingDir & '\' & $expath[$i] & '\' & $exname[$i]) & '" ' & $server[$i] & $port[$i] & $user[$i] & $devr[$i] & $pass[$i] & _
-_Encoding_ANSIToOEM( StringRegExpReplace($exlog[$i], "%date", @YEAR & "." & @MON &"."& @MDAY &"-"& @MIN &"."& @SEC) ) & $params[$i] & @CRLF
+;$sLine[$i] = '"' & _Encoding_ANSIToOEM(@WorkingDir & '\' & $expath[$i] & '\' & $exname[$i]) & '" ' & $server[$i] & $port[$i] & $user[$i] & $devr[$i] & $pass[$i] & _
+;_Encoding_ANSIToOEM( StringRegExpReplace($exlog[$i], "%date", @YEAR & "." & @MON &"."& @MDAY &"-"& @MIN &"."& @SEC) ) & $params[$i] & @CRLF
+
+$sLine[$i] = '"' & _Encoding_ANSIToOEM(@WorkingDir & '\' & $expath[$i] & '\' & $exname[$i]) & '" ' & $server[$i] & $port[$i] & $user[$i] & $devr[$i] & $pass[$i] & $exlogTmp & $params[$i] & @CRLF
 
 
 ; в папке программы. "(путь1251>866)" сервер порт пользовательУстройство пароль лог параметры(перевод строки)
 	Case $typecmd[$i] = 2
 ;$sLine[$i] = '"' & _Encoding_ANSIToOEM(@WorkingDir & '\' & $expath[$i] & '\' & $exname[$i]) & '" ' & $server[$i] & " " & $port[$i] & " " & $user[$i] & $devr[$i] & " " & $pass[$i] & " " & _Encoding_ANSIToOEM($exlog[$i]) & " " & $params[$i] & @CRLF
-$sLine[$i] = '"' & _Encoding_ANSIToOEM(@WorkingDir & '\' & $expath[$i] & '\' & $exname[$i]) & '" ' & $server[$i] & " " & $port[$i] & " " & $user[$i] & $devr[$i] & " " & $pass[$i] & " " & _
-_Encoding_ANSIToOEM( StringRegExpReplace($exlog[$i], "%date", @YEAR & "." & @MON &"."& @MDAY &"-"& @MIN &"."& @SEC) ) & " " & $params[$i] & @CRLF
+;$sLine[$i] = '"' & _Encoding_ANSIToOEM(@WorkingDir & '\' & $expath[$i] & '\' & $exname[$i]) & '" ' & $server[$i] & " " & $port[$i] & " " & $user[$i] & $devr[$i] & " " & $pass[$i] & " " & _
+;_Encoding_ANSIToOEM( StringRegExpReplace($exlog[$i], "%date", @YEAR & "." & @MON &"."& @MDAY &"-"& @MIN &"."& @SEC) ) & " " & $params[$i] & @CRLF
 
+$sLine[$i] = '"' & _Encoding_ANSIToOEM(@WorkingDir & '\' & $expath[$i] & '\' & $exname[$i]) & '" ' & $server[$i] & " " & $port[$i] & " " & $user[$i] & $devr[$i] & " " & $pass[$i] & " " & $exlogTmp & " " & $params[$i] & @CRLF
 
 
 EndSelect
