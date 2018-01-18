@@ -16,6 +16,7 @@
 #AutoIt3Wrapper_Res_Icon_Add=res\icon01.ico;gui icon
 #AutoIt3Wrapper_Res_Icon_Add=res\icon02.ico;gui icon admin
 #AutoIt3Wrapper_Res_Icon_Add=res\icon03.ico;tray
+;#AutoIt3Wrapper_Res_File_Add=
 #AutoIt3Wrapper_Run_Au3Stripper=y
 #Au3Stripper_Parameters=/pe /sf /sv /om /rm; /SCI=1
 #AutoIt3Wrapper_Run_After=del /f /q "%scriptdir%\%scriptfile%_stripped.au3"
