@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Res_Language=1049
 #AutoIt3Wrapper_Icon=res\icon00.ico
 #AutoIt3Wrapper_Res_FileVersion_AutoIncrement=y
-#AutoIt3Wrapper_Res_Fileversion=0.1.0.220
+#AutoIt3Wrapper_Res_Fileversion=0.1.1.223
 #AutoIt3Wrapper_Res_Description=Окно консоли
 #AutoIt3Wrapper_Res_Field=ProductName|Окно консоли
 #AutoIt3Wrapper_Res_Field=Build|%longdate% %time%
@@ -45,6 +45,7 @@ Switch IniRead ($sysini,"LOG","CheckDll", "")
 	_dllCHK()
 EndSwitch
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#Region Global
 Global Const $WA_ACTIVE = 1
 Global Const $WA_CLICKACTIVE = 2
 Global Const $WA_INACTIVE = 0
@@ -57,7 +58,7 @@ $tmpStbs = $windowTabs+1
 Global $strl4 , $iTab , $hImage ; элемент иконок кнопки
 
 ; размеры gui
-Global $NameGUI = "AiGUI"
+Global $NameGUI = "GUI"
 Global Const $WWidth = 670 , $WHeight = 450 ; ширина и высота окна 450
 Global Const $StrTool = 35 ; сверху первая строка под вкладкой.
 Global Const $THeight = $WHeight-82 ; высота консоли
@@ -77,7 +78,7 @@ Global $st_trayexit
 Global $lbT[$windowTabs+1]; активность
 Global Const $lbTAct = 0x00FF09 ;цвет активного индикатора
 Global Const $lbTdeact = 0xFBD7F4 ;цвет НЕактивного индикатора
-
+#EndRegion Global
 _iniLoad() ; загрузить настройки из ini <aig-ini.au3>
 _sLine()  ; загрузить строки
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -87,6 +88,7 @@ TraySetIcon ( @ScriptFullPath, 203 )
 
 _Main()
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#Region While
 While 1
    Switch TrayGetMsg()
 	  Case -8;$TRAY_EVENT_PRIMARYUP
@@ -130,7 +132,9 @@ EndSelect
 Sleep(10)
 ;GUISetState($hSETUP)
 WEnd
+#EndRegion While
 ;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+#Region Main Func
 Func _Main()
 
 Switch IniRead ($sysini,"GUI","Win7Style", 0); стиль окна. 0=стандартная, 1=изменённая(стабильность не проверена)
@@ -156,19 +160,8 @@ EndSwitch
 GUISetOnEvent(-3, '_closeWin', $hGUI);$GUI_EVENT_CLOSE
 GUISetOnEvent(-4, '_hideWin', $hGUI);$GUI_EVENT_MINIMIZE
 
-
-
 addRUN()
-_GUIisAdmin()
-
-
-
-
-GUISetFont(8.5, Null, Null, Null ,$hGUI , $txtQual);бесполезный код
-
-
-;GUICtrlSetTip(-1, '#Region LABEL')
-;#FFFFFF
+;GUISetFont(8.5, Null, Null, Null ,$hGUI , $txtQual);бесполезный код
 
 $iTab = GUICtrlCreateTab(6, 5, $WWidth-10, $WHeight-10) ;создать вкладки с отступом 5 по краям окна, и 5 внутри ;$TCS_HOTTRACK
 ;..................................................................................................
@@ -228,8 +221,6 @@ _GUIImageList_AddIcon($hImage, "shell32.dll", 137, True);112
 $btnAllStart = GUICtrlCreateButton("Пуск", $WWidth-315-1, $tCordLbtT-8, 141-1, 40)
 _GUICtrlButton_SetImageList($btnAllStart, $hImage)
 GUICtrlSetOnEvent(-1, "btnAllStart")
-;GUICtrlSetState(-1, $GUI_DISABLE)
-
 
 $hImage = _GUIImageList_Create(32, 32, 5, 3);, 6)
 _GUIImageList_AddIcon($hImage, "shell32.dll", 215, True)
@@ -238,19 +229,8 @@ _GUICtrlButton_SetImageList($btnAllStop, $hImage)
 GUICtrlSetOnEvent(-1, "btnAllStop")
 GUICtrlSetState(-1, $GUI_DISABLE)
 
-
-
-
-
-
-
-
-
-
-
 EndSwitch
 ;End VIP buttons
-
 
 $hImage = _GUIImageList_Create(32, 32, 5, 3);, 6)
 _GUIImageList_AddIcon($hImage, "taskmgr.exe", 0, True)
@@ -297,8 +277,6 @@ $btnMC = GUICtrlCreateButton("msconfig", 25, $WHeight-51, 80, 24) ;157 40
 _GUICtrlButton_SetImageList($btnMC, $hImage)
 GUICtrlSetOnEvent(-1, "btnMC")
 
-
-
 $hImage = _GUIImageList_Create(17 , 17,5, "");,5 )
 _GUIImageList_AddIcon($hImage, "miguiresource.dll", 1, True)
 $btnTC = GUICtrlCreateButton("taskschd", 25+87, $WHeight-51, 80, 24) ;157 40
@@ -329,8 +307,6 @@ $iBtnStop[$t] = GUICtrlCreateButton("Стоп", 115, $THeight+35, 95, 32, 0x01) 
 GUICtrlSetOnEvent(-1, "StopPressed")
 GUICtrlSetState(-1, $GUI_DISABLE)
 _GUICtrlButton_SetImageList(-1, $hImage)
-
-
 
 $hImage = _GUIImageList_Create(24, 24, 5, 3);, 6)
 _GUIImageList_AddIcon($hImage, "imageres.dll", 93, True)
@@ -383,8 +359,10 @@ Next
 
 GUISetState(@SW_SHOW, $hGUI)
 EndFunc ;==>_Main
+#EndRegion Main Func
 ;--------------------------------------------------------------------------------------------------
 ;--------------------------------------------------------------------------------------------------
+#Region Setup Window
 Func btnST() ; окно настроек
 ;$setEXIT = 0
 ;$guiSZ = WinGetClientSize ($hGUI );670 450
@@ -431,7 +409,6 @@ GUICtrlCreateButton("Сохранить", 137, 32, 100, 32)
 GUICtrlSetOnEvent(-1, "SetsSave")
 _GUICtrlButton_SetImageList(-1, $hImage)
 ;;..................................................................................................
-
 Local Const $snTabs2 = $guiCoord[3]-80	; вкладок. ;438
 
 $hImage = _GUIImageList_Create(32, 32, 5, 3)
@@ -439,9 +416,7 @@ _GUIImageList_AddIcon($hImage, "shell32.dll", 71, True)
 GUICtrlCreateButton("Запилить батник", 11, $snTabs2-7, 100, 36, 0x2000 )
 _GUICtrlButton_SetImageList(-1, $hImage)
 GUICtrlSetOnEvent(-1, "createBAT")
-
-
-;;..................................................................................................
+;;............................................
 Local Const $snTabs1 = $guiCoord[2]-82 ; позиция_ ;276
 
 GUICtrlCreateGroup(Null, $snTabs1-123, $snTabs2-16 , 178 , 45)
@@ -530,7 +505,9 @@ Next
 GUISetState(@SW_SHOW)
 ;GUISwitch($hGUI)
 EndFunc
+#EndRegion Setup Window
 ;--------------------------------------------------------------------------------------------------
+#Region Setup Func
 Func SetsClose(); закрыть окно настроек
 GUIDelete(@GUI_WinHandle);@GUI_WinHandle ;$hSETUP
 WinSetState ( $hGUI, Null, @SW_ENABLE )
@@ -579,6 +556,7 @@ EndSelect
 
    SetsClose()
 EndFunc
+#EndRegion Setup Func
 ;--------------------------------------------------------------------------------------------------
 Func WM_ACTIVATE($hWnd, $iMsg, $wParam, $lParam)
     Switch _WinAPI_LoWord($wParam)
@@ -741,9 +719,9 @@ EndFunc   ;==>_UnSel
 Func addRUN()
 IniWrite($sysini, "RUN", "RunPID", WinGetProcess ( $hGUI )); отметить что программа запущена
 IniWrite($sysini, "RUN", "RunGUIh", Dec(StringMid($hGUI,3,16)))
-EndFunc
-;--------------------------------------------------------------------------------------------------
-Func _GUIisAdmin()
+;EndFunc
+
+;Func _GUIisAdmin()
 Select
 	Case IsAdmin()
 		GUISetIcon(@ScriptFullPath, 202)
@@ -775,6 +753,7 @@ Local $getTab = GUICtrlRead($iTab)-1
 	  StdinWrite($iPIDx[$getTab], $sLine[$getTab])
 EndFunc
 ;--------------------------------------------------------------------------------------------------
+#Region StopPressed
 Func StopPressed()
    ;GUICtrlSetBkColor($lbT[$getTab], 0xEBA794)
 
@@ -792,6 +771,7 @@ Local $getTab = GUICtrlRead($iTab)-1
 			   If Not ProcessExists ( $iPIDx[$getTab] ) Then GUICtrlSetBkColor($lbT[$getTab], $lbTdeact)
 		   EndIf
 EndFunc
+#EndRegion StopPressed
 ;--------------------------------------------------------------------------------------------------
 Func btnAllStop()
    For $i=0 To $windowTabs
@@ -854,6 +834,7 @@ Func _hideWin(); скрыть главное окно
 WinSetState ( $hGUI, Null, @SW_HIDE )
 EndFunc
 ;--------------------------------------------------------------------------------------------------
+#Region Exit
 Func _ProExit()
 	; нажата кнопка выход на окне
 Switch MsgBox(4+32+8192, 'Выход из программы', 'Выйти из программы' & @CRLF & 'завершив все процессы ?',10)
@@ -879,9 +860,11 @@ For $i = 0 To $windowTabs
 Next
 EndFunc   ;==>_OnExit
 ;--------------------------------------------------------------------------------------------------
+#EndRegion Exit
 Func btnHL()
 EndFunc
 ;--------------------------------------------------------------------------------------------------
+#Region ShellExecute
 Func btnTM()
 ShellExecute(@SystemDir & '\taskmgr.exe', '', '', '', @SW_SHOW)
 ;Run (@SystemDir & "\taskmgr.exe", @SystemDir ,@SW_SHOW)
@@ -912,6 +895,7 @@ EndFunc
 Func btnTC()
 ShellExecute(@SystemDir & '\mmc.exe', @SystemDir & "\taskschd.msc /s", '', '', @SW_SHOW)
 EndFunc
+#EndRegion ShellExecute
 ;--------------------------------------------------------------------------------------------------
 Func WM_SETCURSOR($hWnd, $Msg, $wParam, $lParam)
     If $wParam = $hGUI Then
@@ -1012,3 +996,4 @@ EndSelect
 EndFunc
 
 
+;GUICtrlSetTip(-1, '#Region LABEL')

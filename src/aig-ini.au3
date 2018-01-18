@@ -222,11 +222,10 @@ EndSelect
 EndFunc
 
 Func createBAT()
-
-Select
-	Case Not FileExists (  @WorkingDir & "\запилки")
-		DirCreate ( @WorkingDir & "\запилки" )
-			EndSelect
+	Select
+		Case Not FileExists (  @WorkingDir & "\запилки")
+			DirCreate ( @WorkingDir & "\запилки" )
+				EndSelect
 For $i=0 To $windowTabs
 	FileDelete ( @WorkingDir & "\запилки\" & $process & $i & "_" & $info[$i] & ".bat" )
 	FileWrite ( @WorkingDir & "\запилки\" & $process & $i & "_" & $info[$i] & ".bat", "@echo off" & @CRLF & _
