@@ -147,8 +147,8 @@ Switch IniRead ($sysini,"GUI","Win7Style", 0); стиль окна. 0=станд
 		_GUICtrlMenu_DeleteMenu(_GUICtrlMenu_GetSystemMenu($hGUI), 2)
 		GUIRegisterMsg(0x0020, 'WM_SETCURSOR');$WM_SETCURSOR=0x0020
 	Case 2
-$hGUI = GUICreate($NameGUI,$WWidth,$WHeight+20,-1,-1,0x80800000,65536);BitXOR($WS_OVERLAPPEDWINDOW, $WS_MAXIMIZEBOX)
-GUISetBkColor(0xE0FFFF) ; устанавливает цвет фона
+		$hGUI = GUICreate($NameGUI,$WWidth,$WHeight+20,-1,-1,0x80800000,65536);BitXOR($WS_OVERLAPPEDWINDOW, $WS_MAXIMIZEBOX)
+		GUISetBkColor(0xE0FFFF) ; устанавливает цвет фона
 ;								0x80000000+0x00800000 = 0x80800000
 		;_GUICtrlMenu_DeleteMenu(_GUICtrlMenu_GetSystemMenu($hGUI), 2)
 		;GUIRegisterMsg(0x0020, 'WM_SETCURSOR');$WM_SETCURSOR=0x0020
