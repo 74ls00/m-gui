@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Res_Language=1049
 #AutoIt3Wrapper_Icon=res\icon00.ico
 #AutoIt3Wrapper_Res_FileVersion_AutoIncrement=y
-#AutoIt3Wrapper_Res_Fileversion=0.1.1.232
+#AutoIt3Wrapper_Res_Fileversion=0.1.1.237
 #AutoIt3Wrapper_Res_Description=Окно консоли
 #AutoIt3Wrapper_Res_Field=ProductName|Окно консоли
 #AutoIt3Wrapper_Res_Field=Build|%longdate% %time%
@@ -29,16 +29,31 @@
 Opt("TrayAutoPause", 0)
 Opt('TrayMenuMode', 3)	;	http://autoit-script.ru/autoit3_docs/functions/AutoItSetOption.htm
 Opt("GUIOnEventMode", 1)
+Opt("TrayOnEventMode", 1)
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 _debug_start()
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+$hGUI = IniRead ($sysini,"RUN","RunGUIh", Null)
+Select ; не запускать вторую копию программы ; @ScriptName
+Case $hGUI <> "" And ProcessExists ( IniRead ($sysini,"RUN","RunPID", Null) )
+$hGUI = HWnd($hGUI)
+_showWin()
+Exit
+EndSelect
+
+
+#cs
 Select ; не запускать вторую копию программы ; @ScriptName
 Case IniRead ($sysini,"RUN","RunPID", Null) <> "" And ProcessExists ( IniRead ($sysini,"RUN","RunPID", Null) )
 	WinSetState ( HWnd(IniRead ($sysini,"RUN","RunGUIh", Null)), Null, @SW_SHOW )
 	WinActivate ( HWnd(IniRead ($sysini,"RUN","RunGUIh", Null)) )
 	Exit
 EndSelect
+;_showWin
+#ce
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Switch IniRead ($sysini,"LOG","CheckDll", "")
 	Case 1 ; 1=проверять системные ресурсы
@@ -82,6 +97,7 @@ Global Const $lbTdeact = 0xFBD7F4 ;цвет НЕактивного индика�
 _iniLoad() ; загрузить настройки из ini <aig-ini.au3>
 _sLine()  ; загрузить строки
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 TraySetState(1) ; Показывает меню трея
 TraySetIcon ( @ScriptFullPath, 203 )
 ;OnAutoItExitRegister("_OnExit")
@@ -90,12 +106,15 @@ _Main()
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #Region While
 While 1
+#cs
+
+
    Switch TrayGetMsg()
 	  Case -8;$TRAY_EVENT_PRIMARYUP
 		 WinSetState ( $hGUI, Null, @SW_SHOW )
 		 WinActivate ( $hGUI, Null )
 	  EndSwitch
-
+#ce
 Switch $streadmode; = 0 ;0 _Update(), 1 _Update()
 	Case 0
 		_Update()
@@ -159,6 +178,7 @@ EndSwitch
 
 GUISetOnEvent(-3, '_closeWin', $hGUI);$GUI_EVENT_CLOSE
 GUISetOnEvent(-4, '_hideWin', $hGUI);$GUI_EVENT_MINIMIZE
+TraySetOnEvent ( -8, '_showWin' );$TRAY_EVENT_PRIMARYUP
 
 addRUN()
 ;GUISetFont(8.5, Null, Null, Null ,$hGUI , $txtQual);бесполезный код
@@ -832,6 +852,10 @@ EndFunc
 Func _hideWin(); скрыть главное окно
  ;  AdlibUnRegister("_UnSel")
 WinSetState ( $hGUI, Null, @SW_HIDE )
+EndFunc
+Func _showWin()
+WinSetState ( $hGUI, Null, @SW_SHOW )
+WinActivate ( $hGUI, Null )
 EndFunc
 ;--------------------------------------------------------------------------------------------------
 #Region Exit

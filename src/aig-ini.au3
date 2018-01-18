@@ -195,7 +195,7 @@ Func _sLine()
 ;                                       >------------------------------------------------------------------------------------------------------------------------<
 ;                                                            >---------------------------------------------------------------------<
 ;                                                                                >-------<
-Local $exlogTmp = _Encoding_ANSIToOEM ( StringRegExpReplace( StringRegExpReplace($exlog[$i], "%date", @YEAR & "." & @MON &"."& @MDAY) , "%time" , @MIN &"."& @SEC ) )
+Local $exlogTmp = _Encoding_ANSIToOEM ( StringRegExpReplace( StringRegExpReplace($exlog[$i], "%date", @YEAR & "." & @MON &"."& @MDAY) , "%time" , @HOUR &"."& @MIN &"."& @SEC ) )
 
 Select ; тип пути. 0=без пути. 1=кирилица с пробелами в пути. 2=как 1, с пробелом между параметрами
       Case $typecmd[$i] = 4
