@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Res_Language=1049
 #AutoIt3Wrapper_Icon=res\icon00.ico
 #AutoIt3Wrapper_Res_FileVersion_AutoIncrement=y
-#AutoIt3Wrapper_Res_Fileversion=0.1.1.238
+#AutoIt3Wrapper_Res_Fileversion=0.1.1.242
 #AutoIt3Wrapper_Res_Description=Окно консоли
 #AutoIt3Wrapper_Res_Field=ProductName|Окно консоли
 #AutoIt3Wrapper_Res_Field=Build|%longdate% %time%
@@ -16,7 +16,7 @@
 #AutoIt3Wrapper_Res_Icon_Add=res\icon01.ico;gui icon
 #AutoIt3Wrapper_Res_Icon_Add=res\icon02.ico;gui icon admin
 #AutoIt3Wrapper_Res_Icon_Add=res\icon03.ico;tray
-;#AutoIt3Wrapper_Res_File_Add=
+;#AutoIt3Wrapper_Res_File_Add=res\devcon64.exe
 #AutoIt3Wrapper_Run_Au3Stripper=y
 #Au3Stripper_Parameters=/pe /sf /sv /om /rm; /SCI=1
 #AutoIt3Wrapper_Run_After=del /f /q "%scriptdir%\%scriptfile%_stripped.au3"

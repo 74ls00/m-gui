@@ -1,4 +1,8 @@
+﻿#AutoIt3Wrapper_UseX64=y
+
 ;http://autoit-script.ru/index.php?topic=2345.15
+;https://www.autoitscript.com/forum/topic/77463-embed-dlls-in-script-and-call-functions-from-memory-memorydll-udf/#comment-560708
+
 $VarName = StringStripWS(InputBox("MemoryDllGen", "Select a name of variable:", "DllBinary"), 3)
 If $VarName = "" Then Exit
 
