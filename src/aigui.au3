@@ -5,14 +5,14 @@
 #AutoIt3Wrapper_Res_Language=1049
 #AutoIt3Wrapper_Icon=res\icon00.ico
 #AutoIt3Wrapper_Res_FileVersion_AutoIncrement=y
-#AutoIt3Wrapper_Res_Fileversion=0.1.1.227
+#AutoIt3Wrapper_Res_Fileversion=0.1.1.232
 #AutoIt3Wrapper_Res_Description=Окно консоли
 #AutoIt3Wrapper_Res_Field=ProductName|Окно консоли
 #AutoIt3Wrapper_Res_Field=Build|%longdate% %time%
 ;#AutoIt3Wrapper_Res_Field=OriginalFileName|exe;gui.exe
 #AutoIt3Wrapper_Res_ProductVersion=0.1α
 #AutoIt3Wrapper_Res_LegalCopyright=©
-#AutoIt3Wrapper_Res_Comment=Consoles GUI
+;#AutoIt3Wrapper_Res_Comment=Consoles GUI
 #AutoIt3Wrapper_Res_Icon_Add=res\icon01.ico;gui icon
 #AutoIt3Wrapper_Res_Icon_Add=res\icon02.ico;gui icon admin
 #AutoIt3Wrapper_Res_Icon_Add=res\icon03.ico;tray
@@ -58,7 +58,7 @@ $tmpStbs = $windowTabs+1
 Global $strl4 , $iTab , $hImage ; элемент иконок кнопки
 
 ; размеры gui
-Global $NameGUI = "GUI"
+Global $NameGUI = "CIVIR ETIYUA"
 Global Const $WWidth = 670 , $WHeight = 450 ; ширина и высота окна 450
 Global Const $StrTool = 35 ; сверху первая строка под вкладкой.
 Global Const $THeight = $WHeight-82 ; высота консоли

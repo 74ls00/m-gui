@@ -82,3 +82,16 @@ $typecmd[3] = 1
 
 
 EndFunc
+
+#cs
+Почемуто слова уже заняты, так чем не повод их использовать если их значения совпадают.
+Привет виртляндия.
+ЦИВИР, Чайковский
+Официальное название 	ОБЩЕСТВО С ОГРАНИЧЕННОЙ ОТВЕТСТВЕННОСТЬЮ "ЦИВИР"
+Вид деятельности 	Деятельность агентов по оптовой торговле топливом, рудами, металлами и химическим веществами
+ETIYUA US license plate
+At this page you can find information about ETIYUA license plate of America
+Unfortunately, at the moment we don't have information or an image of this license plate.
+We are constantly working on expanding our database of license plates, and it is likely that this number will soon be added.
+Try to find another license plates on the website that interests you.funnyplatesofamerica.com/etiyua
+#ce
