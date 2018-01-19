@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Res_Language=1049
 #AutoIt3Wrapper_Icon=res\icon00.ico
 #AutoIt3Wrapper_Res_FileVersion_AutoIncrement=y
-#AutoIt3Wrapper_Res_Fileversion=0.1.1.251
+#AutoIt3Wrapper_Res_Fileversion=0.1.1.252
 #AutoIt3Wrapper_Res_Description=Окно консоли
 #AutoIt3Wrapper_Res_Field=ProductName|Окно консоли
 #AutoIt3Wrapper_Res_Field=Build|%longdate% %time%
@@ -319,15 +319,15 @@ Switch $BigRun[$t]
 	  GUICtrlSetState ( -1, 4 ) ; $GUI_UNCHECKED 4
 EndSwitch
 
+#cs
 $ckbxBigRunA[$t] = GUICtrlCreateCheckbox("адаптивно", 400, $THeight+30+12+18-8, 150, 16); ,0x0020)
-
 Switch $BigRunA[$t]
    Case 1
 	  GUICtrlSetState ( -1, 1 )
    Case Else
 	  GUICtrlSetState ( -1, 4 )
 EndSwitch
-
+#ce
 
 GUICtrlCreateIcon("mblctr.exe", 133, $WWidth-44, $WHeight-47)
 ;GUICtrlSetImage ( -1, "winhlp32.exe", 0 ,0);154 215
@@ -755,7 +755,7 @@ Local $getTab = GUICtrlRead($iTab)-1
 
 
 
-
+#cs
 Switch GUICtrlRead($ckbxBigRunA[$getTab]);start
 	Case 1
 
@@ -769,7 +769,7 @@ Switch $BigRunSel[$getTab]
 EndSwitch
 
 EndSwitch
-
+#ce
 
 
 
@@ -786,7 +786,7 @@ Local $getTab = GUICtrlRead($iTab)-1
 	GUICtrlSetState($iBtnStart[$getTab], $GUI_ENABLE)
 
 
-
+#cs
 ;адаптивное выключение
 
 Switch GUICtrlRead($ckbxBigRun[$getTab]);записываем состояние выключателя
@@ -800,7 +800,7 @@ Switch GUICtrlRead($ckbxBigRunA[$getTab]);stop ; если выбрано ада�
 	GUICtrlSetState ( $ckbxBigRun[$getTab], 4 ) ; убираем метку
 	$BigRun[$getTab] = 0						; и обнуляем значение
 		EndSwitch
-
+#ce
 
 
 
@@ -957,12 +957,6 @@ EndFunc ; ==> WM_SETCURSOR
 
 Func btnAllStart()
 
-;MsgBox(262144, "", 'Selection:' & @CRLF & '$iBtnStart' & @CRLF & @CRLF & 'Return:' & @CRLF & GUICtrlGetState ($iBtnStart[0] )) ;### Debug MSGBOX
-
-
-
-
-;$btnAllStart
 For $i=0 To $windowTabs
 
 Select
@@ -977,7 +971,7 @@ Select
 	GUICtrlSetState($iBtnStop[$i], $GUI_ENABLE)
 	GUICtrlSetState($btnAllStop, $GUI_ENABLE)
 
-
+#cs
 Switch GUICtrlRead($ckbxBigRunA[$i])
 Case 4
 
@@ -989,7 +983,7 @@ Switch $BigRunSel[$i]
 EndSwitch
 
 EndSwitch
-
+#ce
 
 
 	StdinWrite($iPIDx[$i], $sLine[$i])
