@@ -33,7 +33,7 @@ Global $sLine[$windowTabs+1],$typecmd[$windowTabs+1]
 Global $info[$windowTabs+1],$server[$windowTabs+1],$port[$windowTabs+1],$user[$windowTabs+1],$pass[$windowTabs+1]
 Global $devr[$windowTabs+1],$expath[$windowTabs+1],$exname[$windowTabs+1],$exlog[$windowTabs+1],$params[$windowTabs+1]
 Global $debug[$windowTabs+1],$exlpid[$windowTabs+1],$useregflg[$windowTabs+1],$urlprofile[$windowTabs+1]
-Global $ckbxBigRun[$windowTabs+1], $BigRun[$windowTabs+1]
+Global $ckbxBigRun[$windowTabs+1], $BigRun[$windowTabs+1], $ckbxBigRunA[$windowTabs+1], $BigRunA[$windowTabs+1]
 Global $NameGUI
 
 ;--------------------------------------------------------------------------------------------------
@@ -54,7 +54,8 @@ $debug[$i] = @WorkingDir & $expath[$i] & "\" & $exname[$i] & $server[$i] & $port
 $exlpid[$i] = Null	; pid запущеного процесса
 $useregflg[$i] = 0	; 1 = пользователь зарегестрирован на пуле , 0 = предупредить
 $urlprofile[$i] = "http:/www#"
-$ckbxBigRun[$i] = ""
+$BigRun[$i] = ""
+$BigRunA[$i] = ""
 ;IniWrite($myini, $process & $i, "separator","----------------------------------------------------------------------")
 Next
  ;MsgBox(4096,"_iniDefLoad",$info[0])
@@ -93,9 +94,6 @@ IniWrite($myini, $process & $i, "useregflg", $useregflg[$i])
 IniWrite($myini, $process & $i, "urlprofile",'"' & $urlprofile[$i] & '"')
 
 
-;IniWrite($myini, $process & $i, "______separator","----------------------------------------------------------------------")
-
-
    Next
 ;MsgBox(262144, 'Debug line ~' & @ScriptLineNumber, 'Selection:' & @CRLF & '$BigRun' & @CRLF & @CRLF & 'Return:' & @CRLF & $BigRun[0])
 
@@ -111,15 +109,25 @@ Switch GUICtrlRead($ckbxBigRun[$i])
 		$BigRun[$i] = 1
 	Case Else
 		$BigRun[$i] = 0
-EndSwitch
+			EndSwitch
+				IniWrite($myini, $process & $i, "bigrun",$BigRun[$i])
 
-IniWrite($myini, $process & $i, "bigrun",$BigRun[$i])
+Switch GUICtrlRead($ckbxBigRunA[$i])
+	Case 1
+		$BigRunA[$i] = 1
+	Case Else
+		$BigRunA[$i] = 0
+			EndSwitch
+				IniWrite($myini, $process & $i, "bigruna",$BigRunA[$i])
 
 IniDelete ( $myini, $process & $i, "__________________________________________" )
 IniWrite($myini, $process & $i, "__________________________________________","__________________________________________")
 Next
 
+;MsgBox(262144, "",$BigRun[0])
+
 EndFunc
+
 ;--------------------------------------------------------------------------------------------------
 Func _saveSysIni()
 IniWrite($sysini, "GUI", "Tray1_Exit",$trayexit)
@@ -178,9 +186,8 @@ $exlpid[$i] = IniRead ($myini,$process & $i,"exlpid", Null)
 $useregflg[$i] = IniRead ($myini,$process & $i,"useregflg", Null)
 $urlprofile[$i] = IniRead ($myini,$process & $i,"urlprofile", Null)
 $BigRun[$i] = IniRead ($myini,$process & $i,"bigrun", 0)
-;MsgBox(262144, 'Debug line ~' & @ScriptLineNumber, 'Selection:' & @CRLF & '$ckbxBigRun' & @CRLF & @CRLF & 'Return:' & @CRLF & $ckbxBigRun) ;### Debug MSGBOX
-   Next
-
+$BigRunA[$i] = IniRead ($myini,$process & $i,"bigruna", 0)
+Next
 Case Else
    _iniSave()
 EndSelect

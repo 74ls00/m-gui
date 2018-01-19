@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Res_Language=1049
 #AutoIt3Wrapper_Icon=res\icon00.ico
 #AutoIt3Wrapper_Res_FileVersion_AutoIncrement=y
-#AutoIt3Wrapper_Res_Fileversion=0.1.1.242
+#AutoIt3Wrapper_Res_Fileversion=0.1.1.251
 #AutoIt3Wrapper_Res_Description=Окно консоли
 #AutoIt3Wrapper_Res_Field=ProductName|Окно консоли
 #AutoIt3Wrapper_Res_Field=Build|%longdate% %time%
@@ -80,7 +80,7 @@ Global $iBtnUnPause[$windowTabs+1],$iBtnPause[$windowTabs+1] , $iBtnCont[$window
 Global $iPIDx[$windowTabs+1] , $aPIDs[$windowTabs+1] , $sOut[$windowTabs+1] , $getTab ;=GUICtrlRead($iTab)-1
 Global $sn_info[$windowTabs+1],$st_typecmd[$windowTabs+1],$st_expath[$windowTabs+1],$st_exname[$windowTabs+1],$st_server[$windowTabs+1],$st_urlprofile[$windowTabs+1]
 Global $st_port[$windowTabs+1],$st_user[$windowTabs+1],$st_devr[$windowTabs+1],$st_pass[$windowTabs+1],$st_exlog[$windowTabs+1],$st_params[$windowTabs+1]
-Global $ckbxBigRun[$windowTabs+1], $BigRun[$windowTabs+1]
+Global $ckbxBigRun[$windowTabs+1], $BigRun[$windowTabs+1], $ckbxBigRunA[$windowTabs+1], $BigRunA[$windowTabs+1], $BigRunSel[$windowTabs+1]
 Global $conOut[$windowTabs+1] = [0]; временная переменная вываода
 ;Global $aSel[2]
 
@@ -91,6 +91,8 @@ Global $lbT[$windowTabs+1]; активность
 Global Const $lbTAct = 0x00FF09 ;цвет активного индикатора
 Global Const $lbTdeact = 0xFBD7F4 ;цвет НЕактивного индикатора
 #EndRegion Global
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+_loadSysIni()
 _iniLoad() ; загрузить настройки из ini <aig-ini.au3>
 _sLine()  ; загрузить строки
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -110,31 +112,6 @@ Switch $streadmode; = 0 ;0 _Update(), 1 _Update()
 	Case Else
 	  _Update2()
 EndSwitch
-
-
-#cs
-Local $n = 0 ,$m=0
-For $i=0 To $windowTabs
-
-Select
-	Case GUICtrlRead($ckbxBigRun[$i]) =1
-$n = $n+1
-EndSelect
-
-Select
-	Case GUICtrlGetState ($iBtnStart[$i] ) = 144
-$m=$m+1
-EndSelect
-Next
-
-Select
-	Case $m=$n
-GUICtrlSetState($btnAllStart, $GUI_DISABLE)
-EndSelect
-#ce
-
-
-
 
 
 Sleep(10)
@@ -205,7 +182,12 @@ $lbT[$i] = GUICtrlCreateLabel(" " & $info[$i] & " ", $tCordLbtL+$tCordSzH+5,  $t
 Next
 ;GUICtrlSetBkColor(-1, 0x23F009)
 
+;подпись версия
 GUICtrlCreateLabel(FileGetVersion(@AutoItExe), $WWidth-70, $WHeight-40, 50, 20, 0x0201)
+GUICtrlSetBkColor(-1, 0xFFFFFF)
+;GUICtrlSetBkColor(-1, 0x23F009)
+GUICtrlCreateLabel($version, $WWidth-171, $WHeight-40, 100, 20, 0x0202)
+;GUICtrlSetBkColor(-1, 0x20F006)
 GUICtrlSetBkColor(-1, 0xFFFFFF)
 
 #cs
@@ -327,10 +309,8 @@ _GUICtrlHyperLink_Create("Профиль", 320, $THeight+49, 50, 15, 0x0000FF, 0
 ;GUICtrlSetBkColor(-1, 0x23F009)
 
 ;GUICtrlCreateCheckbox("Пуск БОЛЬШОЙ кнопкой", 320, $THeight+30, 150, 16); ,0x0020)
-$ckbxBigRun[$t] = GUICtrlCreateCheckbox("Пуск БОЛЬШОЙ кнопкой", 400, $THeight+30+12, 150, 16); ,0x0020)
+$ckbxBigRun[$t] = GUICtrlCreateCheckbox("Пуск БОЛЬШОЙ кнопкой", 400, $THeight+30+12-8, 150, 16); ,0x0020)
 ;GUICtrlSetBkColor(-1, 0x23F009)
-
-GUICtrlCreateCheckbox("Пуск БОЛЬШОЙ кнопкой", 400, $THeight+30+12, 150, 16); ,0x0020)
 
 Switch $BigRun[$t]
    Case 1
@@ -339,7 +319,14 @@ Switch $BigRun[$t]
 	  GUICtrlSetState ( -1, 4 ) ; $GUI_UNCHECKED 4
 EndSwitch
 
+$ckbxBigRunA[$t] = GUICtrlCreateCheckbox("адаптивно", 400, $THeight+30+12+18-8, 150, 16); ,0x0020)
 
+Switch $BigRunA[$t]
+   Case 1
+	  GUICtrlSetState ( -1, 1 )
+   Case Else
+	  GUICtrlSetState ( -1, 4 )
+EndSwitch
 
 
 GUICtrlCreateIcon("mblctr.exe", 133, $WWidth-44, $WHeight-47)
@@ -734,13 +721,17 @@ IniWrite($sysini, "RUN", "RunGUIh", Dec(StringMid($hGUI,3,16)))
 Select
 	Case IsAdmin()
 		GUISetIcon(@ScriptFullPath, 202)
-		WinSetTitle ( $hGUI, "", $NameGUI & "  " & $version & " - Администратор" )
+		;WinSetTitle ( $hGUI, "", $NameGUI & "  " & $version & " - Администратор" )
+		WinSetTitle ( $hGUI, "", " !!! " & $NameGUI & " !!!")
 	Case Else
 		GUISetIcon(@ScriptFullPath, 201)
-		WinSetTitle ( $hGUI, "", $NameGUI & "  " & $version & " - без прав администратора" )
+		;WinSetTitle ( $hGUI, "", $NameGUI & "  " & $version & " - без прав администратора" )
+		WinSetTitle ( $hGUI, "", "  " & $NameGUI); & " - без прав администратора" )
 EndSelect
 EndFunc
 ;--------------------------------------------------------------------------------------------------
+
+
 
 
 
@@ -759,6 +750,29 @@ Local $getTab = GUICtrlRead($iTab)-1
 	  GUICtrlSetState($iBtnStart[$getTab], $GUI_DISABLE)
 	  GUICtrlSetState($iBtnStop[$getTab], $GUI_ENABLE)
 	  GUICtrlSetState($btnAllStop, $GUI_ENABLE)
+
+
+
+
+
+
+Switch GUICtrlRead($ckbxBigRunA[$getTab]);start
+	Case 1
+
+Switch $BigRunSel[$getTab]
+	Case 1
+		GUICtrlSetState ( $ckbxBigRun[$getTab], 1 )
+		$BigRun[$getTab] = 1
+	Case Else
+		GUICtrlSetState ( $ckbxBigRun[$getTab], 4 )
+		$BigRun[$getTab] = 4
+EndSwitch
+
+EndSwitch
+
+
+
+
 	  StdinWrite($iPIDx[$getTab], $sLine[$getTab])
 EndFunc
 ;--------------------------------------------------------------------------------------------------
@@ -770,6 +784,26 @@ Local $getTab = GUICtrlRead($iTab)-1
 	GUICtrlSetState($btnAllStart, $GUI_ENABLE)
 	GUICtrlSetState($iBtnStop[$getTab], $GUI_DISABLE)
 	GUICtrlSetState($iBtnStart[$getTab], $GUI_ENABLE)
+
+
+
+;адаптивное выключение
+
+Switch GUICtrlRead($ckbxBigRun[$getTab]);записываем состояние выключателя
+	Case 1
+		$BigRunSel[$getTab] = 1
+	Case Else
+		$BigRunSel[$getTab] = 0
+		EndSwitch
+Switch GUICtrlRead($ckbxBigRunA[$getTab]);stop ; если выбрано адаптивно
+	Case 1
+	GUICtrlSetState ( $ckbxBigRun[$getTab], 4 ) ; убираем метку
+	$BigRun[$getTab] = 0						; и обнуляем значение
+		EndSwitch
+
+
+
+
 	  Local $iPIDs = $iPIDx[$getTab]
 	  Local $aPIDs = _WinAPI_EnumChildProcess($iPIDs)
            If Not @error Then ; завершить дочерний процес
@@ -942,6 +976,22 @@ Select
 	GUICtrlSetState($iBtnStart[$i], $GUI_DISABLE)
 	GUICtrlSetState($iBtnStop[$i], $GUI_ENABLE)
 	GUICtrlSetState($btnAllStop, $GUI_ENABLE)
+
+
+Switch GUICtrlRead($ckbxBigRunA[$i])
+Case 4
+
+Switch $BigRunSel[$i]
+	Case 1
+		GUICtrlSetState ( $ckbxBigRun[$i], 1 )
+		$BigRun[$i] = 1
+
+EndSwitch
+
+EndSwitch
+
+
+
 	StdinWrite($iPIDx[$i], $sLine[$i])
 
 EndSelect
