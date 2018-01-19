@@ -138,6 +138,8 @@ addRUN()
 $iTab = GUICtrlCreateTab(6, 5, $WWidth-10, $WHeight-10) ;создать вкладки с отступом 5 по краям окна, и 5 внутри ;$TCS_HOTTRACK
 ;..................................................................................................
 GUICtrlCreateTabItem("  Панель  "); Вкладка для инструментов
+;GUICtrlSetImage(-1, "mycomput.dll", 0, 0) ; иконка вкладки
+
 
 GUICtrlCreateGroup("", 15 , $StrTool-5 , $WWidth-32 , $WHeight-46)
 GUICtrlCreateLabel($NameGUI & " - зелёная фигня", 20, $StrTool+5, $WWidth-42-70, 60)
@@ -235,7 +237,7 @@ GUICtrlSetOnEvent(-1, "btnCM")
 $hImage = _GUIImageList_Create(32, 32, 5, 3);, 6)
 _GUIImageList_AddIcon($hImage, "shell32.dll", 21, True)
 ;$hImage = _GUIImageList_Create(30, 30, 5, 3);, 6)
-;_GUIImageList_AddIcon($hImage, "mycomput.dll", 0, True)
+;_GUIImageList_AddIcon($hImage, "mycomput.dll", 0, True);GUICtrlSetImage(-1, "shell32.dll", -155, 0) ; иконка вкладки
 $btnST = GUICtrlCreateButton("Настройки", 494 , $WHeight-100, 150, 40);494 $WWidth-176
 _GUICtrlButton_SetImageList($btnST, $hImage)
 GUICtrlSetOnEvent(-1, "btnST")
@@ -339,6 +341,7 @@ GUICtrlSendMsg(-1, $EM_LIMITTEXT, -1, 0)
 
 
 Next
+GUICtrlCreateTabItem("")
 
 GUISetState(@SW_SHOW, $hGUI)
 EndFunc ;==>_Main
@@ -418,7 +421,7 @@ Switch $trayexit
 	  GUICtrlSetState ( $st_trayexit, 4 ) ; $GUI_UNCHECKED 4
 EndSwitch
 ;..................................................................................................
-Local Const $snTUD = 110 ; вертикаль таблицы
+Local Const $snTUD = 92 ; вертикаль таблицы
 local Const $snMLen = 200 ; длина поля путь
 Local Const $snXLen = 100
 Local Const $snSWLen = 165
@@ -473,11 +476,11 @@ GUICtrlCreateLabel("Url:", 20+3, $snTUD+210, 28, 20, 0x0200)
 $st_urlprofile[$i] = GUICtrlCreateInput($urlprofile[$i], 53+3, $snTUD+210, $guiCoord[2]-96,20)
 
 Next
-
+GUICtrlCreateTabItem("")
 ;$stTabs = GUICtrlCreateInput($tmpStbs, $snTabs1, $snTabs2, 40, 20)
 
-
-
+GUICtrlCreateInput($webbrowser, 53+3, $snTUD+250, $guiCoord[2]-270,20)
+;GUICtrlSetImage(-1, "shell32.dll", -155, 0) ; иконка вкладки
 
 ;MsgBox(0, "WinGetPos активного окна", $exname[5])
   ;"X=" & $guiCoord[0] & @LF & @TAB & _
