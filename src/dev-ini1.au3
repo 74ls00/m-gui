@@ -64,7 +64,7 @@ $user[4] = "--user t1NaDzay6nMfvcPCMC9bLdSzwAHk1J8Y2A6"
 $devr[4] = ".ZM_gpu0"
 $expath[4] = "zm_0.5.7_win"
 $exname[4] = "zm.exe"
-$exlog[4] = '--logfile="' & @WorkingDir & '\tmp\log.txt"'
+$exlog[4] = '--logfile="' & @WorkingDir & '\tmp\log%date_%time.txt"'
 $urlprofile[4] = "https://zcash.flypool.org/miners/t1NaDzay6nMfvcPCMC9bLdSzwAHk1J8Y2A6"
 $debug[4] = '"' & _Encoding_ANSIToOEM(@WorkingDir & '\' & $expath[4] & '\' & $exname[4]) & '" ' & $server[4] & " " & $port[4] & " " & $user[4] & $devr[4] & " " & $pass[4] & " " & _Encoding_ANSIToOEM($exlog[4]) & " " & $params[4] & @CRLF
 $typecmd[4] = 2

@@ -1,8 +1,7 @@
-;#include <dev-ini.au3>
 #include <dev-ini1.au3>
-;#include <ex-dev-ini.au3>
-Global $myini = @WorkingDir & "\myconf.ini"
+#Region Init
 Global $sysini = @WorkingDir & "\system.ini"
+Global Const $myini = @WorkingDir & "\myconf.ini"
 Global Const $process = "miner"
 Global $windowTabs=4
 Global $trayexit=0 ;1=tray. 0=exit
@@ -17,7 +16,6 @@ Case Not FileExists($sysini)
 _saveSysIni()
 EndSelect
 _loadSysIni()
-;MsgBox(4096, "lll" , $trayexit & $strLimit)
 
 Select
 Case FileExists($myini)
@@ -35,8 +33,9 @@ Global $devr[$windowTabs+1],$expath[$windowTabs+1],$exname[$windowTabs+1],$exlog
 Global $debug[$windowTabs+1],$exlpid[$windowTabs+1],$useregflg[$windowTabs+1],$urlprofile[$windowTabs+1]
 Global $ckbxBigRun[$windowTabs+1], $BigRun[$windowTabs+1], $ckbxBigRunA[$windowTabs+1], $BigRunA[$windowTabs+1]
 Global $NameGUI
-
+#EndRegion
 ;--------------------------------------------------------------------------------------------------
+#Region _iniDefLoad
 Func _iniDefLoad()
 For $i=0 To $windowTabs
 $info[$i] = $i		; строка .название вкладки
@@ -60,6 +59,7 @@ $BigRunA[$i] = ""
 Next
  ;MsgBox(4096,"_iniDefLoad",$info[0])
 EndFunc
+#EndRegion
 ;--------------------------------------------------------------------------------------------------
 Func _iniSave()
 

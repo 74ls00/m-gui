@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Res_Language=1049
 #AutoIt3Wrapper_Icon=res\icon00.ico
 #AutoIt3Wrapper_Res_FileVersion_AutoIncrement=y
-#AutoIt3Wrapper_Res_Fileversion=0.1.1.256
+#AutoIt3Wrapper_Res_Fileversion=0.1.1.263
 #AutoIt3Wrapper_Res_Description=Окно консоли
 #AutoIt3Wrapper_Res_Field=ProductName|Окно консоли
 #AutoIt3Wrapper_Res_Field=Build|%longdate% %time%
@@ -36,16 +36,6 @@ $hGUI = HWnd($hGUI)
 _showWin()
 Exit
 EndSelect
-
-#cs
-Select ; не запускать вторую копию программы ; @ScriptName
-Case IniRead ($sysini,"RUN","RunPID", Null) <> "" And ProcessExists ( IniRead ($sysini,"RUN","RunPID", Null) )
-	WinSetState ( HWnd(IniRead ($sysini,"RUN","RunGUIh", Null)), Null, @SW_SHOW )
-	WinActivate ( HWnd(IniRead ($sysini,"RUN","RunGUIh", Null)) )
-	Exit
-EndSelect
-;_showWin
-#ce
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Opt("TrayAutoPause", 0)
 Opt('TrayMenuMode', 3)	;	http://autoit-script.ru/autoit3_docs/functions/AutoItSetOption.htm
@@ -80,8 +70,8 @@ Global $iBtnUnPause[$windowTabs+1],$iBtnPause[$windowTabs+1] , $iBtnCont[$window
 Global $iPIDx[$windowTabs+1] , $aPIDs[$windowTabs+1] , $sOut[$windowTabs+1] , $getTab ;=GUICtrlRead($iTab)-1
 Global $sn_info[$windowTabs+1],$st_typecmd[$windowTabs+1],$st_expath[$windowTabs+1],$st_exname[$windowTabs+1],$st_server[$windowTabs+1],$st_urlprofile[$windowTabs+1]
 Global $st_port[$windowTabs+1],$st_user[$windowTabs+1],$st_devr[$windowTabs+1],$st_pass[$windowTabs+1],$st_exlog[$windowTabs+1],$st_params[$windowTabs+1]
-Global $ckbxBigRun[$windowTabs+1], $BigRun[$windowTabs+1], $ckbxBigRunA[$windowTabs+1], $BigRunA[$windowTabs+1], $BigRunSel[$windowTabs+1]
-Global $conOut[$windowTabs+1] = [0]; временная переменная вываода
+Global $ckbxBigRun[$windowTabs+1], $BigRun[$windowTabs+1], $ckbxBigRunA[$windowTabs+1] ;, $BigRunA[$windowTabs+1], $BigRunSel[$windowTabs+1]
+;Global $conOut[$windowTabs+1] = [0]; временная переменная вываода
 ;Global $aSel[2]
 
 Global Const $txtQual = 3 ; сглаживание
@@ -96,23 +86,19 @@ _loadSysIni()
 _iniLoad() ; загрузить настройки из ini <aig-ini.au3>
 _sLine()  ; загрузить строки
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
 TraySetState(1) ; Показывает меню трея
 TraySetIcon ( @ScriptFullPath, 203 )
 ;OnAutoItExitRegister("_OnExit")
-
 _Main()
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #Region While
 While 1
-
 Switch $streadmode; = 0 ;0 _Update(), 1 _Update()
 	Case 0
 		_Update()
 	Case Else
 	  _Update2()
 EndSwitch
-
 
 Sleep(10)
 ;GUISetState($hSETUP)
@@ -306,9 +292,7 @@ _GUICtrlButton_SetImageList(-1, $hImage)
 
 
 _GUICtrlHyperLink_Create("Профиль", 320, $THeight+49, 50, 15, 0x0000FF, 0x0000FF, -1, $urlprofile[$t], 'Перейти: ' & $urlprofile[$t], $hGUI);colors 0x0000FF 0x551A8B
-;GUICtrlSetBkColor(-1, 0x23F009)
 
-;GUICtrlCreateCheckbox("Пуск БОЛЬШОЙ кнопкой", 320, $THeight+30, 150, 16); ,0x0020)
 $ckbxBigRun[$t] = GUICtrlCreateCheckbox("Пуск БОЛЬШОЙ кнопкой", 400, $THeight+30+12-8, 150, 16); ,0x0020)
 ;GUICtrlSetBkColor(-1, 0x23F009)
 
@@ -318,6 +302,9 @@ Switch $BigRun[$t]
    Case Else
 	  GUICtrlSetState ( -1, 4 ) ; $GUI_UNCHECKED 4
 EndSwitch
+
+;GUICtrlSetTip(-1, 'Если установлен это флаг' & @CRLF & "процесс на вкладке" & @CRLF & "будет запущен" )
+;GUICtrlSetTip(-1, 'Если установлен это флаг' & @CRLF & "процесс на вкладке" & @CRLF & "будет запущен" )
 
 #cs
 $ckbxBigRunA[$t] = GUICtrlCreateCheckbox("адаптивно", 400, $THeight+30+12+18-8, 150, 16); ,0x0020)
