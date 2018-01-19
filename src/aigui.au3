@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Res_Language=1049
 #AutoIt3Wrapper_Icon=res\icon00.ico
 #AutoIt3Wrapper_Res_FileVersion_AutoIncrement=y
-#AutoIt3Wrapper_Res_Fileversion=0.1.1.252
+#AutoIt3Wrapper_Res_Fileversion=0.1.1.256
 #AutoIt3Wrapper_Res_Description=Окно консоли
 #AutoIt3Wrapper_Res_Field=ProductName|Окно консоли
 #AutoIt3Wrapper_Res_Field=Build|%longdate% %time%
@@ -751,30 +751,14 @@ Local $getTab = GUICtrlRead($iTab)-1
 	  GUICtrlSetState($iBtnStop[$getTab], $GUI_ENABLE)
 	  GUICtrlSetState($btnAllStop, $GUI_ENABLE)
 
-
-
-
-
-#cs
-Switch GUICtrlRead($ckbxBigRunA[$getTab]);start
-	Case 1
-
-Switch $BigRunSel[$getTab]
-	Case 1
-		GUICtrlSetState ( $ckbxBigRun[$getTab], 1 )
-		$BigRun[$getTab] = 1
-	Case Else
-		GUICtrlSetState ( $ckbxBigRun[$getTab], 4 )
-		$BigRun[$getTab] = 4
-EndSwitch
-
-EndSwitch
-#ce
-
-
+	_disAllRun()
 
 	  StdinWrite($iPIDx[$getTab], $sLine[$getTab])
 EndFunc
+
+
+
+
 ;--------------------------------------------------------------------------------------------------
 #Region StopPressed
 Func StopPressed()
@@ -782,27 +766,9 @@ Func StopPressed()
 
 Local $getTab = GUICtrlRead($iTab)-1
 	GUICtrlSetState($btnAllStart, $GUI_ENABLE)
+
 	GUICtrlSetState($iBtnStop[$getTab], $GUI_DISABLE)
 	GUICtrlSetState($iBtnStart[$getTab], $GUI_ENABLE)
-
-
-#cs
-;адаптивное выключение
-
-Switch GUICtrlRead($ckbxBigRun[$getTab]);записываем состояние выключателя
-	Case 1
-		$BigRunSel[$getTab] = 1
-	Case Else
-		$BigRunSel[$getTab] = 0
-		EndSwitch
-Switch GUICtrlRead($ckbxBigRunA[$getTab]);stop ; если выбрано адаптивно
-	Case 1
-	GUICtrlSetState ( $ckbxBigRun[$getTab], 4 ) ; убираем метку
-	$BigRun[$getTab] = 0						; и обнуляем значение
-		EndSwitch
-#ce
-
-
 
 	  Local $iPIDs = $iPIDx[$getTab]
 	  Local $aPIDs = _WinAPI_EnumChildProcess($iPIDs)
@@ -822,15 +788,12 @@ Func btnAllStop()
 Select
    Case ControlCommand($hGUI, '', $iBtnStop[$i], 'IsEnabled')
 
-;If ControlCommand($hGUI, '', $iBtnStop[$i], 'IsEnabled') Then
 GUICtrlSetState($btnAllStart, $GUI_ENABLE)
 GUICtrlSetState($iBtnStart[$i], $GUI_ENABLE)
 GUICtrlSetState($iBtnStop[$i], $GUI_DISABLE)
 
-
- ;EndIf
-	   Local $iPIDs = $iPIDx[$i]
-	   Local $aPIDs = _WinAPI_EnumChildProcess($iPIDs)
+Local $iPIDs = $iPIDx[$i]
+Local $aPIDs = _WinAPI_EnumChildProcess($iPIDs)
 
  If Not @error Then ; завершить дочерний процес
 			   For $n = 1 To $aPIDs[0][0]
@@ -845,6 +808,21 @@ If Not ProcessExists ( $iPIDx[$i] ) Then GUICtrlSetBkColor($lbT[$i], $lbTdeact)
 GUICtrlSetState($btnAllStop, $GUI_DISABLE)
 
 
+EndFunc
+;--------------------------------------------------------------------------------------------------
+Func _disAllRun()
+Local $tmp=-1
+For $i=0 To $windowTabs
+Select ; если стоит птичка   и   кнопка нажата   или   птички нет
+	Case GUICtrlRead($ckbxBigRun[$i]) = 1 And GUICtrlGetState ($iBtnStart[$i] ) = 144 Or GUICtrlRead($ckbxBigRun[$i]) = 4
+	$tmp=$tmp+1
+		EndSelect
+			Next
+Select
+	Case $tmp = $windowTabs
+		GUICtrlSetState($btnAllStart, $GUI_DISABLE)
+EndSelect
+;MsgBox(262144, $windowTabs, $tmp) ;### Debug MSGBOX
 EndFunc
 ;--------------------------------------------------------------------------------------------------
 Func CleanPressed()
@@ -970,6 +948,7 @@ Select
 	GUICtrlSetState($iBtnStart[$i], $GUI_DISABLE)
 	GUICtrlSetState($iBtnStop[$i], $GUI_ENABLE)
 	GUICtrlSetState($btnAllStop, $GUI_ENABLE)
+	_disAllRun()
 
 #cs
 Switch GUICtrlRead($ckbxBigRunA[$i])
