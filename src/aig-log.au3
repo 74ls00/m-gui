@@ -1,3 +1,4 @@
+;perfmon.exe
 Func _dllCHK()
 Local $chklog
 	$chklog = FileOpen(@WorkingDir & "\dllchk.log", 2)

@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Res_Language=1049
 #AutoIt3Wrapper_Icon=res\icon00.ico
 #AutoIt3Wrapper_Res_FileVersion_AutoIncrement=y
-#AutoIt3Wrapper_Res_Fileversion=0.1.1.268
+#AutoIt3Wrapper_Res_Fileversion=0.1.1.270
 #AutoIt3Wrapper_Res_Description=Окно консоли
 #AutoIt3Wrapper_Res_Field=ProductName|Окно консоли
 #AutoIt3Wrapper_Res_Field=Build|%longdate% %time%
@@ -252,22 +252,23 @@ GUICtrlSetOnEvent(-1, "btnCA")
 
 
 ;$hImage = _GUIImageList_Create(32, 32, 5, 3, 6)
-$hImage = _GUIImageList_Create(17 , 17,5, 3);,5 )
-_GUIImageList_AddIcon($hImage, "msconfig.exe", 0, True)
+$hImage = _GUIImageList_Create(16 , 16,5, "")
+_GUIImageList_AddIcon($hImage, "msconfig.exe", 0, False)
 $btnMC = GUICtrlCreateButton("msconfig", 25, $WHeight-51, 80, 24) ;157 40
 _GUICtrlButton_SetImageList($btnMC, $hImage)
 GUICtrlSetOnEvent(-1, "btnMC")
 
-$hImage = _GUIImageList_Create(17 , 17,5, "");,5 )
-_GUIImageList_AddIcon($hImage, "miguiresource.dll", 1, True)
+$hImage = _GUIImageList_Create(16 , 16,5, "");,5 )
+_GUIImageList_AddIcon($hImage, "miguiresource.dll", 1, False)
 $btnTC = GUICtrlCreateButton("taskschd", 25+87, $WHeight-51, 80, 24) ;157 40
 _GUICtrlButton_SetImageList($btnTC, $hImage)
 GUICtrlSetOnEvent(-1, "btnTC")
 
-
-
-
-
+$hImage = _GUIImageList_Create(16 , 16,5, "")
+_GUIImageList_AddIcon($hImage, "perfmon.exe", 0, False)
+$btnPMr = GUICtrlCreateButton("perfmon/r", 25+87+87, $WHeight-51, 80, 24)
+_GUICtrlButton_SetImageList($btnPMr, $hImage)
+GUICtrlSetOnEvent(-1, "btnPMr")
 
 
 ;..................................................................................................
@@ -488,10 +489,10 @@ GUICtrlSetOnEvent(-1, "_setWebBrowser")
 ;"ширина =  " & $guiCoord[2] & @LF & @TAB & _
 ;"высота  =  " & $guiCoord[3])
 EndSelect
-GUISetState(@SW_SHOW)
+GUISetState(@SW_SHOW);http://forum.oszone.net/post-1455732.html
 ;GUISwitch($hGUI)
-WinSetState ( $hSETUP, Null, @SW_SHOW )
-WinActivate($hSETUP)
+;WinSetState ( $hSETUP, Null, @SW_SHOW )
+;WinActivate($hSETUP)
 
 
 
@@ -911,8 +912,13 @@ EndFunc
 Func btnTC()
 ShellExecute(@SystemDir & '\mmc.exe', @SystemDir & "\taskschd.msc /s", '', '', @SW_SHOW)
 EndFunc
+;--------------------------------------------------------------------------------------------------
+Func btnPMr()
+ShellExecute(@SystemDir & '\perfmon.exe', "/res", '', '', @SW_SHOW)
+EndFunc
 #EndRegion ShellExecute
 ;--------------------------------------------------------------------------------------------------
+
 Func WM_SETCURSOR($hWnd, $Msg, $wParam, $lParam)
     If $wParam = $hGUI Then
         Switch BitAND($lParam, 0xFFFF) ; _WinAPI_LoWord
