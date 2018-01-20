@@ -6,7 +6,7 @@ Global Const $process = "miner"
 Global $windowTabs=4
 Global $trayexit=0 ;1=tray. 0=exit
 Global $strLimit=600000
-Global $webbrowser = "G:\home\Documents\Projects\0-MyFirefox\FirefoxPortable_x64\FirefoxPortable.exe"
+Global $webbrowser = "C:\Program Files\Mozilla Firefox\firefox.exe" ;"G:\home\Documents\Projects\0-MyFirefox\FirefoxPortable_x64\FirefoxPortable.exe"
 
 Global $streadmode = 0 ;0 _Update(), 1 _Update()
 Global $selectTime = 5000 ;ms
@@ -33,6 +33,7 @@ Global $devr[$windowTabs+1],$expath[$windowTabs+1],$exname[$windowTabs+1],$exlog
 Global $debug[$windowTabs+1],$exlpid[$windowTabs+1],$useregflg[$windowTabs+1],$urlprofile[$windowTabs+1]
 Global $ckbxBigRun[$windowTabs+1], $BigRun[$windowTabs+1], $ckbxBigRunA[$windowTabs+1], $BigRunA[$windowTabs+1]
 Global $NameGUI
+Global $st_browser, $hSETUP
 #EndRegion
 ;--------------------------------------------------------------------------------------------------
 #Region _iniDefLoad
@@ -132,6 +133,7 @@ EndFunc
 Func _saveSysIni()
 IniWrite($sysini, "GUI", "Tray1_Exit",$trayexit)
 IniWrite($sysini, "GUI", "ListingLimit",$strLimit)
+IniWrite($sysini, "GUI", "WebBrowser", '"' & $webbrowser & '"')
 
 EndFunc
 ;--------------------------------------------------------------------------------------------------
@@ -151,14 +153,15 @@ Func _loadSysIni()
 				IniWrite($sysini, "GUI", "Win7Style", 0)
 					EndSelect
 
-			Select ;$webbrowser = IniRead ($sysini,"GUI","WebBrowser", $webbrowser)
-				Case IniRead ($sysini,"GUI","WebBrowser", Null) = ""
-				IniWrite($sysini, "GUI", "WebBrowser", '"' & $webbrowser & '"')
-					EndSelect
+			;Select ;$webbrowser = IniRead ($sysini,"GUI","WebBrowser", $webbrowser)
+				;Case IniRead ($sysini,"GUI","WebBrowser", Null) = ""
+				;IniWrite($sysini, "GUI", "WebBrowser", '"' & $webbrowser & '"')
+					;EndSelect
 	EndSelect
 
 $trayexit = IniRead ($sysini,"GUI","Tray1_Exit", $trayexit)
 $strLimit = IniRead ($sysini,"GUI","ListingLimit", $strLimit)
+$webbrowser = IniRead ($sysini,"GUI","WebBrowser", $webbrowser)
 
 EndFunc
 ;--------------------------------------------------------------------------------------------------
@@ -247,6 +250,12 @@ Next
 EndFunc
 ;--------------------------------------------------------------------------------------------------
 Func _setWebBrowser()
-$webbrowser = FileOpenDialog("Путь к браузеру", "C:\", "Программы (*.exe)|Все файлы (*.*)", 1 + 4)
-
+Local $tmp = $webbrowser
+$webbrowser = FileOpenDialog("Путь к браузеру", "C:\Program Files\Mozilla Firefox", "Программы (*.exe)|Все файлы (*.*)", 1, "firefox.exe", $hSETUP)
+Switch $webbrowser
+	Case ""
+	$webbrowser = $tmp
+EndSwitch
+GUICtrlSetData ( $st_browser, $webbrowser )
 EndFunc
+;--------------------------------------------------------------------------------------------------

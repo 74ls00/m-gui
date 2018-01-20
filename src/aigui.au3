@@ -29,6 +29,7 @@
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 _debug_start()
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#Region one start
 $hGUI = IniRead ($sysini,"RUN","RunGUIh", Null)
 Select ; не запускать вторую копию программы ; @ScriptName
 Case $hGUI <> "" And ProcessExists ( IniRead ($sysini,"RUN","RunPID", Null) )
@@ -36,6 +37,7 @@ $hGUI = HWnd($hGUI)
 _showWin()
 Exit
 EndSelect
+#EndRegion
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Opt("TrayAutoPause", 0)
 Opt('TrayMenuMode', 3)	;	http://autoit-script.ru/autoit3_docs/functions/AutoItSetOption.htm
@@ -75,7 +77,7 @@ Global $ckbxBigRun[$windowTabs+1], $BigRun[$windowTabs+1], $ckbxBigRunA[$windowT
 ;Global $aSel[2]
 
 Global Const $txtQual = 3 ; сглаживание
-Global $st_trayexit
+Global $st_trayexit, $st_browser
 
 Global $lbT[$windowTabs+1]; активность
 Global Const $lbTAct = 0x00FF09 ;цвет активного индикатора
@@ -365,7 +367,6 @@ Local $guiCoord = WinGetPos ($hGUI)
 
 Select
 	Case Not IsHWnd($hSETUP);если окна нет, создать
-
 $hSETUP = GUICreate("Настройки", $guiCoord[2]-16, $guiCoord[3]-39, $guiCoord[0]+7, $guiCoord[1]+30, -2139095040, -1, $hGUI);BitOR ($WS_BORDER, $WS_POPUP)
 
 ;MsgBox(4096, "lll" ,  BitOR ($WS_BORDER, $WS_POPUP))
@@ -449,12 +450,12 @@ GUICtrlSetData(-1, "0|1|2",$typecmd[$i])
 $st_expath[$i] = GUICtrlCreateInput($expath[$i], 62+3, $snTUD+60-$snVStep,  $snMLen, 20)
 $st_exname[$i] = GUICtrlCreateInput($exname[$i], $snMLen+72+3, $snTUD+60-5,  $snXLen, 20)
 ;
-GUICtrlCreateLabel("Server:", 20+3, $snTUD+90-10, 35, 20, 0x0200)
+GUICtrlCreateLabel("Server:", 20+3, $snTUD+90-$snVStep*2, 35, 20, 0x0200)
 $st_server[$i] = GUICtrlCreateInput($server[$i], 57+3, $snTUD+90-$snVStep*2, $snSWLen,20)
 $st_port[$i] = GUICtrlCreateInput($port[$i], $snSWLen+30+39+3, $snTUD+90-$snVStep*2, $snPLen,20) ;$snSWLen+40+$snPLen
 
-GUICtrlCreateLabel("User:", 20+3, $snTUD+120-15, 28, 20, 0x0200)
-$st_user[$i] = GUICtrlCreateInput($user[$i], 50+3, $snTUD+120-$snVStep*3, $snULen,20)
+GUICtrlCreateLabel("User:", 20+3, $snTUD+120-$snVStep*3, 28, 20, 0x0200)
+$st_user[$i] = GUICtrlCreateInput($user[$i], 53, $snTUD+120-$snVStep*3, $snULen,20)
 GUICtrlCreateLabel("&&", $snULen+51+3, $snTUD+120-$snVStep*3, 10, 20, 0x0200)
 $st_devr[$i] = GUICtrlCreateInput($devr[$i], $snULen+30+2+26+3, $snTUD+120-$snVStep*3, $snRLen,20)
 GUICtrlCreateLabel("Pass:", $snULen+$snRLen+60+3, $snTUD+120-$snVStep*3, 30, 20, 0x0200)
@@ -463,11 +464,11 @@ $st_pass[$i] = GUICtrlCreateInput($pass[$i], $snULen+$snRLen+91+3, $snTUD+120-$s
 
 GUICtrlCreateLabel("Log:", 20+3, $snTUD+150-$snVStep*4, 28, 20, 0x0200)
 ;GUICtrlSetBkColor(-1,0x00FF09)
-$st_exlog[$i] = GUICtrlCreateInput($exlog[$i], 53+3, $snTUD+150-$snVStep*4, $guiCoord[2]-96,20)
+$st_exlog[$i] = GUICtrlCreateInput($exlog[$i], 53, $snTUD+150-$snVStep*4, $guiCoord[2]-96+3,20)
 $st_params[$i] = GUICtrlCreateInput($params[$i], 20+4, $snTUD+180-$snVStep*5, $guiCoord[2]-63,20)
 
 GUICtrlCreateLabel("Url:", 20+3, $snTUD+210-$snVStep*6, 28, 20, 0x0200)
-$st_urlprofile[$i] = GUICtrlCreateInput($urlprofile[$i], 53+3, $snTUD+210-$snVStep*6, $guiCoord[2]-96,20)
+$st_urlprofile[$i] = GUICtrlCreateInput($urlprofile[$i], 56, $snTUD+210-$snVStep*6, $guiCoord[2]-96+1,20)
 
 Next
 GUICtrlCreateTabItem(""); конец вкладок
@@ -477,7 +478,7 @@ Local Const $snWBL = $guiCoord[2]-350 ; ширина строки браузер
 Local Const $snWBtn = 60; ширина кнопки
 
 
-GUICtrlCreateInput($webbrowser, $snWBtn+16, $snPUD, $snWBL,20)
+$st_browser = GUICtrlCreateInput($webbrowser, $snWBtn+16, $snPUD, $snWBL,20)
 GUICtrlCreateButton("Браузер", 11, $snPUD, $snWBtn, 20);, 0x2000 )
 GUICtrlSetOnEvent(-1, "_setWebBrowser")
 
@@ -489,13 +490,17 @@ GUICtrlSetOnEvent(-1, "_setWebBrowser")
 EndSelect
 GUISetState(@SW_SHOW)
 ;GUISwitch($hGUI)
+WinSetState ( $hSETUP, Null, @SW_SHOW )
+WinActivate($hSETUP)
+
+
+
 EndFunc
 #EndRegion Setup Window
 ;--------------------------------------------------------------------------------------------------
 #Region Setup Func
 Func SetsClose(); закрыть окно настроек
-;GUIDelete($hSETUP);@GUI_WinHandle ;$hSETUP
-GUISetState(@SW_HIDE, $hSETUP)
+GUISetState(@SW_HIDE, $hSETUP);GUIDelete($hSETUP);@GUI_WinHandle ;$hSETUP
 WinSetState ( $hGUI, Null, @SW_ENABLE )
 WinSetState ( $hGUI, Null, @SW_SHOW )
 WinActivate ( $hGUI, Null )
