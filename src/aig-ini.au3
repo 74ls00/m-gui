@@ -245,3 +245,8 @@ For $i=0 To $windowTabs
 "title " & $info[$i] & " - Created in " & $NameGUI & @CRLF & @CRLF & $sLine[$i] )
 Next
 EndFunc
+;--------------------------------------------------------------------------------------------------
+Func _setWebBrowser()
+$webbrowser = FileOpenDialog("Путь к браузеру", "C:\", "Программы (*.exe)|Все файлы (*.*)", 1 + 4)
+
+EndFunc
