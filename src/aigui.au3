@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Res_Language=1049
 #AutoIt3Wrapper_Icon=res\icon00.ico
 #AutoIt3Wrapper_Res_FileVersion_AutoIncrement=y
-#AutoIt3Wrapper_Res_Fileversion=0.1.1.272
+#AutoIt3Wrapper_Res_Fileversion=0.1.1.277
 #AutoIt3Wrapper_Res_Description=Окно консоли
 #AutoIt3Wrapper_Res_Field=ProductName|Окно консоли
 #AutoIt3Wrapper_Res_Field=Build|%longdate% %time%
@@ -73,10 +73,12 @@ Global $iPIDx[$windowTabs+1] , $aPIDs[$windowTabs+1] , $sOut[$windowTabs+1] , $g
 Global $sn_info[$windowTabs+1],$st_typecmd[$windowTabs+1],$st_expath[$windowTabs+1],$st_exname[$windowTabs+1],$st_server[$windowTabs+1],$st_urlprofile[$windowTabs+1]
 Global $st_port[$windowTabs+1],$st_user[$windowTabs+1],$st_devr[$windowTabs+1],$st_pass[$windowTabs+1],$st_exlog[$windowTabs+1],$st_params[$windowTabs+1]
 Global $ckbxBigRun[$windowTabs+1], $BigRun[$windowTabs+1], $ckbxBigRunA[$windowTabs+1] ;, $BigRunA[$windowTabs+1], $BigRunSel[$windowTabs+1]
+Global $outMode[$windowTabs+1]
+Global $vTemp
 ;Global $conOut[$windowTabs+1] = [0]; временная переменная вываода
 ;Global $aSel[2]
 
-Global Const $txtQual = 3 ; сглаживание
+;Global Const $txtQual = 3 ; сглаживание
 Global $st_trayexit, $st_browser
 
 Global $lbT[$windowTabs+1]; активность
@@ -353,23 +355,11 @@ EndFunc ;==>_Main
 ;--------------------------------------------------------------------------------------------------
 #Region Setup Window
 Func btnST() ; окно настроек
-;$setEXIT = 0
-;$guiSZ = WinGetClientSize ($hGUI );670 450
-;$guiCoord = WinGetPos ($hGUI);676 478
-
-
 Local $guiCoord = WinGetPos ($hGUI)
-
-;local Const $snMain1 = $guiCoord[2]-38 ; шир.
-;local Const $snMain2 = $guiCoord[3]-60 ; выс.
-
-;Local $stTabs
-;
 
 Select
 	Case Not IsHWnd($hSETUP);если окна нет, создать
 
-;$hSETUP = GUICreate("Настройки", $guiCoord[2]-16, $guiCoord[3]-39, $guiCoord[0]+7, $guiCoord[1]+30, -2139095040, -1, $hGUI);BitOR ($WS_BORDER, $WS_POPUP)
 $hSETUP = GUICreate("Настройки", $guiCoord[2]-16, $guiCoord[3]-39, $guiCoord[0]+7, $guiCoord[1]+30, -2139095040, -1, $hGUI);BitOR ($WS_BORDER, $WS_POPUP)
 
 
@@ -452,7 +442,7 @@ GUICtrlCreateLabel("Mode:", 24, $snTUD+30, 28, 20, 0x0200)
 $st_typecmd[$i] = GUICtrlCreateCombo($typecmd[$i], 24, $snTUD+60-$snVStep, 32, 100)
 GUICtrlSetData(-1, "0|1|2",$typecmd[$i])
 $st_expath[$i] = GUICtrlCreateInput($expath[$i], 62+3, $snTUD+60-$snVStep,  $snMLen, 20)
-$st_exname[$i] = GUICtrlCreateInput($exname[$i], $snMLen+72+3, $snTUD+60-5,  $snXLen, 20)
+$st_exname[$i] = GUICtrlCreateInput($exname[$i], $snMLen+72+3, $snTUD+60-$snVStep,  $snXLen, 20)
 ;
 GUICtrlCreateLabel("Server:", 20+3, $snTUD+90-$snVStep*2, 35, 20, 0x0200)
 $st_server[$i] = GUICtrlCreateInput($server[$i], 57+3, $snTUD+90-$snVStep*2, $snSWLen,20)
@@ -577,8 +567,19 @@ For $i = 0 to $windowTabs
 
 
 ;Local $stdTmp = DllCall('user32.dll', 'bool', 'OemToChar', 'str', StdoutRead($iPIDx[$i]), 'str', StdoutRead($iPIDx[$i]))[2]
+
+
 ;Local $vTemp = $sOut[$i] & _Encoding_UTF8ToANSI_API( $stdTmp )
-Local $vTemp = $sOut[$i] & DllCall('user32.dll', 'bool', 'OemToChar', 'str', StdoutRead($iPIDx[$i]), 'str', StdoutRead($iPIDx[$i]))[2]
+;Local $vTemp
+
+;Select
+;	Case $outMode = ""
+
+$vTemp = $sOut[$i] & DllCall('user32.dll', 'bool', 'OemToChar', 'str', StdoutRead($iPIDx[$i]), 'str', StdoutRead($iPIDx[$i]))[2]
+;	Case Else
+;EndSelect
+;MsgBox(262144, 'Debug line ~' & @ScriptLineNumber, 'Selection:' & @CRLF & '$outMode' & @CRLF & @CRLF & 'Return:' & @CRLF & $outMode) ;### Debug MSGBOX
+
 Local $strl4 =  StringLen ( $vTemp )
 Local $aSel = GUICtrlRecvMsg($iEdt[$i],0xB0 ); 0xB0 $EM_GETSEL$selectTime
 

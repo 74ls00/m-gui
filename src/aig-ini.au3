@@ -34,6 +34,7 @@ Global $debug[$windowTabs+1],$exlpid[$windowTabs+1],$useregflg[$windowTabs+1],$u
 Global $ckbxBigRun[$windowTabs+1], $BigRun[$windowTabs+1], $ckbxBigRunA[$windowTabs+1], $BigRunA[$windowTabs+1]
 Global $NameGUI
 Global $st_browser, $hSETUP
+Global $outMode[$windowTabs+1]
 #EndRegion
 ;--------------------------------------------------------------------------------------------------
 #Region _iniDefLoad
@@ -56,6 +57,9 @@ $useregflg[$i] = 0	; 1 = пользователь зарегестрирован
 $urlprofile[$i] = "http:/www#"
 $BigRun[$i] = ""
 $BigRunA[$i] = ""
+
+$outMode[$i] = "dll";log
+
 ;IniWrite($myini, $process & $i, "separator","----------------------------------------------------------------------")
 Next
  ;MsgBox(4096,"_iniDefLoad",$info[0])
@@ -93,6 +97,8 @@ IniWrite($myini, $process & $i, "debug",'"' & $debug[$i] & '"')
 IniWrite($myini, $process & $i, "exlpid", $exlpid[$i])
 IniWrite($myini, $process & $i, "useregflg", $useregflg[$i])
 IniWrite($myini, $process & $i, "urlprofile",'"' & $urlprofile[$i] & '"')
+
+IniWrite($myini, $process & $i, "outmode",'"' & $outMode[$i] & '"')
 
 
    Next
@@ -146,7 +152,7 @@ Func _loadSysIni()
 		Case Else ;если существует
 			Select ;но пустая строка
 				Case IniRead ($sysini,"LOG","CheckDll", Null) = ""
-				IniWrite($sysini, "LOG", "CheckDll", 1) ; то записать дефолтные
+				IniWrite($sysini, "LOG", "CheckDll", 0) ; то записать дефолтные
 					EndSelect
 			Select
 				Case IniRead ($sysini,"GUI","Win7Style", Null) = ""
