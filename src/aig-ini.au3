@@ -8,6 +8,7 @@ Global $trayexit=0 ;1=tray. 0=exit
 Global $strLimit=600000
 Global $webbrowser = "C:\Program Files\Mozilla Firefox\firefox.exe" ;"G:\home\Documents\Projects\0-MyFirefox\FirefoxPortable_x64\FirefoxPortable.exe"
 
+
 Global $streadmode = 0 ;0 _Update(), 1 _Update()
 Global $selectTime = 5000 ;ms
 
@@ -35,6 +36,7 @@ Global $ckbxBigRun[$windowTabs+1], $BigRun[$windowTabs+1], $ckbxBigRunA[$windowT
 Global $NameGUI
 Global $st_browser, $hSETUP
 Global $outMode[$windowTabs+1]
+Global $strl4
 #EndRegion
 ;--------------------------------------------------------------------------------------------------
 #Region _iniDefLoad
@@ -196,6 +198,8 @@ $useregflg[$i] = IniRead ($myini,$process & $i,"useregflg", Null)
 $urlprofile[$i] = IniRead ($myini,$process & $i,"urlprofile", Null)
 $BigRun[$i] = IniRead ($myini,$process & $i,"bigrun", 0)
 $BigRunA[$i] = IniRead ($myini,$process & $i,"bigruna", 0)
+$outMode[$i] = IniRead ($myini,$process & $i,"outmode", 0)
+
 Next
 Case Else
    _iniSave()
@@ -265,3 +269,26 @@ EndSwitch
 GUICtrlSetData ( $st_browser, $webbrowser )
 EndFunc
 ;--------------------------------------------------------------------------------------------------
+#cs
+Func tmpdir(); создаёт временную папку
+Select
+	Case Not FileExists (  $utils & "\~")
+		DirCreate ( $utils & "\~" )
+EndSelect
+EndFunc
+#ce
+;--------------------------------------------------------------------------------------------------
+#cs
+Func clearEdt($cEdtID)
+; очищать окно с сохранением в файл
+; если строка слишком длинная
+   Local $nFile = @WorkingDir & "\tmp\zLog" & "_" & $cEdtID & "_" & @YEAR & @MON & @MDAY & "." & @MIN & @SEC & ".txt"
+   $hFile = FileOpen($nFile, 1)
+   FileWrite($hFile, $sOut[$cEdtID] & @CRLF & ">" & $strl4 & "<")
+   FileClose($hFile)
+   _debug_send_file()
+   $sOut[$cEdtID] = "Превышено " & $strl4 & " знаков." & @CRLF & "Прошлый вывод сохранён в " & $nFile & @CRLF
+   $strl4 = 0
+
+EndFunc
+#ce

@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Res_Language=1049
 #AutoIt3Wrapper_Icon=res\icon00.ico
 #AutoIt3Wrapper_Res_FileVersion_AutoIncrement=y
-#AutoIt3Wrapper_Res_Fileversion=0.1.1.277
+#AutoIt3Wrapper_Res_Fileversion=0.1.1.278
 #AutoIt3Wrapper_Res_Description=Окно консоли
 #AutoIt3Wrapper_Res_Field=ProductName|Окно консоли
 #AutoIt3Wrapper_Res_Field=Build|%longdate% %time%
@@ -73,7 +73,11 @@ Global $iPIDx[$windowTabs+1] , $aPIDs[$windowTabs+1] , $sOut[$windowTabs+1] , $g
 Global $sn_info[$windowTabs+1],$st_typecmd[$windowTabs+1],$st_expath[$windowTabs+1],$st_exname[$windowTabs+1],$st_server[$windowTabs+1],$st_urlprofile[$windowTabs+1]
 Global $st_port[$windowTabs+1],$st_user[$windowTabs+1],$st_devr[$windowTabs+1],$st_pass[$windowTabs+1],$st_exlog[$windowTabs+1],$st_params[$windowTabs+1]
 Global $ckbxBigRun[$windowTabs+1], $BigRun[$windowTabs+1], $ckbxBigRunA[$windowTabs+1] ;, $BigRunA[$windowTabs+1], $BigRunSel[$windowTabs+1]
-Global $outMode[$windowTabs+1]
+Global $outMode[$windowTabs+1],$outFile[$windowTabs+1]
+
+
+
+;	$outFile[]= StringRegExp ( StringRegExpReplace( StringRegExpReplace($exlog[$i], "%date", @YEAR & "." & @MON &"."& @MDAY) , "%time" , @HOUR &"."& @MIN &"."& @SEC ),'[A-Z]:[^" -]+',1)
 Global $vTemp
 ;Global $conOut[$windowTabs+1] = [0]; временная переменная вываода
 ;Global $aSel[2]
@@ -572,13 +576,62 @@ For $i = 0 to $windowTabs
 ;Local $vTemp = $sOut[$i] & _Encoding_UTF8ToANSI_API( $stdTmp )
 ;Local $vTemp
 
-;Select
-;	Case $outMode = ""
-
+Select
+	Case $outMode[$i] = "" Or $outMode[$i] = "dll"
 $vTemp = $sOut[$i] & DllCall('user32.dll', 'bool', 'OemToChar', 'str', StdoutRead($iPIDx[$i]), 'str', StdoutRead($iPIDx[$i]))[2]
-;	Case Else
-;EndSelect
-;MsgBox(262144, 'Debug line ~' & @ScriptLineNumber, 'Selection:' & @CRLF & '$outMode' & @CRLF & @CRLF & 'Return:' & @CRLF & $outMode) ;### Debug MSGBOX
+	Case $outMode[$i] = "stdout" Or $outMode[$i] = "so"
+$vTemp = _Encoding_OEM2ANSI( StdoutRead ( $iPIDx[$i],True) & StderrRead( $iPIDx[$i],True) )
+	Case Else
+;читаем из файла чтоб обойти буферизацию стандартного вывода ;https://github.com/nanopool/ewbf-miner/issues/59
+
+Local  $tmp[2],$tmp;,$str[1],$str
+;$tmp = StringRegExp($exlog[$i],'[A-Z]:[^" -]+',1)
+
+
+;$file = ' -lo --logfile="G:\путь\log.txt"'
+
+;MsgBox(0, "Результат", "-"& $exlog[$i] & "-")
+
+;If $exlog[$i]<>"" Then	$tmp=StringRegExp($exlog[$i],'[A-Z]:[^" -]+',1)
+
+Select
+	Case $exlog[$i]<>""
+
+
+	;$tmp=StringRegExp($exlog[$i],'[A-Z]:[^" -]+',1)
+
+	;$tmp= StringRegExp ( StringRegExpReplace( StringRegExpReplace($exlog[$i], "%date", @YEAR & "." & @MON &"."& @MDAY) , "%time" , @HOUR &"."& @MIN &"."& @SEC ),'[A-Z]:[^" -]+',1)
+
+	;$tmp= StringRegExp ( StringRegExpReplace( StringRegExpReplace($exlog[$i], "%date", @YEAR & "." & @MON &"."& @MDAY) , "%time" , @HOUR &"."& @MIN &"."& @SEC ),'[A-Z]:[^" -]+',1)[0]
+
+		;$tmp= StringRegExp ( StringRegExpReplace( StringRegExpReplace($exlog[$i], "%date", @YEAR & "." & @MON &"."& @MDAY) , "%time" , @HOUR &"."& @MIN &"."& @SEC ),'[A-Z]:[^" -]+',1)[0]
+
+$tmp= StringRegExp ( StringRegExpReplace( StringRegExpReplace($exlog[$i], "%date", @YEAR & "." & @MON &"."& @MDAY) , "%time" , @HOUR &"."& @MIN &"."& @SEC ),'[A-Z]:[^" -]+',1)[0]
+EndSelect
+
+
+;$outFile[$i] = FileOpen ( $tmp, 8+1)
+
+$vTemp = FileRead ( $tmp)
+
+
+;FileClose($outFile[$i])
+
+
+Select
+Case $i=5
+;MsgBox(0, "Результат", $tmp)
+;MsgBox(262144, $tmp, $outFile[$i])
+
+
+EndSelect
+
+
+
+EndSelect
+
+
+;MsgBox(262144, 'Debug line ~' & @ScriptLineNumber, 'Selection:' & @CRLF & '$outMode' & @CRLF & @CRLF & 'Return:' & @CRLF & "-" & $outMode[$i] &"-") ;### Debug MSGBOX
 
 Local $strl4 =  StringLen ( $vTemp )
 Local $aSel = GUICtrlRecvMsg($iEdt[$i],0xB0 ); 0xB0 $EM_GETSEL$selectTime
@@ -590,6 +643,7 @@ Select
 
 Select ; очищать окно с сохранением в файл
 Case $strl4 > $strLimit ; если строка слишком длинная
+	;clearEdt($i)
    Local $nFile = @WorkingDir & "\tmp\zLog" & "_" & $i & "_" & @YEAR & @MON & @MDAY & "." & @MIN & @SEC & ".txt"
    $hFile = FileOpen($nFile, 1)
    FileWrite($hFile, $sOut[$i] & @CRLF & ">" & $strl4 & "<")
@@ -747,21 +801,70 @@ EndFunc
 
 
 ;--------------------------------------------------------------------------------------------------
-Func StartPressed()
-Local $getTab = GUICtrlRead($iTab)-1
-   $iPIDx[$getTab] = Run(@ComSpec , Null, @SW_HIDE, $STDIN_CHILD + $STDERR_MERGED)
-   If ProcessExists ( $iPIDx[$getTab] ) Then GUICtrlSetBkColor($lbT[$getTab], $lbTAct)
-   ;OnAutoItExitRegister("_OnExit")
-   $exlpid[$getTab] = $iPIDx[$getTab]
-   _iniSave()
-	  GUICtrlSetState($iBtnStart[$getTab], $GUI_DISABLE)
-	  GUICtrlSetState($iBtnStop[$getTab], $GUI_ENABLE)
-	  GUICtrlSetState($btnAllStop, $GUI_ENABLE)
+Func StartPressed();нажата кнопка старт
+Local $getTab = GUICtrlRead($iTab)-1; определяем номер процесса по вкладке
+;stdbuf https://github.com/nanopool/ewbf-miner/issues/59
+;$iPIDx[$getTab] = Run(@ComSpec , Null, @SW_HIDE, $STDIN_CHILD + $STDERR_MERGED); создаём процесс
 
-	_disAllRun()
+;Select
+;	Case $outMode[$getTab] = "f"
+;		tmpdir()
+;$tmp = DllCall('user32.dll', 'bool', 'OemToChar', 'str', StdoutRead($iPIDx[$getTab]), 'str', StdoutRead($iPIDx[$getTab]))[2]
+;FileWrite ( $utils & "\~\" & $getTab,$tmp)
+;$tmp= '"'& @ComSpec & '" /c ' & StringStripWS ( $sLine[$getTab], 2+1 ) & " >" & $utils & "\~\" & $getTab & @CRLF
+;$iPIDx[$getTab] = Run($tmp, Null, @SW_HIDE, $STDIN_CHILD + $STDERR_MERGED)
+;MsgBox(262144, 'Debug line ~' & @ScriptLineNumber, 'Selection:' & @CRLF & '$sLine' & @CRLF & @CRLF & 'Return:' & @CRLF & $tmp) ;### Debug MSGBOX
+;StdinWrite($iPIDx[$getTab], $sLine[$getTab] & " >" & $utils & "\~\" & $getTab); отправляем на него команду
+;	Case Else
 
-	  StdinWrite($iPIDx[$getTab], $sLine[$getTab])
-EndFunc
+;Local $tmp[1],$tmp
+
+;$tmp = StringRegExp ( StringRegExpReplace( StringRegExpReplace($exlog[$i], "%date", @YEAR & "." & @MON &"."& @MDAY) , "%time" , @HOUR &"."& @MIN &"."& @SEC ),'[A-Z]:[^" -]+',1)
+
+#cs
+Select
+	Case $exlog[$iTab]<>""
+$tmp= StringRegExp ( StringRegExpReplace( StringRegExpReplace($exlog[$i], "%date", @YEAR & "." & @MON &"."& @MDAY) , "%time" , @HOUR &"."& @MIN &"."& @SEC ),'[A-Z]:[^" -]+',1)[0]
+$outFile[$iTab] = FileOpen ( $tmp, 1)
+
+EndSelect
+#ce
+
+
+;$outFile[$iTab] = FileOpen ( $tmp[0], 1)
+;
+
+$iPIDx[$getTab] = Run(@ComSpec , Null, @SW_HIDE, $STDIN_CHILD + $STDERR_MERGED); создаём процесс
+StdinWrite($iPIDx[$getTab], $sLine[$getTab]); отправляем на него команду
+
+;EndSelect
+; если нажата кнопка и режим лога, открыть файл; закрыть файл при остановке
+; записать в файл содержимое вывода и очистить вывод.
+;StdinWrite($iPIDx[$getTab], " | unbuffer" &  $sLine[$getTab]); отправляем на него команду
+;$iPIDx[$getTab] = Run(@ComSpec & " " & $sLine[$getTab], Null, @SW_HIDE, $STDIN_CHILD + $STDERR_MERGED)
+;$iPIDx[$getTab] = Run("C:\Windows\System32\ping.exe  -t ya.ru ", Null, @SW_HIDE, $STDIN_CHILD + $STDERR_MERGED)
+;$iPIDx[$getTab] = Run("G:\home\Documents\Projects\autoit\aigui\src\TlS\cygwin\bin\bash.exe stdbuf -oL -eL  G:/home/Documents/Projects/autoit/aigui/src/TlS/cygwin/miner.sh", Null, @SW_SHOW, $STDIN_CHILD + $STDERR_MERGED)
+;$iPIDx[$getTab] = Run("G:\home\Documents\Projects\autoit\aigui\src\TlS\cygwin\bin\bash.exe -c G:/home/Documents/Projects/autoit/aigui/src/TlS/cygwin/bin/stdbuf.exe -oL -eL  G:/home/Documents/Projects/autoit/aigui/src/TlS/cygwin/miner.sh", Null, @SW_SHOW, $STDIN_CHILD + $STDERR_MERGED)
+;$iPIDx[$getTab] = Run("G:/home/Documents/Projects/autoit/aigui/src/TlS/cygwin/bin/stdbuf.exe -o0 -e0  G:/home/Documents/Projects/autoit/aigui/src/0.3.4b/miner.exe  --server zec.suprnova.cc --port 2142 --user satok.gpu_ewbf --pass gpu0p", Null, @SW_SHOW, $STDIN_CHILD + $STDERR_MERGED)
+
+
+;;Run (@SystemDir & "\mmc.exe " & @SystemDir & "\devmgmt.msc" , @SystemDir ,@SW_SHOW)
+
+;MsgBox(262144, 'Debug line ~' & @ScriptLineNumber, 'Selection:' & @CRLF & '$sLine' & @CRLF & @CRLF & 'Return:' & @CRLF & $sLine[$getTab]) ;### Debug MSGBOX
+
+
+
+If ProcessExists($iPIDx[$getTab]) Then GUICtrlSetBkColor($lbT[$getTab], $lbTAct);если процесс запущен, отмечаем на главной панели
+	$exlpid[$getTab] = $iPIDx[$getTab];записываем пид в файл
+	_iniSave()
+
+	GUICtrlSetState($iBtnStart[$getTab], $GUI_DISABLE);меняем состояние кнопок
+	GUICtrlSetState($iBtnStop[$getTab], $GUI_ENABLE)
+	GUICtrlSetState($btnAllStop, $GUI_ENABLE)
+	_disAllRun(); изменяем состояние главной кнопки
+
+
+EndFunc ;==>StartPressed
 
 
 

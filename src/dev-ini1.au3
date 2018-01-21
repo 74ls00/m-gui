@@ -1,7 +1,8 @@
 #include-once
 
-
-
+Global $bash = @WorkingDir & "\TlS\cygwin\bin\bash.exe"
+Global $roscmd = @WorkingDir & "\TlS\cygwin\cmd-ros047.exe"
+Global $utils = @WorkingDir & "\TlS";папка утилит
 
 
 Global $windowTabs
