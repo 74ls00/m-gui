@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Res_Language=1049
 #AutoIt3Wrapper_Icon=res\icon00.ico
 #AutoIt3Wrapper_Res_FileVersion_AutoIncrement=y
-#AutoIt3Wrapper_Res_Fileversion=0.1.1.270
+#AutoIt3Wrapper_Res_Fileversion=0.1.1.272
 #AutoIt3Wrapper_Res_Description=Окно консоли
 #AutoIt3Wrapper_Res_Field=ProductName|Окно консоли
 #AutoIt3Wrapper_Res_Field=Build|%longdate% %time%
@@ -357,7 +357,7 @@ Func btnST() ; окно настроек
 ;$guiSZ = WinGetClientSize ($hGUI );670 450
 ;$guiCoord = WinGetPos ($hGUI);676 478
 
-WinSetState ( $hGUI, Null, @SW_DISABLE )
+
 Local $guiCoord = WinGetPos ($hGUI)
 
 ;local Const $snMain1 = $guiCoord[2]-38 ; шир.
@@ -368,7 +368,10 @@ Local $guiCoord = WinGetPos ($hGUI)
 
 Select
 	Case Not IsHWnd($hSETUP);если окна нет, создать
+
+;$hSETUP = GUICreate("Настройки", $guiCoord[2]-16, $guiCoord[3]-39, $guiCoord[0]+7, $guiCoord[1]+30, -2139095040, -1, $hGUI);BitOR ($WS_BORDER, $WS_POPUP)
 $hSETUP = GUICreate("Настройки", $guiCoord[2]-16, $guiCoord[3]-39, $guiCoord[0]+7, $guiCoord[1]+30, -2139095040, -1, $hGUI);BitOR ($WS_BORDER, $WS_POPUP)
+
 
 ;MsgBox(4096, "lll" ,  BitOR ($WS_BORDER, $WS_POPUP))
 ;$hSETUP = GUICreate("Настройки", $guiCoord[2]-20, $guiCoord[3]-41, $guiCoord[0]+8, $guiCoord[1]+30, $WS_BORDER, -1, $hGUI)
@@ -479,8 +482,13 @@ Local Const $snWBL = $guiCoord[2]-350 ; ширина строки браузер
 Local Const $snWBtn = 60; ширина кнопки
 
 
+
+
+;$hImage = _GUIImageList_Create(16, 16, 5, 3)
+;_GUIImageList_AddIcon($hImage, $webbrowser, 0, True)
 $st_browser = GUICtrlCreateInput($webbrowser, $snWBtn+16, $snPUD, $snWBL,20)
 GUICtrlCreateButton("Браузер", 11, $snPUD, $snWBtn, 20);, 0x2000 )
+;_GUICtrlButton_SetImageList(-1, $hImage,1);
 GUICtrlSetOnEvent(-1, "_setWebBrowser")
 
 ;GUICtrlSetBkColor(-1,0x00FF09)
@@ -489,7 +497,13 @@ GUICtrlSetOnEvent(-1, "_setWebBrowser")
 ;"ширина =  " & $guiCoord[2] & @LF & @TAB & _
 ;"высота  =  " & $guiCoord[3])
 EndSelect
+;$guiCoord = WinGetPos ($hGUI)
+WinSetState ( $hGUI, Null, @SW_DISABLE )
 GUISetState(@SW_SHOW);http://forum.oszone.net/post-1455732.html
+
+;$guiCoord = WinGetPos ($hGUI)
+WinMove ( $hSETUP, "", $guiCoord[0]+7, $guiCoord[1]+30);перемещает окно настроек за главным, при повторном показе
+
 ;GUISwitch($hGUI)
 ;WinSetState ( $hSETUP, Null, @SW_SHOW )
 ;WinActivate($hSETUP)
@@ -503,8 +517,8 @@ EndFunc
 Func SetsClose(); закрыть окно настроек
 GUISetState(@SW_HIDE, $hSETUP);GUIDelete($hSETUP);@GUI_WinHandle ;$hSETUP
 WinSetState ( $hGUI, Null, @SW_ENABLE )
-WinSetState ( $hGUI, Null, @SW_SHOW )
 WinActivate ( $hGUI, Null )
+WinSetState ( $hGUI, Null, @SW_SHOW )
 EndFunc
 ;--------------------------------------------------------------------------------------------------
 Func SetsSave()
